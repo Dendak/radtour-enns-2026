@@ -153,6 +153,7 @@
     .stay .name { font-size: 1.05rem; font-weight: 600; margin-top: .1rem; }
     .stay .loc { color: var(--muted); font-size: .88rem; }
     .stay.tbd .name { color: #b54708; font-style: italic; font-weight: 500; }
+    .stay-badge { display: inline-block; margin-left: .5rem; padding: .1rem .5rem; font-size: .7rem; font-weight: 600; color: #b54708; background: #fef3e2; border: 1px solid #f3c284; border-radius: 999px; vertical-align: middle; letter-spacing: .02em; }
     .stay { display: block; }
     .stay-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .6rem; }
     .stay-map { width: 100%; height: 240px; border: 0; border-radius: 8px; display: block; }
@@ -278,14 +279,21 @@
 
   <h2 class="section-title">Ubytování</h2>
 
-  <div class="stay tbd">
+  <div class="stay">
     <div class="stay-head">
       <div>
         <div class="night">Nocleh 1 · Pá 1. května</div>
-        <div class="name">zatím neurčeno</div>
+        <div class="name">EEE Hotel Liezen <span class="stay-badge">předběžná rezervace</span></div>
         <div class="loc">Liezen</div>
       </div>
+      <a class="stay-link" href="https://www.google.com/maps/search/?api=1&query=EEE+Hotel+Liezen" target="_blank" rel="noopener">Otevřít v Google Maps ↗</a>
     </div>
+    <iframe
+      class="stay-map"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://maps.google.com/maps?q=EEE+Hotel+Liezen&output=embed&hl=cs&z=15"
+      title="EEE Hotel Liezen — mapa"></iframe>
   </div>
 
   <div class="stay">
@@ -295,14 +303,14 @@
         <div class="name">Landgasthof Kirchenwirt</div>
         <div class="loc">Großraming</div>
       </div>
-      <a class="stay-link" href="https://www.google.com/maps/search/?api=1&query=Landgasthof+Kirchenwirt+Gro%C3%9Framing" target="_blank" rel="noopener">Otevřít v Google Maps ↗</a>
+      <a class="stay-link" href="https://www.google.com/maps/search/?api=1&query=Landgasthof+Kirchenwirt+Kirchenplatz+4+Gro%C3%9Framing" target="_blank" rel="noopener">Otevřít v Google Maps ↗</a>
     </div>
     <iframe
       class="stay-map"
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
-      src="https://en.frame.mapy.com/?x=14.5236&y=47.8918&z=16&source=coor&id=14.5236%2C47.8918&lang=cs"
-      title="Landgasthof Kirchenwirt Großraming — Mapy.com"></iframe>
+      src="https://maps.google.com/maps?q=Landgasthof+Kirchenwirt,+Kirchenplatz+4,+4463+Gro%C3%9Framing,+%C3%96sterreich&output=embed&hl=cs&z=15"
+      title="Landgasthof Kirchenwirt Großraming — mapa"></iframe>
   </div>
 
   <h2 class="section-title">Praktické informace</h2>
