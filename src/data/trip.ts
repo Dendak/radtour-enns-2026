@@ -30,19 +30,10 @@ export const DAY_NAMES: Record<1 | 2 | 3, string> = {
   3: 'Den 3 — Ne 3. května',
 };
 
-export const DAY_PHOTOS: Record<1 | 2 | 3, { url: string; caption: string }> = {
-  1: {
-    url: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=75',
-    caption: 'Radstadt → Liezen · sjezd z Vysokých Taur',
-  },
-  2: {
-    url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=75',
-    caption: 'Gesäuse · soutěska Enns',
-  },
-  3: {
-    url: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=75',
-    caption: 'Enns → Linec · Donauradweg',
-  },
+export const DAY_CAPTIONS: Record<1 | 2 | 3, string> = {
+  1: 'Radstadt → Liezen · sjezd z Vysokých Taur',
+  2: 'Liezen → Großraming · soutěska Gesäuse',
+  3: 'Großraming → Linec · Donauradweg',
 };
 
 export const WAYPOINTS: Waypoint[] = [

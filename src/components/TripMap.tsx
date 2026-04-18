@@ -6,12 +6,13 @@ import {
   CircleMarker,
   LayersControl,
   LayerGroup,
+  Marker,
   Popup,
   useMap,
 } from 'react-leaflet';
 import type { LatLngBoundsExpression, LatLngTuple } from 'leaflet';
 import L from 'leaflet';
-import { DAY_COLORS, DAY_NAMES, DONAU_COLOR, wmoText, type Waypoint } from '@/data/trip';
+import { DAY_COLORS, DAY_NAMES, DONAU_COLOR, STAYS, wmoText, type Waypoint } from '@/data/trip';
 import { splitTrackByDay, type TrackPoint } from '@/hooks/useGpxTrack';
 import type { WeatherPoint } from '@/hooks/useWeather';
 import { cn } from '@/lib/utils';
@@ -54,6 +55,34 @@ function HoverMarkerLayer({ hover }: { hover: { lat: number; lon: number; label:
     markerRef.current.getTooltip()?.setContent(hover.label);
   }, [hover, map]);
   return null;
+}
+
+function stayIcon(color: string): L.DivIcon {
+  return L.divIcon({
+    className: 'stay-pin',
+    html: `
+      <div style="position:relative;width:36px;height:44px;filter:drop-shadow(0 4px 6px rgba(15,23,42,0.35));">
+        <div style="
+          position:absolute;left:0;right:0;top:0;height:36px;
+          background:${color};
+          border:3px solid #fff;
+          border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+          display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>
+          </svg>
+        </div>
+        <div style="
+          position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+          width:0;height:0;
+          border-left:7px solid transparent;border-right:7px solid transparent;
+          border-top:10px solid ${color};"></div>
+      </div>
+    `,
+    iconSize: [36, 44],
+    iconAnchor: [18, 44],
+    popupAnchor: [0, -38],
+  });
 }
 
 export type TripMapProps = {
@@ -163,6 +192,35 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }
           {waypoints.map((w, i) => {
             if (!visibleDays[w.day]) return null;
             const wx = weather[i];
+            const stay = w.tag === 'Nocleh 1' ? STAYS[0] : w.tag === 'Nocleh 2' ? STAYS[1] : null;
+            if (stay) {
+              return (
+                <Marker key={i} position={[w.lat, w.lon]} icon={stayIcon(DAY_COLORS[w.day])} zIndexOffset={1000}>
+                  <Popup>
+                    <div className="min-w-[200px]">
+                      <div className="text-[10px] uppercase tracking-[0.15em] font-semibold text-amber-700">
+                        {stay.tentative ? 'Nocleh · předběžně' : 'Nocleh'}
+                      </div>
+                      <div className="text-base font-bold text-slate-900 mt-0.5">{stay.name}</div>
+                      <div className="text-xs text-slate-500 mb-2">{stay.loc} · km {w.dist.toFixed(0)}</div>
+                      {wx && !wx.error && (
+                        <div className="grid grid-cols-2 gap-y-0.5 text-xs mb-2 pb-2 border-b border-slate-200">
+                          <span className="text-slate-500">Příjezd</span><b>{fmtTime(w.time)}</b>
+                          <span className="text-slate-500">Počasí</span><b>{wmoText(wx.code)}</b>
+                          <span className="text-slate-500">Teplota</span><b>{wx.temp?.toFixed(1)} °C</b>
+                        </div>
+                      )}
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stay.mapsQuery)}`}
+                        target="_blank" rel="noopener"
+                        className="inline-block text-xs font-semibold text-slate-700 hover:text-slate-900">
+                        Otevřít v Google Maps ↗
+                      </a>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            }
             return (
               <CircleMarker
                 key={i}
