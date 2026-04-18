@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="cs">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Radtour Ennsradweg 2026 — Radstadt → Linz</title>
+  <title>Cyklovýlet Ennsradweg 2026 — Radstadt → Linec</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root {
@@ -178,110 +178,110 @@
 <body>
 
 <header class="hero">
-  <h1>Radtour Ennsradweg 2026</h1>
-  <p class="sub">Radstadt → Linz · Ennsradweg &amp; Donauradweg</p>
-  <p class="dates">Freitag 1. Mai – Sonntag 3. Mai 2026</p>
+  <h1>Cyklovýlet Ennsradweg 2026</h1>
+  <p class="sub">Radstadt → Linec · Ennsradweg &amp; Donauradweg</p>
+  <p class="dates">Pátek 1. května – Neděle 3. května 2026</p>
 </header>
 
 <main>
 
   <section class="stats">
-    <div class="stat"><span class="num">263</span><span class="lbl">Kilometer</span></div>
-    <div class="stat"><span class="num">3</span><span class="lbl">Tage</span></div>
-    <div class="stat"><span class="num">6</span><span class="lbl">Personen</span></div>
+    <div class="stat"><span class="num">263</span><span class="lbl">Kilometrů</span></div>
+    <div class="stat"><span class="num">3</span><span class="lbl">Dny</span></div>
+    <div class="stat"><span class="num">6</span><span class="lbl">Osob</span></div>
   </section>
 
-  <h2 class="section-title">Karte &amp; Höhenprofil</h2>
+  <h2 class="section-title">Mapa a výškový profil</h2>
   <div class="map-block">
     <div class="map-controls">
-      <label class="day-toggle d1"><input type="checkbox" data-day="1" checked><span class="dot"></span>Tag 1 · Radstadt → Liezen</label>
-      <label class="day-toggle d2"><input type="checkbox" data-day="2" checked><span class="dot"></span>Tag 2 · Liezen → Großraming</label>
-      <label class="day-toggle d3"><input type="checkbox" data-day="3" checked><span class="dot"></span>Tag 3 · Großraming → Linz</label>
-      <span class="weather-status" id="weather-status">Wetterdaten werden geladen …</span>
-      <button class="refresh-btn" id="refresh-btn" type="button" title="Wetter jetzt neu abrufen">
-        <span class="icon">↻</span><span>Aktualisieren</span>
+      <label class="day-toggle d1"><input type="checkbox" data-day="1" checked><span class="dot"></span>Den 1 · Radstadt → Liezen</label>
+      <label class="day-toggle d2"><input type="checkbox" data-day="2" checked><span class="dot"></span>Den 2 · Liezen → Großraming</label>
+      <label class="day-toggle d3"><input type="checkbox" data-day="3" checked><span class="dot"></span>Den 3 · Großraming → Linec</label>
+      <span class="weather-status" id="weather-status">Načítání počasí …</span>
+      <button class="refresh-btn" id="refresh-btn" type="button" title="Obnovit předpověď počasí">
+        <span class="icon">↻</span><span>Obnovit</span>
       </button>
     </div>
     <div id="map"></div>
     <div class="elev-wrap">
       <div class="elev-head">
-        <h3>Höhenprofil</h3>
-        <span class="hint">Fahre über die Kurve: Position auf der Karte + Wetter zur voraussichtlichen Uhrzeit</span>
+        <h3>Výškový profil</h3>
+        <span class="hint">Přejeďte myší nad křivkou: poloha na mapě + počasí v plánovaném čase</span>
       </div>
       <canvas id="elev-chart"></canvas>
       <div class="elev-tooltip" id="elev-tooltip"></div>
 
       <div class="precip-head">
-        <h3>Regen-Vorhersage</h3>
-        <span class="hint">Millimeter pro Stunde an jedem Wegpunkt zur geplanten Zeit</span>
+        <h3>Předpověď srážek</h3>
+        <span class="hint">Milimetry za hodinu v každém bodě trasy v plánovaném čase</span>
       </div>
       <canvas id="precip-chart"></canvas>
     </div>
   </div>
 
-  <h2 class="section-title">Wetter pro Tag</h2>
+  <h2 class="section-title">Počasí podle dnů</h2>
   <div class="weather-days" id="weather-days"></div>
 
-  <h2 class="section-title">Etappen im Detail</h2>
+  <h2 class="section-title">Podrobnosti etap</h2>
 
   <article class="day d1">
     <div class="day-head">
-      <h3 class="day-title"><span class="num">Tag 1</span>Freitag, 1. Mai</h3>
+      <h3 class="day-title"><span class="num">Den 1</span>Pátek, 1. května</h3>
       <span class="day-meta">77 km · Ennsradweg</span>
     </div>
-    <p class="day-route">Radstadt Bahnhof → Liezen</p>
+    <p class="day-route">Radstadt (nádraží) → Liezen</p>
     <ol class="waypoints">
-      <li><span class="time">09:00</span><span class="km">0 km</span><span class="name">Radstadt Bahnhof</span><span class="tag start">Start</span></li>
-      <li><span class="time">10:00</span><span class="km">20 km</span><span class="name">Schladming</span><span class="tag">Pause</span></li>
-      <li><span class="time">12:00</span><span class="km">42 km</span><span class="name">Gröbming</span><span class="tag eat">Mittag</span></li>
-      <li><span class="time">14:00</span><span class="km">60 km</span><span class="name">Irdning</span><span class="tag">Pause</span></li>
-      <li><span class="time">15:30</span><span class="km">77 km</span><span class="name">Liezen</span><span class="tag bed">Nacht 1</span></li>
+      <li><span class="time">09:00</span><span class="km">0 km</span><span class="name">Radstadt (nádraží)</span><span class="tag start">Start</span></li>
+      <li><span class="time">10:00</span><span class="km">20 km</span><span class="name">Schladming</span><span class="tag">Přestávka</span></li>
+      <li><span class="time">12:00</span><span class="km">42 km</span><span class="name">Gröbming</span><span class="tag eat">Oběd</span></li>
+      <li><span class="time">14:00</span><span class="km">60 km</span><span class="name">Irdning</span><span class="tag">Přestávka</span></li>
+      <li><span class="time">15:30</span><span class="km">77 km</span><span class="name">Liezen</span><span class="tag bed">Nocleh 1</span></li>
     </ol>
   </article>
 
   <article class="day d2">
     <div class="day-head">
-      <h3 class="day-title"><span class="num">Tag 2</span>Samstag, 2. Mai</h3>
+      <h3 class="day-title"><span class="num">Den 2</span>Sobota, 2. května</h3>
       <span class="day-meta">99 km · Gesäuse &amp; Eisenwurzen</span>
     </div>
     <p class="day-route">Liezen → Großraming</p>
     <ol class="waypoints">
       <li><span class="time">09:00</span><span class="km">77 km</span><span class="name">Liezen</span><span class="tag start">Start</span></li>
-      <li><span class="time">10:30</span><span class="km">99 km</span><span class="name">Admont Stift</span><span class="tag">Pause</span></li>
-      <li><span class="time">12:00</span><span class="km">118 km</span><span class="name">Gesäuse</span><span class="tag">Highlight</span></li>
-      <li><span class="time">12:30</span><span class="km">125 km</span><span class="name">Hieflau</span><span class="tag">Pause</span></li>
-      <li><span class="time">13:00</span><span class="km">134 km</span><span class="name">Großreifling</span><span class="tag">Durchfahrt</span></li>
-      <li><span class="time">13:30</span><span class="km">145 km</span><span class="name">Altenmarkt b. St. Gallen</span><span class="tag eat">Mittag</span></li>
-      <li><span class="time">16:00</span><span class="km">167 km</span><span class="name">Weyer</span><span class="tag">Pause</span></li>
-      <li><span class="time">17:00</span><span class="km">176 km</span><span class="name">Großraming</span><span class="tag bed">Nacht 2</span></li>
+      <li><span class="time">10:30</span><span class="km">99 km</span><span class="name">Klášter Admont</span><span class="tag">Přestávka</span></li>
+      <li><span class="time">12:00</span><span class="km">118 km</span><span class="name">Gesäuse</span><span class="tag">Zajímavost</span></li>
+      <li><span class="time">12:30</span><span class="km">125 km</span><span class="name">Hieflau</span><span class="tag">Přestávka</span></li>
+      <li><span class="time">13:00</span><span class="km">134 km</span><span class="name">Großreifling</span><span class="tag">Průjezd</span></li>
+      <li><span class="time">13:30</span><span class="km">145 km</span><span class="name">Altenmarkt u St. Gallen</span><span class="tag eat">Oběd</span></li>
+      <li><span class="time">16:00</span><span class="km">167 km</span><span class="name">Weyer</span><span class="tag">Přestávka</span></li>
+      <li><span class="time">17:00</span><span class="km">176 km</span><span class="name">Großraming</span><span class="tag bed">Nocleh 2</span></li>
     </ol>
   </article>
 
   <article class="day d3">
     <div class="day-head">
-      <h3 class="day-title"><span class="num">Tag 3</span>Sonntag, 3. Mai</h3>
+      <h3 class="day-title"><span class="num">Den 3</span>Neděle, 3. května</h3>
       <span class="day-meta">87 km · Ennsradweg + Donauradweg</span>
     </div>
-    <p class="day-route">Großraming → Linz Hbf</p>
+    <p class="day-route">Großraming → Linec hl. n.</p>
     <ol class="waypoints">
       <li><span class="time">09:00</span><span class="km">176 km</span><span class="name">Großraming</span><span class="tag start">Start</span></li>
-      <li><span class="time">09:30</span><span class="km">185 km</span><span class="name">Reichraming</span><span class="tag">Pause</span></li>
-      <li><span class="time">10:00</span><span class="km">191 km</span><span class="name">Losenstein</span><span class="tag">Pause</span></li>
-      <li><span class="time">12:00</span><span class="km">214 km</span><span class="name">Steyr</span><span class="tag eat">Mittag</span></li>
-      <li><span class="time">14:30</span><span class="km">239 km</span><span class="name">Enns</span><span class="tag">Pause</span></li>
+      <li><span class="time">09:30</span><span class="km">185 km</span><span class="name">Reichraming</span><span class="tag">Přestávka</span></li>
+      <li><span class="time">10:00</span><span class="km">191 km</span><span class="name">Losenstein</span><span class="tag">Přestávka</span></li>
+      <li><span class="time">12:00</span><span class="km">214 km</span><span class="name">Steyr</span><span class="tag eat">Oběd</span></li>
+      <li><span class="time">14:30</span><span class="km">239 km</span><span class="name">Enns</span><span class="tag">Přestávka</span></li>
       <li><span class="time">14:45</span><span class="km">243 km</span><span class="name">Mauthausen</span><span class="tag">Donauradweg</span></li>
-      <li><span class="time">15:30</span><span class="km">255 km</span><span class="name">Steyregg</span><span class="tag">Pause</span></li>
-      <li><span class="time">16:00</span><span class="km">263 km</span><span class="name">Linz Hauptbahnhof</span><span class="tag end">Ziel</span></li>
+      <li><span class="time">15:30</span><span class="km">255 km</span><span class="name">Steyregg</span><span class="tag">Přestávka</span></li>
+      <li><span class="time">16:00</span><span class="km">263 km</span><span class="name">Linec hlavní nádraží</span><span class="tag end">Cíl</span></li>
     </ol>
   </article>
 
-  <h2 class="section-title">Übernachtungen</h2>
+  <h2 class="section-title">Ubytování</h2>
 
   <div class="stay tbd">
     <div class="stay-head">
       <div>
-        <div class="night">Nacht 1 · Fr 1. Mai</div>
-        <div class="name">noch offen</div>
+        <div class="night">Nocleh 1 · Pá 1. května</div>
+        <div class="name">zatím neurčeno</div>
         <div class="loc">Liezen</div>
       </div>
     </div>
@@ -290,31 +290,31 @@
   <div class="stay">
     <div class="stay-head">
       <div>
-        <div class="night">Nacht 2 · Sa 2. Mai</div>
+        <div class="night">Nocleh 2 · So 2. května</div>
         <div class="name">Landgasthof Kirchenwirt</div>
         <div class="loc">Großraming</div>
       </div>
-      <a class="stay-link" href="https://www.google.com/maps/search/?api=1&query=Landgasthof+Kirchenwirt+Gro%C3%9Framing" target="_blank" rel="noopener">In Google Maps öffnen ↗</a>
+      <a class="stay-link" href="https://www.google.com/maps/search/?api=1&query=Landgasthof+Kirchenwirt+Gro%C3%9Framing" target="_blank" rel="noopener">Otevřít v Google Maps ↗</a>
     </div>
     <iframe
       class="stay-map"
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
       src="https://www.openstreetmap.org/export/embed.html?bbox=14.516%2C47.887%2C14.532%2C47.897&amp;layer=mapnik&amp;marker=47.8918%2C14.5236"
-      title="Landgasthof Kirchenwirt Großraming — Karte"></iframe>
+      title="Landgasthof Kirchenwirt Großraming — mapa"></iframe>
   </div>
 
-  <h2 class="section-title">Wissenswertes</h2>
+  <h2 class="section-title">Praktické informace</h2>
   <div class="info-grid">
-    <div class="info-card"><h3>Anreise</h3><p>Per Bahn nach <strong>Radstadt</strong> (ÖBB, Fahrrad-Stellplatz reservieren). Treffpunkt am Bahnhof.</p></div>
-    <div class="info-card"><h3>Rückreise</h3><p>Ab <strong>Linz Hbf</strong> per ÖBB zurück nach Radstadt (Umstieg in Selzthal oder Salzburg).</p></div>
-    <div class="info-card"><h3>Route</h3><p>Ennsradweg (R7) bis Enns, dann Donauradweg (R1) bis Linz. Überwiegend asphaltiert, familientauglich.</p></div>
-    <div class="info-card"><h3>Packen</h3><ul><li>Helm, Regenjacke, Sonnenschutz</li><li>Flickzeug, Ersatzschlauch, Pumpe</li><li>Trinkflasche, Riegel</li><li>Ausweis, Bargeld/Karte</li></ul></div>
+    <div class="info-card"><h3>Příjezd</h3><p>Vlakem do <strong>Radstadtu</strong> (ÖBB, rezervujte místo pro kolo). Sraz na nádraží.</p></div>
+    <div class="info-card"><h3>Zpáteční cesta</h3><p>Z <strong>Linec hl. n.</strong> vlakem ÖBB zpět do Radstadtu (přestup v Selzthalu nebo Salcburku).</p></div>
+    <div class="info-card"><h3>Trasa</h3><p>Ennsradweg (R7) do Enns, pak Donauradweg (R1) do Lince. Většinou asfaltováno, vhodné i pro rodiny.</p></div>
+    <div class="info-card"><h3>Zavazadlo</h3><ul><li>Helma, pláštěnka, ochrana proti slunci</li><li>Lepení, náhradní duše, hustilka</li><li>Láhev na pití, tyčinky</li><li>Občanský průkaz, hotovost/karta</li></ul></div>
   </div>
 
 </main>
 
-<footer>Radtour 1.–3. Mai 2026 · Wetter: Open-Meteo · Karte: CyclOSM / OpenStreetMap</footer>
+<footer>Cyklovýlet 1.–3. května 2026 · Počasí: Open-Meteo · Mapa: CyclOSM / OpenStreetMap</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -322,50 +322,50 @@
 
 // Waypoints with expected arrival time (ISO local time, Europe/Vienna)
 const WAYPOINTS = [
-  // Day 1
-  { day: 1, dist: 0,   lat: 47.3853, lon: 13.4536, name: 'Radstadt Bahnhof',       time: '2026-05-01T09:00', tag: 'Start' },
-  { day: 1, dist: 20,  lat: 47.3950, lon: 13.6858, name: 'Schladming',             time: '2026-05-01T10:00', tag: 'Pause' },
-  { day: 1, dist: 42,  lat: 47.4403, lon: 13.9067, name: 'Gröbming',               time: '2026-05-01T12:00', tag: 'Mittag' },
-  { day: 1, dist: 60,  lat: 47.4944, lon: 14.1042, name: 'Irdning',                time: '2026-05-01T14:00', tag: 'Pause' },
-  { day: 1, dist: 77,  lat: 47.5664, lon: 14.2406, name: 'Liezen',                 time: '2026-05-01T15:30', tag: 'Nacht 1' },
-  // Day 2
+  // Den 1
+  { day: 1, dist: 0,   lat: 47.3853, lon: 13.4536, name: 'Radstadt (nádraží)',     time: '2026-05-01T09:00', tag: 'Start' },
+  { day: 1, dist: 20,  lat: 47.3950, lon: 13.6858, name: 'Schladming',             time: '2026-05-01T10:00', tag: 'Přestávka' },
+  { day: 1, dist: 42,  lat: 47.4403, lon: 13.9067, name: 'Gröbming',               time: '2026-05-01T12:00', tag: 'Oběd' },
+  { day: 1, dist: 60,  lat: 47.4944, lon: 14.1042, name: 'Irdning',                time: '2026-05-01T14:00', tag: 'Přestávka' },
+  { day: 1, dist: 77,  lat: 47.5664, lon: 14.2406, name: 'Liezen',                 time: '2026-05-01T15:30', tag: 'Nocleh 1' },
+  // Den 2
   { day: 2, dist: 77,  lat: 47.5664, lon: 14.2406, name: 'Liezen',                 time: '2026-05-02T09:00', tag: 'Start' },
-  { day: 2, dist: 99,  lat: 47.5749, lon: 14.4601, name: 'Admont Stift',           time: '2026-05-02T10:30', tag: 'Pause' },
-  { day: 2, dist: 118, lat: 47.5747, lon: 14.6200, name: 'Gesäuse',                time: '2026-05-02T12:00', tag: 'Highlight' },
-  { day: 2, dist: 125, lat: 47.6067, lon: 14.7489, name: 'Hieflau',                time: '2026-05-02T12:30', tag: 'Pause' },
-  { day: 2, dist: 134, lat: 47.6956, lon: 14.7283, name: 'Großreifling',           time: '2026-05-02T13:00', tag: 'Durchfahrt' },
-  { day: 2, dist: 145, lat: 47.6833, lon: 14.6333, name: 'Altenmarkt b. St. Gallen', time: '2026-05-02T13:30', tag: 'Mittag' },
-  { day: 2, dist: 167, lat: 47.8547, lon: 14.6636, name: 'Weyer',                  time: '2026-05-02T16:00', tag: 'Pause' },
-  { day: 2, dist: 176, lat: 47.8906, lon: 14.5264, name: 'Großraming',             time: '2026-05-02T17:00', tag: 'Nacht 2' },
-  // Day 3
+  { day: 2, dist: 99,  lat: 47.5749, lon: 14.4601, name: 'Klášter Admont',         time: '2026-05-02T10:30', tag: 'Přestávka' },
+  { day: 2, dist: 118, lat: 47.5747, lon: 14.6200, name: 'Gesäuse',                time: '2026-05-02T12:00', tag: 'Zajímavost' },
+  { day: 2, dist: 125, lat: 47.6067, lon: 14.7489, name: 'Hieflau',                time: '2026-05-02T12:30', tag: 'Přestávka' },
+  { day: 2, dist: 134, lat: 47.6956, lon: 14.7283, name: 'Großreifling',           time: '2026-05-02T13:00', tag: 'Průjezd' },
+  { day: 2, dist: 145, lat: 47.6833, lon: 14.6333, name: 'Altenmarkt u St. Gallen', time: '2026-05-02T13:30', tag: 'Oběd' },
+  { day: 2, dist: 167, lat: 47.8547, lon: 14.6636, name: 'Weyer',                  time: '2026-05-02T16:00', tag: 'Přestávka' },
+  { day: 2, dist: 176, lat: 47.8906, lon: 14.5264, name: 'Großraming',             time: '2026-05-02T17:00', tag: 'Nocleh 2' },
+  // Den 3
   { day: 3, dist: 176, lat: 47.8906, lon: 14.5264, name: 'Großraming',             time: '2026-05-03T09:00', tag: 'Start' },
-  { day: 3, dist: 185, lat: 47.9489, lon: 14.4769, name: 'Reichraming',            time: '2026-05-03T09:30', tag: 'Pause' },
-  { day: 3, dist: 191, lat: 47.9597, lon: 14.4253, name: 'Losenstein',             time: '2026-05-03T10:00', tag: 'Pause' },
-  { day: 3, dist: 214, lat: 48.0381, lon: 14.4181, name: 'Steyr',                  time: '2026-05-03T12:00', tag: 'Mittag' },
-  { day: 3, dist: 239, lat: 48.2158, lon: 14.4775, name: 'Enns',                   time: '2026-05-03T14:30', tag: 'Pause' },
+  { day: 3, dist: 185, lat: 47.9489, lon: 14.4769, name: 'Reichraming',            time: '2026-05-03T09:30', tag: 'Přestávka' },
+  { day: 3, dist: 191, lat: 47.9597, lon: 14.4253, name: 'Losenstein',             time: '2026-05-03T10:00', tag: 'Přestávka' },
+  { day: 3, dist: 214, lat: 48.0381, lon: 14.4181, name: 'Steyr',                  time: '2026-05-03T12:00', tag: 'Oběd' },
+  { day: 3, dist: 239, lat: 48.2158, lon: 14.4775, name: 'Enns',                   time: '2026-05-03T14:30', tag: 'Přestávka' },
   { day: 3, dist: 243, lat: 48.2397, lon: 14.5156, name: 'Mauthausen',             time: '2026-05-03T14:45', tag: 'Donauradweg' },
-  { day: 3, dist: 255, lat: 48.2881, lon: 14.3600, name: 'Steyregg',               time: '2026-05-03T15:30', tag: 'Pause' },
-  { day: 3, dist: 263, lat: 48.2906, lon: 14.2903, name: 'Linz Hauptbahnhof',      time: '2026-05-03T16:00', tag: 'Ziel' }
+  { day: 3, dist: 255, lat: 48.2881, lon: 14.3600, name: 'Steyregg',               time: '2026-05-03T15:30', tag: 'Přestávka' },
+  { day: 3, dist: 263, lat: 48.2906, lon: 14.2903, name: 'Linec hlavní nádraží',   time: '2026-05-03T16:00', tag: 'Cíl' }
 ];
 
 const DAY_COLORS = { 1: '#e63946', 2: '#f77f00', 3: '#2a9d8f' };
-const DAY_NAMES  = { 1: 'Tag 1 — Fr 1. Mai', 2: 'Tag 2 — Sa 2. Mai', 3: 'Tag 3 — So 3. Mai' };
+const DAY_NAMES  = { 1: 'Den 1 — Pá 1. května', 2: 'Den 2 — So 2. května', 3: 'Den 3 — Ne 3. května' };
 
-// WMO weather code → German label
+// WMO weather code → Czech label
 const WMO = {
-  0: 'Klar', 1: 'Meist klar', 2: 'Teils bewölkt', 3: 'Bewölkt',
-  45: 'Nebel', 48: 'Reifnebel',
-  51: 'Leichter Nieselregen', 53: 'Nieselregen', 55: 'Starker Nieselregen',
-  56: 'Gefr. Nieselregen', 57: 'Gefr. Nieselregen',
-  61: 'Leichter Regen', 63: 'Regen', 65: 'Starker Regen',
-  66: 'Gefr. Regen', 67: 'Gefr. Regen',
-  71: 'Leichter Schneefall', 73: 'Schneefall', 75: 'Starker Schneefall',
-  77: 'Schneekörner',
-  80: 'Regenschauer', 81: 'Starker Regenschauer', 82: 'Heftiger Regenschauer',
-  85: 'Schneeschauer', 86: 'Starker Schneeschauer',
-  95: 'Gewitter', 96: 'Gewitter mit Hagel', 99: 'Gewitter mit Hagel'
+  0: 'Jasno', 1: 'Převážně jasno', 2: 'Polojasno', 3: 'Zataženo',
+  45: 'Mlha', 48: 'Namrzající mlha',
+  51: 'Slabé mrholení', 53: 'Mrholení', 55: 'Silné mrholení',
+  56: 'Mrznoucí mrholení', 57: 'Mrznoucí mrholení',
+  61: 'Slabý déšť', 63: 'Déšť', 65: 'Silný déšť',
+  66: 'Mrznoucí déšť', 67: 'Mrznoucí déšť',
+  71: 'Slabé sněžení', 73: 'Sněžení', 75: 'Silné sněžení',
+  77: 'Sněhová zrna',
+  80: 'Přeháňky', 81: 'Silné přeháňky', 82: 'Prudké přeháňky',
+  85: 'Sněhové přeháňky', 86: 'Silné sněhové přeháňky',
+  95: 'Bouřka', 96: 'Bouřka s kroupami', 99: 'Bouřka s kroupami'
 };
-function wmoText(code) { return WMO[code] ?? 'unbekannt'; }
+function wmoText(code) { return WMO[code] ?? 'neznámo'; }
 
 // ================== INIT MAP ==================
 
@@ -375,7 +375,7 @@ const cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{
 }).addTo(map);
 const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' });
 const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17, attribution: '© OpenStreetMap, © OpenTopoMap', subdomains: 'abc' });
-L.control.layers({ 'CyclOSM (Fahrrad)': cyclosm, 'OpenStreetMap': osm, 'OpenTopoMap': topo }).addTo(map);
+L.control.layers({ 'CyclOSM (cyklo)': cyclosm, 'OpenStreetMap': osm, 'OpenTopoMap': topo }).addTo(map);
 
 // Day layers (populated once we have a track)
 const dayLayers = { 1: L.layerGroup().addTo(map), 2: L.layerGroup().addTo(map), 3: L.layerGroup().addTo(map) };
@@ -523,26 +523,26 @@ function renderWaypoints() {
 
 function fmtTime(iso) {
   const d = new Date(iso);
-  return d.toLocaleString('de-AT', { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleString('cs-CZ', { weekday: 'short', hour: '2-digit', minute: '2-digit' });
 }
 
 function renderWaypointPopup(w) {
   const wx = w._weather;
   let wHtml;
-  if (!wx) wHtml = '<div class="wp-weather" style="color:#888;font-style:italic">Wetter lädt …</div>';
-  else if (wx.error) wHtml = `<div class="wp-weather" style="color:#888;font-style:italic">Kein Forecast verfügbar (${wx.error})</div>`;
+  if (!wx) wHtml = '<div class="wp-weather" style="color:#888;font-style:italic">Načítání počasí …</div>';
+  else if (wx.error) wHtml = `<div class="wp-weather" style="color:#888;font-style:italic">Předpověď není dostupná (${wx.error})</div>`;
   else wHtml = `
-    <div class="wp-label">Wetter ${fmtTime(w.time)}</div>
+    <div class="wp-label">Počasí ${fmtTime(w.time)}</div>
     <div class="wp-weather">
-      <span>Bedingung</span><b>${wmoText(wx.code)}</b>
-      <span>Temperatur</span><b>${wx.temp?.toFixed(1)} °C</b>
-      <span>Niederschlag</span><b>${wx.precip?.toFixed(1)} mm</b>
-      <span>Wind</span><b>${wx.wind?.toFixed(0)} km/h</b>
+      <span>Stav</span><b>${wmoText(wx.code)}</b>
+      <span>Teplota</span><b>${wx.temp?.toFixed(1)} °C</b>
+      <span>Srážky</span><b>${wx.precip?.toFixed(1)} mm</b>
+      <span>Vítr</span><b>${wx.wind?.toFixed(0)} km/h</b>
     </div>`;
   return `
     <div class="wp-popup">
       <h4>${w.name}</h4>
-      <div class="wp-time">${DAY_NAMES[w.day]} · km ${w.dist} · geplant ${new Date(w.time).toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})} Uhr</div>
+      <div class="wp-time">${DAY_NAMES[w.day]} · km ${w.dist} · plán ${new Date(w.time).toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})}</div>
       <div>${w.tag}</div>
       ${wHtml}
     </div>`;
@@ -553,7 +553,7 @@ function renderWaypointPopup(w) {
 async function fetchWeather() {
   const status = document.getElementById('weather-status');
   const btn = document.getElementById('refresh-btn');
-  status.textContent = 'Wetter wird geladen …';
+  status.textContent = 'Načítání počasí …';
   if (btn) { btn.disabled = true; btn.classList.add('spinning'); }
   try {
     const lats = WAYPOINTS.map(w => w.lat.toFixed(4)).join(',');
@@ -569,10 +569,10 @@ async function fetchWeather() {
 
     WAYPOINTS.forEach((w, i) => {
       const d = data[i];
-      if (!d?.hourly?.time) { w._weather = { error: 'keine Daten' }; return; }
+      if (!d?.hourly?.time) { w._weather = { error: 'žádná data' }; return; }
       const target = roundToHour(w.time); // e.g. "2026-05-01T10:00"
       const idx = d.hourly.time.indexOf(target);
-      if (idx === -1) { w._weather = { error: 'außerhalb Forecast-Fenster' }; return; }
+      if (idx === -1) { w._weather = { error: 'mimo rozsah předpovědi' }; return; }
       w._weather = {
         temp:   d.hourly.temperature_2m[idx],
         precip: d.hourly.precipitation[idx],
@@ -582,12 +582,12 @@ async function fetchWeather() {
     });
 
     const now = new Date();
-    status.textContent = `Wetter: aktualisiert ${now.toLocaleTimeString('de-AT',{hour:'2-digit',minute:'2-digit'})} · nächstes Update in 10 Min`;
+    status.textContent = `Počasí: aktualizováno ${now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})} · další za 10 min`;
     // refresh any open waypoint popup with new data
     wpMarkers.forEach(({w, marker}) => { if (marker.isPopupOpen()) marker.getPopup().setContent(renderWaypointPopup(w)); });
   } catch (e) {
-    status.textContent = `Wetter: Fehler (${e.message}) · nächster Versuch in 10 Min`;
-    WAYPOINTS.forEach(w => { if (!w._weather) w._weather = { error: 'Netzwerk' }; });
+    status.textContent = `Počasí: chyba (${e.message}) · další pokus za 10 min`;
+    WAYPOINTS.forEach(w => { if (!w._weather) w._weather = { error: 'Síť' }; });
   } finally {
     if (btn) { btn.disabled = false; btn.classList.remove('spinning'); }
   }
@@ -850,28 +850,28 @@ function onChartMove(ev) {
 
   const wp = nearestWaypointWithWeather(d, day);
   const t = interpolatedTimeForDist(d);
-  const timeStr = t.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+  const timeStr = t.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
 
   // map tooltip (weather on the map)
   let mapHtml;
-  if (!wp || !wp._weather) mapHtml = `<div class="hwt-head" style="color:${DAY_COLORS[day]}">${timeStr} · km ${d.toFixed(0)}</div><div style="font-style:italic;color:#888">Wetter lädt …</div>`;
+  if (!wp || !wp._weather) mapHtml = `<div class="hwt-head" style="color:${DAY_COLORS[day]}">${timeStr} · km ${d.toFixed(0)}</div><div style="font-style:italic;color:#888">Načítání počasí …</div>`;
   else if (wp._weather.error) mapHtml = `<div class="hwt-head" style="color:${DAY_COLORS[day]}">${timeStr} · km ${d.toFixed(0)}</div><div style="font-style:italic;color:#888">${wp._weather.error}</div>`;
   else mapHtml = `
     <div class="hwt-head" style="color:${DAY_COLORS[day]}">${timeStr} · km ${d.toFixed(0)}</div>
     <div class="hwt-cond">${wmoText(wp._weather.code)}</div>
-    <div class="hwt-row"><span>Temperatur</span><span>${wp._weather.temp?.toFixed(1)} °C</span></div>
-    <div class="hwt-row"><span>Regen</span><span>${wp._weather.precip?.toFixed(1)} mm</span></div>
-    <div class="hwt-row"><span>Wind</span><span>${wp._weather.wind?.toFixed(0)} km/h</span></div>`;
+    <div class="hwt-row"><span>Teplota</span><span>${wp._weather.temp?.toFixed(1)} °C</span></div>
+    <div class="hwt-row"><span>Srážky</span><span>${wp._weather.precip?.toFixed(1)} mm</span></div>
+    <div class="hwt-row"><span>Vítr</span><span>${wp._weather.wind?.toFixed(0)} km/h</span></div>`;
   hoverMarker.setTooltipContent(mapHtml);
 
   // elevation tooltip below chart (just route info)
   const tt = document.getElementById('elev-tooltip');
   tt.innerHTML = `
     <div class="tt-head" style="color:${DAY_COLORS[day]}">${DAY_NAMES[day]}</div>
-    <div class="tt-row"><span>Position</span><span>km ${d.toFixed(1)}</span></div>
-    <div class="tt-row"><span>Höhe</span><span>${Math.round(pt.ele)} m</span></div>
-    <div class="tt-row"><span>geplant</span><span>${timeStr} Uhr</span></div>
-    <div class="tt-row" style="margin-top:.2rem;font-size:.75rem;color:#888"><span>Wetter</span><span>siehe Karte</span></div>`;
+    <div class="tt-row"><span>Poloha</span><span>km ${d.toFixed(1)}</span></div>
+    <div class="tt-row"><span>Výška</span><span>${Math.round(pt.ele)} m</span></div>
+    <div class="tt-row"><span>plán</span><span>${timeStr}</span></div>
+    <div class="tt-row" style="margin-top:.2rem;font-size:.75rem;color:#888"><span>Počasí</span><span>viz mapa</span></div>`;
 
   // position tooltip near cursor, clamped inside wrap
   const wrap = chart.canvas.parentElement.getBoundingClientRect();
@@ -994,7 +994,7 @@ function drawPrecipChart() {
 
     // time labels (rotated)
     const t = new Date(w.time);
-    const label = t.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+    const label = t.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
     ctx.save();
     ctx.translate(slotX + slotW/2, H - padB + 6);
     ctx.rotate(-Math.PI / 4);
@@ -1019,16 +1019,16 @@ function renderDailyWeather() {
     const tMax = temps.length ? Math.max(...temps) : null;
     const sumBits = [];
     if (tMin !== null) sumBits.push(`${tMin.toFixed(0)}–${tMax.toFixed(0)} °C`);
-    sumBits.push(`Σ ${totalRain.toFixed(1)} mm Regen`);
+    sumBits.push(`Σ ${totalRain.toFixed(1)} mm srážek`);
 
     const chips = wps.map(w => {
-      const time = new Date(w.time).toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+      const time = new Date(w.time).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
       const wx = w._weather;
       if (!wx) return `
         <div class="weather-chip missing">
           <div class="chip-time">${time}</div>
           <div class="chip-name">${w.name}</div>
-          <div class="chip-temp">lädt …</div>
+          <div class="chip-temp">načítá …</div>
         </div>`;
       if (wx.error) return `
         <div class="weather-chip missing">
