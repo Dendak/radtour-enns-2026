@@ -68,7 +68,7 @@
     .elev-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .5rem; margin-bottom: .4rem; padding: 0 .25rem; }
     .elev-head h3 { margin: 0; font-size: 1rem; color: #1d3557; }
     .elev-head .hint { font-size: .78rem; color: var(--muted); }
-    #elev-chart { width: 100%; height: 200px; display: block; background: #fafafa; border-radius: 8px; touch-action: none; }
+    #elev-chart { width: 100%; height: 250px; display: block; background: linear-gradient(180deg, #fcfcfb 0%, #f6f5ef 100%); border-radius: 10px; touch-action: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
     .elev-tooltip {
       position: absolute; pointer-events: none; background: white; border: 1px solid var(--border); border-radius: 10px;
       box-shadow: 0 4px 16px rgba(0,0,0,.12); padding: .6rem .75rem; font-size: .85rem; min-width: 200px; z-index: 10;
@@ -429,6 +429,15 @@ const WP_ELEV = {
   'Reichraming': 345, 'Losenstein': 329, 'Steyr': 311, 'Enns': 281,
   'Mauthausen': 250, 'Steyregg': 249, 'Linz Hauptbahnhof': 266
 };
+// Deterministic pseudo-noise for subtle, repeatable micro-terrain variation
+function noise1d(x) {
+  const s = Math.sin(x * 12.9898) * 43758.5453;
+  return (s - Math.floor(s)) - 0.5;
+}
+function smoothNoise(x) {
+  return 0.5 * noise1d(x * 0.7) + 0.3 * noise1d(x * 1.9 + 17) + 0.2 * noise1d(x * 4.3 + 53);
+}
+
 function synthesizeTrack() {
   // Dedupe — waypoints at day boundaries repeat (e.g. Liezen at end of day1 and start of day2)
   const unique = [];
@@ -440,14 +449,23 @@ function synthesizeTrack() {
   for (let i = 0; i < unique.length - 1; i++) {
     const a = unique[i], b = unique[i+1];
     const aEle = WP_ELEV[a.name] ?? 400, bEle = WP_ELEV[b.name] ?? 400;
-    const steps = Math.max(40, Math.round((b.dist - a.dist) * 4));
+    // Much denser sampling: 20 points per km for a smooth profile
+    const steps = Math.max(80, Math.round((b.dist - a.dist) * 20));
+    // Micro-terrain amplitude scales gently with distance (longer → more wavy)
+    const amp = Math.min(18, (b.dist - a.dist) * 0.35);
     for (let s = 0; s < steps; s++) {
       const f = s / steps;
+      // smoothstep easing — less sharp at waypoints, more natural arcs
+      const ease = f * f * (3 - 2 * f);
+      const dist = a.dist + (b.dist - a.dist) * f;
+      // attenuate noise near waypoints so they sit on the exact value
+      const edge = Math.min(f, 1 - f) * 2; // 0 at ends, 1 in middle
+      const wobble = smoothNoise(dist) * amp * edge;
       pts.push({
         lat: a.lat + (b.lat - a.lat) * f,
         lon: a.lon + (b.lon - a.lon) * f,
-        ele: aEle + (bEle - aEle) * f,
-        dist: a.dist + (b.dist - a.dist) * f
+        ele: aEle + (bEle - aEle) * ease + wobble,
+        dist: dist
       });
     }
   }
@@ -590,7 +608,7 @@ function roundToHour(iso) {
 
 const chart = {
   canvas: null, ctx: null, dpr: 1,
-  W: 0, H: 0, padL: 40, padR: 10, padT: 10, padB: 22,
+  W: 0, H: 0, padL: 46, padR: 12, padT: 16, padB: 32,
   track: [], byDay: {}, maxEle: 0, minEle: 0, maxDist: 0
 };
 
@@ -600,8 +618,11 @@ function initChart(track) {
   chart.track = track;
   chart.byDay = splitByDay(track);
   const eles = track.map(p => p.ele).filter(e => !isNaN(e));
-  chart.minEle = Math.floor(Math.min(...eles) / 50) * 50 - 20;
-  chart.maxEle = Math.ceil(Math.max(...eles) / 50) * 50 + 20;
+  const rawMin = Math.min(...eles), rawMax = Math.max(...eles);
+  const range = rawMax - rawMin;
+  const pad = Math.max(25, range * 0.08);
+  chart.minEle = Math.floor((rawMin - pad) / 50) * 50;
+  chart.maxEle = Math.ceil((rawMax + pad) / 50) * 50;
   chart.maxDist = track[track.length - 1].dist;
   resizeChart();
   window.addEventListener('resize', resizeChart);
@@ -627,68 +648,149 @@ function yForEle(e)  { return chart.padT + (1 - (e - chart.minEle) / (chart.maxE
 function drawChart(hoverX) {
   const ctx = chart.ctx;
   ctx.clearRect(0, 0, chart.W, chart.H);
+  const innerTop = chart.padT, innerBottom = chart.H - chart.padB;
+  const innerLeft = chart.padL, innerRight = chart.W - chart.padR;
 
-  // gridlines
-  ctx.strokeStyle = '#e5e3dc'; ctx.lineWidth = 1;
-  ctx.font = '10px -apple-system, Segoe UI, sans-serif';
-  ctx.fillStyle = '#888';
-  const eleSteps = 4;
-  for (let i = 0; i <= eleSteps; i++) {
-    const e = chart.minEle + (chart.maxEle - chart.minEle) * i / eleSteps;
+  // Background gradient (sky-ish) for the plot area
+  const bgGrad = ctx.createLinearGradient(0, innerTop, 0, innerBottom);
+  bgGrad.addColorStop(0, 'rgba(230, 236, 244, 0.35)');
+  bgGrad.addColorStop(1, 'rgba(230, 236, 244, 0)');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(innerLeft, innerTop, innerRight - innerLeft, innerBottom - innerTop);
+
+  // Fine minor gridlines (every 50 m)
+  ctx.strokeStyle = 'rgba(0,0,0,0.04)'; ctx.lineWidth = 1;
+  for (let e = chart.minEle; e <= chart.maxEle; e += 50) {
     const y = yForEle(e);
-    ctx.beginPath(); ctx.moveTo(chart.padL, y); ctx.lineTo(chart.W - chart.padR, y); ctx.stroke();
-    ctx.fillText(`${Math.round(e)} m`, 2, y + 3);
-  }
-  // distance labels
-  const distSteps = 6;
-  for (let i = 0; i <= distSteps; i++) {
-    const d = chart.maxDist * i / distSteps;
-    const x = xForDist(d);
-    ctx.fillText(`${Math.round(d)} km`, x - 14, chart.H - 6);
+    ctx.beginPath(); ctx.moveTo(innerLeft, y); ctx.lineTo(innerRight, y); ctx.stroke();
   }
 
-  // per-day filled areas
+  // Major gridlines (every 200 m) with labels
+  ctx.font = '10px -apple-system, "Segoe UI", Roboto, sans-serif';
+  ctx.textBaseline = 'middle';
+  for (let e = Math.ceil(chart.minEle / 200) * 200; e <= chart.maxEle; e += 200) {
+    const y = yForEle(e);
+    ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+    ctx.beginPath(); ctx.moveTo(innerLeft, y); ctx.lineTo(innerRight, y); ctx.stroke();
+    ctx.fillStyle = '#6b6b6b';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${e} m`, innerLeft - 6, y);
+  }
+
+  // Distance labels (every 50 km, plus endpoints)
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'center';
+  const distMarks = new Set([0, Math.round(chart.maxDist)]);
+  for (let d = 50; d < chart.maxDist; d += 50) distMarks.add(d);
+  distMarks.forEach(d => {
+    const x = xForDist(d);
+    ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+    ctx.beginPath(); ctx.moveTo(x, innerBottom); ctx.lineTo(x, innerBottom + 3); ctx.stroke();
+    ctx.fillStyle = '#6b6b6b';
+    ctx.fillText(`${d} km`, x, innerBottom + 6);
+  });
+
+  // Catmull-Rom → Bezier smoothing helper for one day's polyline
+  function tracePath(pts, closeToFloor) {
+    if (pts.length < 2) return;
+    ctx.moveTo(xForDist(pts[0].dist), yForEle(pts[0].ele));
+    const tension = 0.5;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[i + 2] || p2;
+      const x1 = xForDist(p1.dist), y1 = yForEle(p1.ele);
+      const x2 = xForDist(p2.dist), y2 = yForEle(p2.ele);
+      const cp1x = x1 + (xForDist(p2.dist) - xForDist(p0.dist)) / 6 * tension;
+      const cp1y = y1 + (yForEle(p2.ele) - yForEle(p0.ele)) / 6 * tension;
+      const cp2x = x2 - (xForDist(p3.dist) - xForDist(p1.dist)) / 6 * tension;
+      const cp2y = y2 - (yForEle(p3.ele) - yForEle(p1.ele)) / 6 * tension;
+      ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
+    }
+    if (closeToFloor) {
+      ctx.lineTo(xForDist(pts[pts.length - 1].dist), innerBottom);
+      ctx.lineTo(xForDist(pts[0].dist), innerBottom);
+      ctx.closePath();
+    }
+  }
+
+  // Per-day: gradient fill + smooth line
   for (const day of [1, 2, 3]) {
     const pts = chart.byDay[day];
     if (!pts.length) continue;
-    ctx.fillStyle = DAY_COLORS[day] + '33';
+    const color = DAY_COLORS[day];
+
+    // Fill with vertical gradient (stronger near terrain, fading toward bottom)
+    const fillGrad = ctx.createLinearGradient(0, innerTop, 0, innerBottom);
+    fillGrad.addColorStop(0, color + '55');
+    fillGrad.addColorStop(0.7, color + '22');
+    fillGrad.addColorStop(1, color + '0c');
+    ctx.fillStyle = fillGrad;
     ctx.beginPath();
-    ctx.moveTo(xForDist(pts[0].dist), yForEle(chart.minEle));
-    pts.forEach(p => ctx.lineTo(xForDist(p.dist), yForEle(p.ele)));
-    ctx.lineTo(xForDist(pts[pts.length - 1].dist), yForEle(chart.minEle));
-    ctx.closePath();
+    tracePath(pts, true);
     ctx.fill();
 
-    ctx.strokeStyle = DAY_COLORS[day];
-    ctx.lineWidth = 2;
+    // Smooth line stroke
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.6;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
     ctx.beginPath();
-    pts.forEach((p, i) => {
-      const x = xForDist(p.dist), y = yForEle(p.ele);
-      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    });
+    tracePath(pts, false);
     ctx.stroke();
   }
 
-  // day boundary markers
+  // Day-boundary dividers (subtle)
   [77, 176].forEach(d => {
     const x = xForDist(d);
-    ctx.strokeStyle = '#aaa'; ctx.setLineDash([3, 3]);
-    ctx.beginPath(); ctx.moveTo(x, chart.padT); ctx.lineTo(x, chart.H - chart.padB); ctx.stroke();
+    ctx.strokeStyle = 'rgba(0,0,0,0.22)'; ctx.setLineDash([2, 4]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, innerTop); ctx.lineTo(x, innerBottom); ctx.stroke();
     ctx.setLineDash([]);
   });
 
-  // waypoint tick marks
+  // Waypoint markers (dots with thin vertical tick into the profile)
   WAYPOINTS.forEach(w => {
     const x = xForDist(w.dist);
-    ctx.fillStyle = DAY_COLORS[w.day];
-    ctx.beginPath(); ctx.arc(x, chart.H - chart.padB, 3, 0, Math.PI * 2); ctx.fill();
+    const eleAtWp = WP_ELEV[w.name] ?? 400;
+    const yDot = yForEle(eleAtWp);
+    // thin dashed tick from dot to x-axis
+    ctx.strokeStyle = DAY_COLORS[w.day] + '55';
+    ctx.setLineDash([1, 3]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, yDot); ctx.lineTo(x, innerBottom); ctx.stroke();
+    ctx.setLineDash([]);
+    // dot on the profile
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(x, yDot, 3.2, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = DAY_COLORS[w.day]; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(x, yDot, 3.2, 0, Math.PI * 2); ctx.stroke();
   });
 
-  // hover cursor
+  // hover cursor — vertical line + ring on the profile
   if (hoverX !== undefined) {
-    ctx.strokeStyle = '#1d3557'; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(hoverX, chart.padT); ctx.lineTo(hoverX, chart.H - chart.padB); ctx.stroke();
+    ctx.strokeStyle = 'rgba(29, 53, 87, 0.6)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(hoverX, innerTop); ctx.lineTo(hoverX, innerBottom); ctx.stroke();
+    ctx.setLineDash([]);
+    // interpolated elevation dot at cursor
+    const d = ((hoverX - innerLeft) / (innerRight - innerLeft)) * chart.maxDist;
+    const p = pointAtDist(d);
+    const day = dayForDist(d);
+    const yDot = yForEle(p.ele);
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(hoverX, yDot, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = DAY_COLORS[day]; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(hoverX, yDot, 5, 0, Math.PI * 2); ctx.stroke();
   }
+
+  // axis frame (subtle)
+  ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(innerLeft, innerTop);
+  ctx.lineTo(innerLeft, innerBottom);
+  ctx.lineTo(innerRight, innerBottom);
+  ctx.stroke();
 }
 
 function pointAtDist(d) {
