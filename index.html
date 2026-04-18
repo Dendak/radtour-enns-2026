@@ -68,7 +68,7 @@
     .elev-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .5rem; margin-bottom: .4rem; padding: 0 .25rem; }
     .elev-head h3 { margin: 0; font-size: 1rem; color: #1d3557; }
     .elev-head .hint { font-size: .78rem; color: var(--muted); }
-    #elev-chart { width: 100%; height: 250px; display: block; background: linear-gradient(180deg, #fcfcfb 0%, #f6f5ef 100%); border-radius: 10px; touch-action: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
+    #elev-chart { width: 100%; height: 340px; display: block; background: linear-gradient(180deg, #fcfcfb 0%, #f6f5ef 100%); border-radius: 10px; touch-action: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
     .elev-tooltip {
       position: absolute; pointer-events: none; background: white; border: 1px solid var(--border); border-radius: 10px;
       box-shadow: 0 4px 16px rgba(0,0,0,.12); padding: .6rem .75rem; font-size: .85rem; min-width: 200px; z-index: 10;
@@ -109,7 +109,8 @@
     .weather-day .sum { font-size: .82rem; color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
     .weather-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: .5rem; }
     .weather-chip { background: #fafaf7; border: 1px solid var(--border); border-radius: 8px; padding: .55rem .65rem; font-size: .82rem; }
-    .weather-chip .chip-time { font-weight: 700; color: #1d3557; font-variant-numeric: tabular-nums; }
+    .weather-chip .chip-time { font-weight: 700; color: #1d3557; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; }
+    .weather-chip .chip-km { font-weight: 600; font-size: .7rem; color: #6b6b6b; background: rgba(0,0,0,.05); padding: .05rem .35rem; border-radius: 999px; }
     .weather-chip .chip-name { color: #333; font-size: .78rem; margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .weather-chip .chip-temp { font-size: 1.2rem; font-weight: 700; color: #1d3557; line-height: 1.05; }
     .weather-chip .chip-cond { font-size: .78rem; color: #444; margin-bottom: .25rem; }
@@ -206,7 +207,7 @@
     <div class="elev-wrap">
       <div class="elev-head">
         <h3>Výškový profil</h3>
-        <span class="hint">Přejeďte myší nad křivkou: poloha na mapě + počasí v plánovaném čase</span>
+        <span class="hint" id="elev-stats">Přejeďte myší nad křivkou: poloha na mapě + počasí v plánovaném čase</span>
       </div>
       <canvas id="elev-chart"></canvas>
       <div class="elev-tooltip" id="elev-tooltip"></div>
@@ -300,16 +301,13 @@
       class="stay-map"
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.openstreetmap.org/export/embed.html?bbox=14.516%2C47.887%2C14.532%2C47.897&amp;layer=mapnik&amp;marker=47.8918%2C14.5236"
-      title="Landgasthof Kirchenwirt Großraming — mapa"></iframe>
+      src="https://en.frame.mapy.com/?x=14.5236&y=47.8918&z=16&source=coor&id=14.5236%2C47.8918&lang=cs"
+      title="Landgasthof Kirchenwirt Großraming — Mapy.com"></iframe>
   </div>
 
   <h2 class="section-title">Praktické informace</h2>
   <div class="info-grid">
-    <div class="info-card"><h3>Příjezd</h3><p>Vlakem do <strong>Radstadtu</strong> (ÖBB, rezervujte místo pro kolo). Sraz na nádraží.</p></div>
-    <div class="info-card"><h3>Zpáteční cesta</h3><p>Z <strong>Linec hl. n.</strong> vlakem ÖBB zpět do Radstadtu (přestup v Selzthalu nebo Salcburku).</p></div>
-    <div class="info-card"><h3>Trasa</h3><p>Ennsradweg (R7) do Enns, pak Donauradweg (R1) do Lince. Většinou asfaltováno, vhodné i pro rodiny.</p></div>
-    <div class="info-card"><h3>Zavazadlo</h3><ul><li>Helma, pláštěnka, ochrana proti slunci</li><li>Lepení, náhradní duše, hustilka</li><li>Láhev na pití, tyčinky</li><li>Občanský průkaz, hotovost/karta</li></ul></div>
+    <!-- TODO: doplnit -->
   </div>
 
 </main>
@@ -369,7 +367,7 @@ function wmoText(code) { return WMO[code] ?? 'neznámo'; }
 
 // ================== INIT MAP ==================
 
-const map = L.map('map', { scrollWheelZoom: false });
+const map = L.map('map', { scrollWheelZoom: true });
 const cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
   maxZoom: 18, attribution: '© <a href="https://www.cyclosm.org">CyclOSM</a> · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', subdomains: 'abc'
 }).addTo(map);
@@ -474,14 +472,44 @@ function synthesizeTrack() {
   return pts;
 }
 
+// Dynamic boundaries — recomputed from snapped waypoints after GPX loads
+let DAY_END_DIST = { 1: 77, 2: 176 };
+let DONAU_START = 239;
+
 function splitByDay(track) {
-  // Day thresholds based on waypoint distance bands
-  const d1End = 77, d2End = 176;
+  const d1End = DAY_END_DIST[1], d2End = DAY_END_DIST[2];
   return {
     1: track.filter(p => p.dist <= d1End + 0.01),
     2: track.filter(p => p.dist >= d1End - 0.01 && p.dist <= d2End + 0.01),
     3: track.filter(p => p.dist >= d2End - 0.01)
   };
+}
+
+// Snap each waypoint to its nearest point on the real GPX track.
+// Updates lat/lon/dist so markers sit on the drawn line and km labels
+// reflect the true cumulative distance.
+function snapWaypointsToTrack(track) {
+  if (!track || track.length < 2) return;
+  for (const w of WAYPOINTS) {
+    let best = null, bestD = Infinity;
+    for (const p of track) {
+      const dLat = p.lat - w.lat, dLon = p.lon - w.lon;
+      const d = dLat * dLat + dLon * dLon;
+      if (d < bestD) { bestD = d; best = p; }
+    }
+    if (best) { w.lat = best.lat; w.lon = best.lon; w.dist = best.dist; }
+  }
+  const n1 = WAYPOINTS.find(w => w.day === 1 && w.tag === 'Nocleh 1');
+  const n2 = WAYPOINTS.find(w => w.day === 2 && w.tag === 'Nocleh 2');
+  const enns = WAYPOINTS.find(w => w.name === 'Enns');
+  if (n1) DAY_END_DIST[1] = n1.dist;
+  if (n2) DAY_END_DIST[2] = n2.dist;
+  if (enns) DONAU_START = enns.dist;
+  // Day-2 entries for Liezen and Day-3 entries for Großraming share the boundary km
+  WAYPOINTS.forEach(w => {
+    if (w.day === 2 && w.tag === 'Start') w.dist = DAY_END_DIST[1];
+    if (w.day === 3 && w.tag === 'Start') w.dist = DAY_END_DIST[2];
+  });
 }
 
 function renderTrack(track) {
@@ -492,9 +520,9 @@ function renderTrack(track) {
     if (latlngs.length) {
       const style = { color: DAY_COLORS[d], weight: 5, opacity: 0.85 };
       if (d === 3) {
-        // Donauradweg part (after km 239) as dashed overlay
-        const mainPart = byDay[d].filter(p => p.dist <= 239).map(p => [p.lat, p.lon]);
-        const donauPart = byDay[d].filter(p => p.dist >= 239).map(p => [p.lat, p.lon]);
+        // Donauradweg part (after Enns) as dashed overlay
+        const mainPart = byDay[d].filter(p => p.dist <= DONAU_START).map(p => [p.lat, p.lon]);
+        const donauPart = byDay[d].filter(p => p.dist >= DONAU_START).map(p => [p.lat, p.lon]);
         if (mainPart.length) L.polyline(mainPart, style).addTo(dayLayers[d]);
         if (donauPart.length) L.polyline(donauPart, { color: '#1d4ed8', weight: 5, opacity: 0.85, dashArray: '8,6' }).addTo(dayLayers[d]);
       } else {
@@ -690,23 +718,12 @@ function drawChart(hoverX) {
     ctx.fillText(`${d} km`, x, innerBottom + 6);
   });
 
-  // Catmull-Rom → Bezier smoothing helper for one day's polyline
+  // Direct polyline from GPX points — preserves real micro-terrain detail.
   function tracePath(pts, closeToFloor) {
     if (pts.length < 2) return;
     ctx.moveTo(xForDist(pts[0].dist), yForEle(pts[0].ele));
-    const tension = 0.5;
-    for (let i = 0; i < pts.length - 1; i++) {
-      const p0 = pts[i - 1] || pts[i];
-      const p1 = pts[i];
-      const p2 = pts[i + 1];
-      const p3 = pts[i + 2] || p2;
-      const x1 = xForDist(p1.dist), y1 = yForEle(p1.ele);
-      const x2 = xForDist(p2.dist), y2 = yForEle(p2.ele);
-      const cp1x = x1 + (xForDist(p2.dist) - xForDist(p0.dist)) / 6 * tension;
-      const cp1y = y1 + (yForEle(p2.ele) - yForEle(p0.ele)) / 6 * tension;
-      const cp2x = x2 - (xForDist(p3.dist) - xForDist(p1.dist)) / 6 * tension;
-      const cp2y = y2 - (yForEle(p3.ele) - yForEle(p1.ele)) / 6 * tension;
-      ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
+    for (let i = 1; i < pts.length; i++) {
+      ctx.lineTo(xForDist(pts[i].dist), yForEle(pts[i].ele));
     }
     if (closeToFloor) {
       ctx.lineTo(xForDist(pts[pts.length - 1].dist), innerBottom);
@@ -742,7 +759,7 @@ function drawChart(hoverX) {
   }
 
   // Day-boundary dividers (subtle)
-  [77, 176].forEach(d => {
+  [DAY_END_DIST[1], DAY_END_DIST[2]].forEach(d => {
     const x = xForDist(d);
     ctx.strokeStyle = 'rgba(0,0,0,0.22)'; ctx.setLineDash([2, 4]); ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(x, innerTop); ctx.lineTo(x, innerBottom); ctx.stroke();
@@ -752,7 +769,7 @@ function drawChart(hoverX) {
   // Waypoint markers (dots with thin vertical tick into the profile)
   WAYPOINTS.forEach(w => {
     const x = xForDist(w.dist);
-    const eleAtWp = WP_ELEV[w.name] ?? 400;
+    const eleAtWp = pointAtDist(w.dist).ele;
     const yDot = yForEle(eleAtWp);
     // thin dashed tick from dot to x-axis
     ctx.strokeStyle = DAY_COLORS[w.day] + '55';
@@ -832,7 +849,7 @@ function nearestWaypointWithWeather(d, day) {
   return best;
 }
 
-function dayForDist(d) { return d <= 77 ? 1 : (d <= 176 ? 2 : 3); }
+function dayForDist(d) { return d <= DAY_END_DIST[1] ? 1 : (d <= DAY_END_DIST[2] ? 2 : 3); }
 
 function onChartMove(ev) {
   const rect = chart.canvas.getBoundingClientRect();
@@ -911,6 +928,8 @@ document.querySelectorAll('.day-toggle input').forEach(cb => {
   if (!track) {
     console.info('GPX nicht gefunden — verwende synthetische Route zwischen Wegpunkten.');
     track = synthesizeTrack();
+  } else {
+    snapWaypointsToTrack(track);
   }
   renderTrack(track);
   renderWaypoints();
@@ -1017,29 +1036,34 @@ function renderDailyWeather() {
     const temps = wps.map(w => (w._weather && !w._weather.error) ? w._weather.temp : null).filter(t => t !== null);
     const tMin = temps.length ? Math.min(...temps) : null;
     const tMax = temps.length ? Math.max(...temps) : null;
+    const dayKm = wps.length >= 2 ? (wps[wps.length - 1].dist - wps[0].dist) : 0;
     const sumBits = [];
+    if (dayKm > 0) sumBits.push(`${dayKm.toFixed(0)} km`);
     if (tMin !== null) sumBits.push(`${tMin.toFixed(0)}–${tMax.toFixed(0)} °C`);
     sumBits.push(`Σ ${totalRain.toFixed(1)} mm srážek`);
 
+    const dayStartDist = wps.length ? wps[0].dist : 0;
     const chips = wps.map(w => {
       const time = new Date(w.time).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
+      const segKm = (w.dist - dayStartDist).toFixed(0);
+      const kmBadge = `<span class="chip-km">${segKm} km</span>`;
       const wx = w._weather;
       if (!wx) return `
         <div class="weather-chip missing">
-          <div class="chip-time">${time}</div>
+          <div class="chip-time">${time} · ${kmBadge}</div>
           <div class="chip-name">${w.name}</div>
           <div class="chip-temp">načítá …</div>
         </div>`;
       if (wx.error) return `
         <div class="weather-chip missing">
-          <div class="chip-time">${time}</div>
+          <div class="chip-time">${time} · ${kmBadge}</div>
           <div class="chip-name">${w.name}</div>
           <div class="chip-temp">—</div>
           <div class="chip-cond">${wx.error}</div>
         </div>`;
       return `
         <div class="weather-chip">
-          <div class="chip-time">${time}</div>
+          <div class="chip-time">${time} · ${kmBadge}</div>
           <div class="chip-name" title="${w.name}">${w.name}</div>
           <div class="chip-temp">${wx.temp.toFixed(0)} °C</div>
           <div class="chip-cond">${wmoText(wx.code)}</div>
