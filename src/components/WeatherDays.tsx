@@ -27,7 +27,7 @@ export function WeatherDays({
     <section className="mt-10 md:mt-14">
       <div className="flex items-end justify-between flex-wrap gap-2 mb-5">
         <div>
-          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-teal-700/80">Předpověď</div>
+          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">Předpověď</div>
           <h2 className="section-title">Počasí podle dnů</h2>
         </div>
         <button

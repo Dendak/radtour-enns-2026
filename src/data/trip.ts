@@ -18,11 +18,11 @@ export const TRIP = {
 };
 
 export const DAY_COLORS: Record<1 | 2 | 3, string> = {
-  1: '#e11d48',
-  2: '#f97316',
-  3: '#14b8a6',
+  1: '#b45309',
+  2: '#15803d',
+  3: '#0369a1',
 };
-export const DONAU_COLOR = '#1d4ed8';
+export const DONAU_COLOR = '#1e40af';
 
 export const DAY_NAMES: Record<1 | 2 | 3, string> = {
   1: 'Den 1 — Pá 1. května',

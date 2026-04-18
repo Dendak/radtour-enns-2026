@@ -86,7 +86,7 @@ export function PrecipitationChart({ waypoints, weather, dayEnd }: {
 
   return (
     <div className="p-4 md:p-5 border-t border-slate-200/70">
-      <div className="text-xs font-semibold tracking-[0.15em] uppercase text-teal-700/80">Srážky</div>
+      <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">Srážky</div>
       <div className="font-display text-lg font-bold text-ink mb-2">Předpověď srážek (mm/h)</div>
       <canvas ref={canvasRef} className="w-full h-[180px] block" />
     </div>

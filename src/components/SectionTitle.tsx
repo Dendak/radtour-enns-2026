@@ -9,7 +9,7 @@ export function SectionTitle({ eyebrow, title, hint }: { eyebrow?: string; title
       transition={{ duration: 0.5 }}
       className="mb-5 md:mb-7">
       {eyebrow && (
-        <div className="text-xs font-semibold tracking-[0.15em] uppercase text-teal-700/80 mb-1">{eyebrow}</div>
+        <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90 mb-1">{eyebrow}</div>
       )}
       <div className="flex flex-wrap items-end justify-between gap-2">
         <h2 className="section-title">{title}</h2>

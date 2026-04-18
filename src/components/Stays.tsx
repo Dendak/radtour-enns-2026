@@ -6,7 +6,7 @@ export function Stays() {
   return (
     <section className="mt-10 md:mt-14">
       <div className="mb-5">
-        <div className="text-xs font-semibold tracking-[0.15em] uppercase text-teal-700/80">Nocleh</div>
+        <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">Nocleh</div>
         <h2 className="section-title">Ubytování</h2>
       </div>
       <div className="grid gap-5 md:grid-cols-2">
@@ -23,7 +23,7 @@ export function Stays() {
                 <div>
                   <div className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-500">{s.night}</div>
                   <div className="flex items-center gap-2 mt-1">
-                    <BedDouble className="h-5 w-5 text-teal-600" />
+                    <BedDouble className="h-5 w-5 text-emerald-700" />
                     <h3 className="font-display text-xl font-bold text-ink">{s.name}</h3>
                     {s.tentative && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-2 py-0.5">

@@ -8,15 +8,17 @@ export default {
         display: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
       },
       colors: {
-        day1: '#e11d48',
-        day2: '#f97316',
-        day3: '#14b8a6',
-        donau: '#1d4ed8',
-        ink: '#0f172a',
-        paper: '#fbfaf6',
+        day1: '#b45309',   // burnt amber (Alps descent)
+        day2: '#15803d',   // forest green (Gesäuse)
+        day3: '#0369a1',   // river blue (flat Donau)
+        donau: '#1e40af',
+        ink: '#1c1917',    // warm near-black
+        paper: '#fdfaf3',  // warm cream
+        moss: '#3f6212',
+        rust: '#9a3412',
       },
       backgroundImage: {
-        'hero-grad': 'radial-gradient(1200px 600px at 10% -20%, rgba(20,184,166,0.18), transparent 60%), radial-gradient(900px 500px at 90% 0%, rgba(249,115,22,0.16), transparent 55%), linear-gradient(180deg, #0b1220 0%, #0f172a 100%)',
+        'hero-fallback': 'radial-gradient(1000px 500px at 20% 0%, rgba(180, 83, 9, 0.35), transparent 60%), radial-gradient(900px 500px at 90% 10%, rgba(21, 128, 61, 0.3), transparent 55%), linear-gradient(180deg, #0c0a09 0%, #1c1917 100%)',
       },
       boxShadow: {
         soft: '0 1px 3px rgba(15,23,42,0.06), 0 8px 24px -8px rgba(15,23,42,0.08)',

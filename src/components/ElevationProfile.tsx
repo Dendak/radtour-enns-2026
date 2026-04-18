@@ -230,7 +230,7 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover }:
     <div className="p-4 md:p-5" ref={wrapRef}>
       <div className="flex items-end justify-between flex-wrap gap-2 mb-2">
         <div>
-          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-teal-700/80">Profil</div>
+          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">Profil</div>
           <div className="font-display text-lg font-bold text-ink">Výškový profil</div>
         </div>
         <div className="text-xs text-slate-500 flex gap-3">
