@@ -36,6 +36,22 @@ export const DAY_CAPTIONS: Record<1 | 2 | 3, string> = {
   3: 'Großraming → Linec · Donauradweg',
 };
 
+// Real photos from Wikimedia Commons (stable Special:FilePath redirects, CC/PD licensed)
+export const DAY_PHOTOS: Record<1 | 2 | 3, { url: string; credit: string }> = {
+  1: {
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ennsradweg_bei_Radstadt.jpg?width=1600',
+    credit: 'Wikimedia Commons · Ennsradweg bei Radstadt',
+  },
+  2: {
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Gesaeuseeingang.jpg?width=1600',
+    credit: 'Wikimedia Commons · Gesäuseeingang',
+  },
+  3: {
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Donauufer_Linz_Urfahr_1.jpg?width=1600',
+    credit: 'Wikimedia Commons · Donauufer Linz',
+  },
+};
+
 export const WAYPOINTS: Waypoint[] = [
   { day: 1, dist: 0,   lat: 47.3853, lon: 13.4536, name: 'Radstadt (nádraží)', time: '2026-05-01T09:00', tag: 'Start' },
   { day: 1, dist: 20,  lat: 47.3950, lon: 13.6858, name: 'Schladming',         time: '2026-05-01T10:00', tag: 'Přestávka' },

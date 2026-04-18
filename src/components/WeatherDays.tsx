@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Cloud, CloudRain, Sun, CloudSnow, Wind, Thermometer, MapPin, Clock, RefreshCw } from 'lucide-react';
-import { DAY_COLORS, DAY_NAMES, DAY_CAPTIONS, wmoText, type Waypoint } from '@/data/trip';
+import { DAY_COLORS, DAY_NAMES, DAY_CAPTIONS, DAY_PHOTOS, wmoText, type Waypoint } from '@/data/trip';
 import { TopoPattern } from './TopoPattern';
 import type { WeatherPoint } from '@/hooks/useWeather';
 import { cn } from '@/lib/utils';
@@ -59,21 +59,39 @@ export function WeatherDays({
               key={day}
               className="card overflow-hidden">
               <div
-                className="relative h-24 md:h-28 w-full overflow-hidden text-white"
+                className="relative h-28 md:h-40 w-full overflow-hidden text-white"
                 style={{
                   background: `linear-gradient(135deg, ${color} 0%, ${color}dd 45%, #1c1917 120%)`,
                 }}>
-                <TopoPattern className="text-white/18" />
+                <img
+                  src={DAY_PHOTOS[day].url}
+                  alt=""
+                  aria-hidden
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(180deg, rgba(28,25,23,0.15) 0%, rgba(28,25,23,0.55) 70%, rgba(28,25,23,0.88) 100%), linear-gradient(120deg, ${color}cc 0%, transparent 45%)`,
+                  }}
+                />
+                <TopoPattern className="text-white/15 mix-blend-screen" />
                 <div className="absolute top-0 inset-x-0 h-[3px] bg-white/60" />
-                <div className="relative h-full flex items-center px-5">
+                <div className="relative h-full flex items-end px-5 pb-3">
                   <div>
-                    <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-white/80">
-                      <span className="h-1.5 w-1.5 rounded-full bg-white/80" /> Etapa {day}
+                    <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-white/85">
+                      <span className="h-1.5 w-1.5 rounded-full bg-white" /> Etapa {day}
                     </div>
-                    <div className="font-display font-bold text-base md:text-xl mt-1 drop-shadow-sm leading-snug">
+                    <div className="font-display font-bold text-base md:text-xl mt-1 drop-shadow-md leading-snug">
                       {DAY_CAPTIONS[day]}
                     </div>
                   </div>
+                </div>
+                <div className="absolute right-2 bottom-1.5 text-[9px] text-white/50 tracking-wide">
+                  {DAY_PHOTOS[day].credit}
                 </div>
               </div>
               <div className="p-4 md:p-5">
