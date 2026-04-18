@@ -30,6 +30,21 @@ export const DAY_NAMES: Record<1 | 2 | 3, string> = {
   3: 'Den 3 — Ne 3. května',
 };
 
+export const DAY_PHOTOS: Record<1 | 2 | 3, { url: string; caption: string }> = {
+  1: {
+    url: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=75',
+    caption: 'Radstadt → Liezen · sjezd z Vysokých Taur',
+  },
+  2: {
+    url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=75',
+    caption: 'Gesäuse · soutěska Enns',
+  },
+  3: {
+    url: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=75',
+    caption: 'Enns → Linec · Donauradweg',
+  },
+};
+
 export const WAYPOINTS: Waypoint[] = [
   { day: 1, dist: 0,   lat: 47.3853, lon: 13.4536, name: 'Radstadt (nádraží)', time: '2026-05-01T09:00', tag: 'Start' },
   { day: 1, dist: 20,  lat: 47.3950, lon: 13.6858, name: 'Schladming',         time: '2026-05-01T10:00', tag: 'Přestávka' },

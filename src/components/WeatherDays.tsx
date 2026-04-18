@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Cloud, CloudRain, Sun, CloudSnow, Wind, Thermometer, MapPin, Clock, RefreshCw } from 'lucide-react';
-import { DAY_COLORS, DAY_NAMES, wmoText, type Waypoint } from '@/data/trip';
+import { DAY_COLORS, DAY_NAMES, DAY_PHOTOS, wmoText, type Waypoint } from '@/data/trip';
 import type { WeatherPoint } from '@/hooks/useWeather';
 import { cn } from '@/lib/utils';
 
@@ -49,6 +49,7 @@ export function WeatherDays({
           const start = wps.length ? wps[0].w.dist : 0;
           const color = DAY_COLORS[day];
 
+          const photo = DAY_PHOTOS[day];
           return (
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -56,7 +57,34 @@ export function WeatherDays({
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.45 }}
               key={day}
-              className="card p-4 md:p-5">
+              className="card overflow-hidden">
+              <div className="relative h-28 md:h-36 w-full overflow-hidden">
+                <img
+                  src={photo.url}
+                  alt=""
+                  aria-hidden
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(180deg, rgba(28,25,23,0) 0%, rgba(28,25,23,0.45) 60%, rgba(28,25,23,0.85) 100%), linear-gradient(135deg, ${color}cc 0%, transparent 55%)`,
+                  }}
+                />
+                <div className="absolute inset-x-4 bottom-3 flex items-end justify-between gap-3 text-white">
+                  <div>
+                    <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/80">
+                      <span className="h-2 w-2 rounded-full" style={{ background: color }} /> Etapa {day}
+                    </div>
+                    <div className="font-display font-bold text-base md:text-lg mt-0.5 drop-shadow-sm">{photo.caption}</div>
+                  </div>
+                </div>
+                <div className="absolute top-0 inset-x-0 h-[3px]" style={{ background: color }} />
+              </div>
+              <div className="p-4 md:p-5">
               <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
                 <div className="flex items-center gap-3">
                   <span className="h-3 w-3 rounded-full" style={{ background: color }} />
@@ -104,6 +132,7 @@ export function WeatherDays({
                     </div>
                   );
                 })}
+              </div>
               </div>
             </motion.div>
           );
