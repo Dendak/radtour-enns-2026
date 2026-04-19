@@ -155,7 +155,7 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Radstadt (start)',
     dist: 0,
     blurb:
-      'Jedno z nejlépe dochovaných opevněných měst v Alpách. Tři obranné věže, 800 let staré náměstí. Krátká okruhová procházka před vyjetím.',
+      'Opevněné město se třemi dochovanými obrannými věžemi a náměstím z 13. století. Okruh hradbami trvá ~20 minut.',
     mapsQuery: 'Hauptplatz Radstadt',
     photoUrl: wiki('Radstadt,_Hauptplatz.jpg'),
   },
@@ -177,8 +177,7 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Schladming',
     dist: 20,
     blurb:
-      'Staré hornické město pod Dachsteinem (od 11. století). Dnes zimní středisko, ale Hauptplatz si drží historickou tvář.',
-    tip: 'Krátká procházka po náměstí a na řeku Enns.',
+      'Hornické město pod Dachsteinem od 11. století. Dnes zimní středisko, Hauptplatz ale drží historickou tvář.',
     mapsQuery: 'Hauptplatz Schladming',
     photoUrl: wiki('Schladming-aerial.jpg'),
   },
@@ -189,7 +188,7 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Gröbming',
     dist: 42,
     blurb:
-      'Malé historické jádro se štýrskými měšťanskými domy a krámky. Přirozený polední stop v půlce dne.',
+      'Malé historické jádro se štýrskými měšťanskými domy a krámky. Kolem poledne ~km 42.',
     mapsQuery: 'Altstadt Gröbming',
     photoUrl: wiki('Altstadt_Groebming.jpg'),
   },
@@ -200,7 +199,7 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Liezen',
     dist: 77,
     blurb:
-      'Největší město v horním Ennstalu. Praktické refresh místo s obchody, lékárnou a cukrárnou před posledním tahem do Admontu.',
+      'Největší město horního Ennstalu. Obchody, lékárna, cukrárna — poslední zastávka před tahem do Admontu.',
     mapsQuery: 'Liezen Hauptplatz',
     photoUrl: wiki('Liezen_294A2422_Styria.jpg'),
   },
@@ -241,8 +240,8 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Liezen · Ausseer Straße 7',
     dist: 77,
     blurb:
-      'Tradiční liezenský hostinec. V recenzích chválí Sonntagsbrunch, polední bufet (každé 11. menu zdarma) a sezónní bílý chřest. „Ausgezeichnete Küche, großzügige Portionen, freundliches Personal." Typická domácí rakouská kuchyně.',
-    tip: 'Hlavní pozdní oběd dne 1 — po 75. km ideální stop před posledním tahem do Admontu.',
+      'Rakouská domácí kuchyně na náměstí. Polední bufet (každé 11. menu zdarma), Sonntagsbrunch, sezónní bílý chřest. „Ausgezeichnete Küche, großzügige Portionen."',
+    tip: 'Pozdní oběd dne 1, km 77 — 22 km do Admontu.',
     mapsQuery: 'Gasthof Goldener Hirsch Liezen Ausseer Straße',
     hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · o svátku zkrácené, telefonem ověřit',
   },
@@ -253,8 +252,8 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Admont · u kláštera',
     dist: 99,
     blurb:
-      'Tradiční hostinec přímo vedle Stift Admont. Recenze opakovaně mluví o „best Schnitzel v okolí" a hearty regional dishes — domácí Bauerngröstl, štýrská kuchyně z regionálních surovin. Bezpečné parkování kol.',
-    tip: 'Pozdní oběd / první pivo po příjezdu do cíle dne 1 (~17:00).',
+      'Hostinec hned vedle Stift Admont. V recenzích „best Schnitzel v okolí", domácí Bauerngröstl, štýrské suroviny. Bezpečné parkování kol.',
+    tip: 'První pivo po příjezdu do cíle dne 1 (~17:00).',
     mapsQuery: 'Gasthof Kirchenwirt Admont',
     website: 'https://www.kirchenwirt-admont.at/',
     hours: 'Pá 1.5. (st. svátek): obvykle 11–23 · o svátku stabilně otevřeno',
@@ -267,7 +266,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 99,
     blurb:
       'Největší klášterní knihovna na světě (70 000 svazků, 70 m dlouhá, strop od Altomonteho). Založena 1074. Muzeum přírody, moderní umění.',
-    tip: 'Vstupné cca € 13,50. Unbedingt zajít — i zvenčí za fotku.',
+    tip: 'Vstupné cca € 13,50. Otevřeno sezónně 18.3.–1.11.',
     mapsQuery: 'Stift Admont Bibliothek',
     website: 'https://www.stiftadmont.at/',
     photoUrl: wiki('Stift_Admont_03.jpg'),
@@ -283,7 +282,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 115,
     blurb:
       'Divoká soutěska Enns, vápencové stěny Buchsteinu a Hochtoru. UNESCO-kandidát. Trasa vede přímo dnem údolí podél řeky.',
-    tip: 'Nejkrásnější úsek celé cesty. Dej si čas na focení u Gstatterboden.',
+    tip: 'U Gstatterboden je infocentrum parku a přístup k řece.',
     mapsQuery: 'Gesäuse Nationalpark',
     photoUrl: wiki('Gesaeuseeingang.jpg'),
   },
@@ -301,28 +300,12 @@ export const HIGHLIGHTS: Highlight[] = [
   {
     day: 2,
     kind: 'gastro',
-    name: 'Kölblwirt — Johnsbach im Gesäuse',
-    where: 'Johnsbach (malá odbočka z Gstatterboden)',
-    dist: 118,
-    blurb:
-      '„If God should ever go on holidays, it will be right here." Legendární horský Gasthof na okraji národního parku — Wiener Schnitzel a Kaiserschmarrn z vlastního Bio-Styria-Beef. Terasa s výhledem na Hochtor. TripAdvisor 4.9★.',
-    tip: 'Odbočka ~4 km do kopce — pro fajnšmekry stojí za to. Denní menu cca € 16.',
-    mapsQuery: 'Kölblwirt Johnsbach',
-    website: 'https://www.koelblwirt.at/',
-    photoUrl:
-      'https://www.koelblwirt.at/files/hotel/Medien/Hintergrund/NEU_2016/Nationalpark_Gesa%CC%88use_Gasthof_Ko%CC%88bl%C2%A9StefanLeitner_com_002.jpg',
-    hours: 'So 2.5.: 11:30–21 · sobota standardně otevřeno',
-    rating: { stars: 4.9, count: 44, source: 'TripAdvisor' },
-  },
-  {
-    day: 2,
-    kind: 'gastro',
     name: 'Gasthof Post Altenmarkt',
     where: 'Altenmarkt bei St. Gallen',
     dist: 145,
     blurb:
       'Překvapení ve vesnici: premium steak z vlastního dry-ageru, sezónní Wild- a Gansl-týdny. „Honest regional cooking and an atmospheric summer garden under the giant linden." Google 4.4★ (436 recenzí).',
-    tip: 'Oběd den 2 — po Gesäuse dobré doplnit kalorie. Dry-aged rump steak stojí za to.',
+    tip: 'Oběd dne 2, km 145. Dry-aged rump steak cca € 30.',
     mapsQuery: 'Gasthof Post Altenmarkt bei Sankt Gallen',
     website: 'https://www.gasthofpost-altenmarkt.at/',
     photoUrl:
@@ -338,7 +321,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 167,
     blurb:
       'Barokní hostinec na náměstí Weyer se šéfkuchařem Hermannem Haidingerem. „Mix rakouské a středomořské kuchyně gelingt äußerst überzeugend" — hausgemachte pasta a chléb, istrijský olivový olej. Oceňováno Falstaff.',
-    tip: 'Pokud byl oběd v Altenmarktu, tady stačí káva + Apfelstrudel na náměstí.',
+    tip: 'Po obědě v Altenmarktu stačí káva + Apfelstrudel na náměstí.',
     mapsQuery: 'Gasthof Kaiser von Österreich Weyer',
     website: 'https://www.kaiservonoesterreich.at/',
     photoUrl: 'https://www.kaiservonoesterreich.at/upload/imgproc/1929316_head.jpg',
@@ -352,8 +335,8 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Weyer',
     dist: 167,
     blurb:
-      'Jedno z nejkrásnějších náměstí v Horním Rakousku — barevné kupecké domy ze 16.–18. století, nepoznamenané válkou.',
-    tip: 'Krátká zastávka, 10 minut projít pěšky.',
+      'Barevné kupecké domy ze 16.–18. století okolo dlouhého dřevěného náměstí, nepoznamenané válkou.',
+    tip: 'Projít pěšky od kostela k dolnímu konci náměstí, ~10 minut.',
     mapsQuery: 'Marktplatz Weyer',
     photoUrl: wiki('2012.01.15_-_Weyer31_-_Ehem._Marktgericht,_Soldatenhaus,_Marktplatz_8_-_01.jpg'),
   },
@@ -367,7 +350,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 214,
     blurb:
       'Soutok Enns a Steyr, gotické a barokní jádro, slavný Bummerlhaus (1497). Město železářské tradice a Schubertových letních pobytů.',
-    tip: 'Procházka od nádraží k náměstí Stadtplatz — 10 minut a odrovná tě to.',
+    tip: 'Od mostu k Bummerlhausu na Stadtplatz cca 10 minut pěšky.',
     mapsQuery: 'Stadtplatz Steyr',
     photoUrl: wiki('Blick_ueber_die_Steyrer_Altstadt.jpg'),
   },
@@ -379,7 +362,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 191,
     blurb:
       'Romantická zřícenina hradu ze 12. století na skále nad Ennsem. Symbol Ennstalu, trasa vede přímo pod skalou.',
-    tip: 'Fotostop u mostu — 5 minut a krásný záběr na hrad i řeku.',
+    tip: 'Od mostu pod skalou je záběr na hrad i Enns.',
     mapsQuery: 'Burgruine Losenstein',
     photoUrl: wiki('Losenstein_-_Westsüdwestansicht_(2).JPG'),
   },
@@ -391,7 +374,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 214,
     blurb:
       'Mikropivovar v renesančním dvoře s toskánskými sloupy. „Perfectly cooked steaks in one of Steyr\'s most beautiful courtyards." Wagyu rump steak (BMS 6–8) s gnocchi, grilovaná chobotnice v sezóně. Google 4.7★.',
-    tip: 'Ideální oběd dne 3 — velké porce, přímo na trase. Wagyu stojí za euro navíc.',
+    tip: 'Oběd dne 3 přímo na Stadtplatz, km 214. Teplá kuchyně 11–14 a 17–21.',
     mapsQuery: 'Rahofer Bräu Steyr Stadtplatz',
     website: 'https://www.rahofer.at/',
     photoUrl:
@@ -406,7 +389,7 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Steyr · Zwischenbrücken 3–4',
     dist: 214,
     blurb:
-      'Elegantní vídeňský kaffeehaus přímo u soutoku Enns a Steyr. Domácí Malakoff torte a krémové řezy, snídaně a brunch. Bonus pro nás: nabíječka na e-kola.',
+      'Vídeňský kaffeehaus u soutoku Enns a Steyr. Domácí Malakoff torte, krémové řezy, snídaně a brunch. Nabíječka na e-kola.',
     tip: 'V neděli otevřeno 8–18 (na rozdíl od většiny cukráren v Steyru). Káva + dílek cca € 7.',
     mapsQuery: 'Café Werndl Steyr Zwischenbrücken',
     photoUrl: wiki('Linzertorte_2.jpg'),
@@ -432,8 +415,8 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Mauthausen · u přívozu',
     dist: 243,
     blurb:
-      'Hostinec přímo u Dunaje na Donauradwegu, po odbočce 2 km z Ennsu. Sezónní speciality — Spargel (chřest), Eierschwammerl (lišky), Wildwochen, Martinigansl. „Hearty homemade dishes — perfect for cyclists, with fantastic wine recommendations." Google 4.3★ (404).',
-    tip: 'Po památníku Mauthausen — pozdní oběd nebo velká svačina před finálním tahem do Lince.',
+      'Hostinec u Dunaje na Donauradwegu, kousek za Ennsem. Sezónní speciality — Spargel (chřest), Eierschwammerl (lišky), Wildwochen, Martinigansl. „Hearty homemade dishes with fantastic wine recommendations."',
+    tip: 'Po návštěvě památníku Mauthausen — pozdní oběd před tahem do Lince.',
     mapsQuery: 'Donauhof Mauthausen',
     website: 'https://www.donau-hof.at/',
     photoUrl:
@@ -448,8 +431,8 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Steyregg · nad Dunajem',
     dist: 255,
     blurb:
-      'Klasický hornorakouský Gasthof v Steyreggu, poslední zastávka před Lincem. Signature Steckerlfisch (ryba na špejli), „vynikající a hostinští velmi milí". Google 4.2★.',
-    tip: 'Perfektní finální pivo 8 km před cílem, pokud zbývá čas do vlaku.',
+      'Hornorakouský Gasthof v Steyreggu, 8 km před Lincem. Signature Steckerlfisch (ryba na špejli), v recenzích „vynikající a hostinští velmi milí".',
+    tip: 'Finální pivo před cílem, pokud zbývá čas do vlaku.',
     mapsQuery: 'Gasthaus Panglmayr Steyregg',
     hours: 'Ne 3.5.: obvykle 11–22 · v neděli ověřit',
     rating: { stars: 4.2, count: 120, source: 'Google' },
@@ -484,8 +467,8 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Mauthausen (2 km z trasy)',
     dist: 243,
     blurb:
-      'Bývalý koncentrační tábor, dnes památník. Důstojné, tiché místo. Pokud čas dovolí, zajížďka 2 km kopcem stojí za to.',
-    tip: 'Vstup zdarma. Ne neděle před polednem. Počítej 60–90 min.',
+      'Bývalý koncentrační tábor, dnes památník. Zajížďka 2 km kopcem z Mauthausenu.',
+    tip: 'Vstup zdarma. V neděli otevřeno od 10. Počítej 60–90 min.',
     mapsQuery: 'KZ-Gedenkstätte Mauthausen',
     website: 'https://www.mauthausen-memorial.org/',
     hours: 'Ne 3.5.: 9–17:30 (poslední vstup 16:45) · muzeum od 10',
