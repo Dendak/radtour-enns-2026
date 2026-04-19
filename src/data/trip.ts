@@ -136,7 +136,7 @@ export type Highlight = {
   tip?: string;
   mapsQuery?: string;
   website?: string;
-  photoUrl?: string;
+  photos?: string[];
   /** Opening hours on the day of the trip — e.g. "Pá 1.5. (svátek): 11–22". */
   hours?: string;
   /** Google Maps / review aggregator rating. */
@@ -157,7 +157,7 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Opevněné město se třemi dochovanými obrannými věžemi a náměstím z 13. století. Okruh hradbami trvá ~20 minut.',
     mapsQuery: 'Hauptplatz Radstadt',
-    photoUrl: wiki('Radstadt,_Hauptplatz.jpg'),
+    photos: [wiki('Radstadt,_Hauptplatz.jpg')],
   },
   {
     day: 1,
@@ -168,7 +168,7 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Nejvyšší hora Štýrska (2 995 m) se otevírá ze sedla nad údolím. Za jasného dne vidět ledovec Hallstätter.',
     tip: 'Výhled nejlepší dopoledne, kdy slunce svítí zepředu.',
-    photoUrl: wiki('Dachstein_Para.JPG'),
+    photos: [wiki('Dachstein_Para.JPG')],
   },
   {
     day: 1,
@@ -179,7 +179,7 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Hornické město pod Dachsteinem od 11. století. Dnes zimní středisko, Hauptplatz ale drží historickou tvář.',
     mapsQuery: 'Hauptplatz Schladming',
-    photoUrl: wiki('Schladming-aerial.jpg'),
+    photos: [wiki('Schladming-aerial.jpg')],
   },
   {
     day: 1,
@@ -190,7 +190,7 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Malé historické jádro se štýrskými měšťanskými domy a krámky. Kolem poledne ~km 42.',
     mapsQuery: 'Altstadt Gröbming',
-    photoUrl: wiki('Altstadt_Groebming.jpg'),
+    photos: [wiki('Altstadt_Groebming.jpg')],
   },
   {
     day: 1,
@@ -201,7 +201,7 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Největší město horního Ennstalu. Obchody, lékárna, cukrárna — poslední zastávka před tahem do Admontu.',
     mapsQuery: 'Liezen Hauptplatz',
-    photoUrl: wiki('Liezen_294A2422_Styria.jpg'),
+    photos: [wiki('Liezen_294A2422_Styria.jpg')],
   },
   {
     day: 1,
@@ -228,8 +228,12 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Polední menu cca € 12–15. Ve svátek plno — rezervovat.',
     mapsQuery: 'Stiegenwirt Pichl Mandling',
     website: 'https://www.stiegenwirt.at/',
-    photoUrl:
+    photos: [
       'https://stiegenwirt.at/wp-content/uploads/2026/01/032-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-scaled.jpg',
+      'https://stiegenwirt.at/wp-content/uploads/2026/01/002-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-Kopie.jpg',
+      'https://stiegenwirt.at/wp-content/uploads/2026/01/044-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-scaled.jpg',
+      'https://stiegenwirt.at/wp-content/uploads/2026/01/065-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-scaled.jpg',
+    ],
     hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · ve svátek bývá plno, rezervovat',
     rating: { stars: 4.4, count: 300, source: 'Google' },
   },
@@ -269,8 +273,64 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Vstupné cca € 13,50. Otevřeno sezónně 18.3.–1.11.',
     mapsQuery: 'Stift Admont Bibliothek',
     website: 'https://www.stiftadmont.at/',
-    photoUrl: wiki('Stift_Admont_03.jpg'),
+    photos: [
+      wiki('Stift_Admont_03.jpg'),
+      wiki('Stiftsbibliothek_Admont_01.jpg'),
+      wiki('Admont_-_Benediktinerstift.JPG'),
+      wiki('Stiftskirche_Admont.jpg'),
+    ],
     hours: 'Pá 1.5.: 10–17 (poslední vstup 16:15) · sezona 18.3.–1.11.',
+  },
+  {
+    day: 1,
+    kind: 'kavárna',
+    name: 'Café-Konditorei Landgraf',
+    where: 'Schladming · Hauptplatz 37',
+    dist: 20,
+    blurb:
+      'Rodinná Konditorei na hlavním náměstí — ručně dělané zákusky, vlastní zmrzlina, vlastní dorty. „Good coffee and excellent cakes, everything is fresh."',
+    tip: 'Otevřeno denně 8–22. Káva + zákusek ~€ 6.',
+    mapsQuery: 'Café Landgraf Schladming Hauptplatz',
+    website: 'https://landgraf.cc/',
+    photos: [
+      'https://landgraf.cc/wp-content/uploads/2024/05/cafe-konditorei-restaurant-landgraf.jpg',
+      'https://landgraf.cc/wp-content/uploads/2024/05/IMG_4492-scaled.jpg',
+      'https://landgraf.cc/wp-content/uploads/2024/05/07-20190118_182628.jpg',
+    ],
+    hours: 'Pá 1.5.: 8–22 · otevřeno denně',
+    rating: { stars: 4.0, count: 1200, source: 'Google' },
+  },
+  {
+    day: 1,
+    kind: 'kavárna',
+    name: 'Cafe-Konditorei Stefflbäck',
+    where: 'Gröbming · Hauptplatz 110',
+    dist: 42,
+    blurb:
+      'Štýrská pekárna-kavárna na náměstí — čerstvé pečivo, zákusky, káva z malé štýrské pražírny.',
+    tip: 'Rychlá snídaně nebo svačina na půli dne 1. Otevřeno i v neděli.',
+    mapsQuery: 'Stefflbäck Gröbming Hauptplatz',
+    website: 'https://www.stefflbaeck.at/',
+    hours: 'Pá 1.5.: 7:30–20',
+    rating: { stars: 4.3, count: 80, source: 'Google' },
+  },
+  {
+    day: 1,
+    kind: 'kavárna',
+    name: 'Konditorei Stockhammer',
+    where: 'Admont · Hauptstraße 346',
+    dist: 99,
+    blurb:
+      'Signature „Admonter Marzizoni" — mandlový zákusek podle receptu z archivu benediktinského opatství. „Popular with locals — friendly service, delicious cakes, fantastic ice cream."',
+    tip: 'Otevřeno pátek i neděli 10–17:30 (úterý zavřeno). Po prohlídce knihovny pár kroků.',
+    mapsQuery: 'Konditorei Stockhammer Admont',
+    website: 'https://konditorei-stockhammer.at/',
+    photos: [
+      'https://konditorei-stockhammer.at/00_Regionen/01_Gesaeuse/intern/medienarchiv/bilder/Microsites/konditorei-Stockhammer/6843440/image-thumb__6843440__img-text-slide/Marzizoni.fe173873.jpg',
+      'https://konditorei-stockhammer.at/00_Regionen/01_Gesaeuse/intern/medienarchiv/bilder/Microsites/konditorei-Stockhammer/6843188/image-thumb__6843188__content-teaser--landscape/Konditorei-Stockhammer_c-Stefan-Leitner_Gesaeuse_2-scaled.a3733178.jpg',
+    ],
+    hours: 'Pá 1.5.: 10–17:30',
+    rating: { stars: 4.6, count: 180, source: 'Google' },
   },
 
   // Day 2 — Admont → Großraming
@@ -284,7 +344,7 @@ export const HIGHLIGHTS: Highlight[] = [
       'Divoká soutěska Enns, vápencové stěny Buchsteinu a Hochtoru. UNESCO-kandidát. Trasa vede přímo dnem údolí podél řeky.',
     tip: 'U Gstatterboden je infocentrum parku a přístup k řece.',
     mapsQuery: 'Gesäuse Nationalpark',
-    photoUrl: wiki('Gesaeuseeingang.jpg'),
+    photos: [wiki('Gesaeuseeingang.jpg')],
   },
   {
     day: 2,
@@ -295,7 +355,7 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Po staletí centrum zpracování železné rudy z Erzbergu. Dochovaný industriální ráz, vodní kanál a most.',
     mapsQuery: 'Hieflau',
-    photoUrl: wiki('Hieflau_Ort.jpg'),
+    photos: [wiki('Hieflau_Ort.jpg')],
   },
   {
     day: 2,
@@ -308,8 +368,11 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Oběd dne 2, km 145. Dry-aged rump steak cca € 30.',
     mapsQuery: 'Gasthof Post Altenmarkt bei Sankt Gallen',
     website: 'https://www.gasthofpost-altenmarkt.at/',
-    photoUrl:
+    photos: [
       'https://storage.googleapis.com/shopando-shop-e6949eef-b7c1-4061-be45-826e67764ce2/var/shop/da0e59e0-5597-4c01-8303-c829e3a9ef93_1920.jpg',
+      'https://storage.googleapis.com/shopando-shop-e6949eef-b7c1-4061-be45-826e67764ce2/var/shop/5dfe50be-952b-42b5-bb67-317f95a194dc_1920.jpg',
+      'https://storage.googleapis.com/shopando-shop-e6949eef-b7c1-4061-be45-826e67764ce2/var/shop/7be4259a-7e64-4134-a5b4-6a572335f959_1920.jpg',
+    ],
     hours: 'So 2.5.: obvykle 11–22 · teplé jídlo do 21',
     rating: { stars: 4.4, count: 436, source: 'Google' },
   },
@@ -324,7 +387,7 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Po obědě v Altenmarktu stačí káva + Apfelstrudel na náměstí.',
     mapsQuery: 'Gasthof Kaiser von Österreich Weyer',
     website: 'https://www.kaiservonoesterreich.at/',
-    photoUrl: 'https://www.kaiservonoesterreich.at/upload/imgproc/1929316_head.jpg',
+    photos: ['https://www.kaiservonoesterreich.at/upload/imgproc/1929316_head.jpg'],
     hours: 'So 2.5.: 11–22 · ověřit, některé soboty zavřeno kvůli akcím',
     rating: { stars: 4.5, count: 150, source: 'Google' },
   },
@@ -338,7 +401,21 @@ export const HIGHLIGHTS: Highlight[] = [
       'Barevné kupecké domy ze 16.–18. století okolo dlouhého dřevěného náměstí, nepoznamenané válkou.',
     tip: 'Projít pěšky od kostela k dolnímu konci náměstí, ~10 minut.',
     mapsQuery: 'Marktplatz Weyer',
-    photoUrl: wiki('2012.01.15_-_Weyer31_-_Ehem._Marktgericht,_Soldatenhaus,_Marktplatz_8_-_01.jpg'),
+    photos: [wiki('2012.01.15_-_Weyer31_-_Ehem._Marktgericht,_Soldatenhaus,_Marktplatz_8_-_01.jpg')],
+  },
+  {
+    day: 2,
+    kind: 'kavárna',
+    name: 'Cafe-Konditorei Schwarzlmüller',
+    where: 'Weyer · Oberer Markt 6',
+    dist: 167,
+    blurb:
+      'Ručně dělané Mehlspeis-kreace, pralinky a přes 20 druhů domácí zmrzliny v létě. Rodinný podnik Hannese Schwarzlmüllera, 20+ let.',
+    tip: 'V sobotu odpoledne plno — rezervovat u stolu venku.',
+    mapsQuery: 'Schwarzlmüller Weyer Oberer Markt',
+    website: 'https://www.schwarzlmueller.at/',
+    hours: 'So 2.5.: obvykle 7:30–18 · ověřit telefonem',
+    rating: { stars: 4.5, count: 100, source: 'Google' },
   },
 
   // Day 3 — Großraming → Linec
@@ -352,7 +429,7 @@ export const HIGHLIGHTS: Highlight[] = [
       'Soutok Enns a Steyr, gotické a barokní jádro, slavný Bummerlhaus (1497). Město železářské tradice a Schubertových letních pobytů.',
     tip: 'Od mostu k Bummerlhausu na Stadtplatz cca 10 minut pěšky.',
     mapsQuery: 'Stadtplatz Steyr',
-    photoUrl: wiki('Blick_ueber_die_Steyrer_Altstadt.jpg'),
+    photos: [wiki('Blick_ueber_die_Steyrer_Altstadt.jpg')],
   },
   {
     day: 3,
@@ -364,7 +441,7 @@ export const HIGHLIGHTS: Highlight[] = [
       'Romantická zřícenina hradu ze 12. století na skále nad Ennsem. Symbol Ennstalu, trasa vede přímo pod skalou.',
     tip: 'Od mostu pod skalou je záběr na hrad i Enns.',
     mapsQuery: 'Burgruine Losenstein',
-    photoUrl: wiki('Losenstein_-_Westsüdwestansicht_(2).JPG'),
+    photos: [wiki('Losenstein_-_Westsüdwestansicht_(2).JPG')],
   },
   {
     day: 3,
@@ -377,8 +454,12 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Oběd dne 3 přímo na Stadtplatz, km 214. Teplá kuchyně 11–14 a 17–21.',
     mapsQuery: 'Rahofer Bräu Steyr Stadtplatz',
     website: 'https://www.rahofer.at/',
-    photoUrl:
+    photos: [
       'https://static.wixstatic.com/media/31ef28_0d8887efa11c41f6b0e6ca927cbd9c6a~mv2.jpg',
+      'https://static.wixstatic.com/media/31ef28_b08359ddc5ee48849a68bc9ffd2cacb5~mv2.jpg',
+      'https://static.wixstatic.com/media/31ef28_344e0fa09cc84801bf2027b8c1d6c09a~mv2.jpg',
+      'https://static.wixstatic.com/media/31ef28_06781307a909423db446596e1cffd618~mv2.jpg',
+    ],
     hours: 'Ne 3.5.: 11–14 & 17–22 · teplá kuchyně do 21',
     rating: { stars: 4.7, count: 187, source: 'Google' },
   },
@@ -392,7 +473,7 @@ export const HIGHLIGHTS: Highlight[] = [
       'Vídeňský kaffeehaus u soutoku Enns a Steyr. Domácí Malakoff torte, krémové řezy, snídaně a brunch. Nabíječka na e-kola.',
     tip: 'V neděli otevřeno 8–18 (na rozdíl od většiny cukráren v Steyru). Káva + dílek cca € 7.',
     mapsQuery: 'Café Werndl Steyr Zwischenbrücken',
-    photoUrl: wiki('Linzertorte_2.jpg'),
+    photos: [wiki('Linzertorte_2.jpg')],
     hours: 'Ne 3.5.: 8–18 · v neděli otevřeno',
   },
   {
@@ -419,8 +500,12 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Po návštěvě památníku Mauthausen — pozdní oběd před tahem do Lince.',
     mapsQuery: 'Donauhof Mauthausen',
     website: 'https://www.donau-hof.at/',
-    photoUrl:
+    photos: [
       'https://www.donau-hof.at/assets/Uploads/header_essen2x-v2__FillWzE5MjAsNTAwXQ.png',
+      'https://www.donau-hof.at/assets/Uploads/aussicht-6__FillMaxWzgwMCw4MDBd_FillWzMyMCwyNjBd.jpeg',
+      'https://www.donau-hof.at/assets/Uploads/CIMG4241__FillMaxWzgwMCw4MDBd_FillWzMyMCwyNjBd.JPG',
+      'https://www.donau-hof.at/assets/Uploads/saisonales_neu_03__FillMaxWzgwMCw4MDBd_FillWzMyMCwyNjBd.png',
+    ],
     hours: 'Ne 3.5.: obvykle 11–21 · v neděli otevřeno, teplá kuchyně do 20',
     rating: { stars: 4.3, count: 404, source: 'Google' },
   },
@@ -436,6 +521,11 @@ export const HIGHLIGHTS: Highlight[] = [
     mapsQuery: 'Gasthaus Panglmayr Steyregg',
     hours: 'Ne 3.5.: obvykle 11–22 · v neděli ověřit',
     rating: { stars: 4.2, count: 120, source: 'Google' },
+    photos: [
+      'https://assets.sta.io/site_media/u/si/2016/06/08/essen2.jpg',
+      'https://assets.sta.io/site_media/u/si/2016/06/08/essen3.jpg',
+      'https://assets.sta.io/site_media/u/si/2016/06/08/startimg.jpg',
+    ],
   },
   {
     day: 3,
@@ -446,7 +536,7 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Městská práva 1212, římské kořeny (Lauriacum). Stadtturm z 1568, 60 m vysoká renesanční zvonice uprostřed náměstí.',
     mapsQuery: 'Stadtturm Enns',
-    photoUrl: wiki('Enns_-_Hauptplatz_mit_Stadtturm.JPG'),
+    photos: [wiki('Enns_-_Hauptplatz_mit_Stadtturm.JPG')],
   },
   {
     day: 3,
@@ -456,9 +546,62 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 263,
     blurb:
       'Hlavní město Horního Rakouska, barokní Hauptplatz, Ars Electronica Center u Dunaje, Nový dóm — největší kostel Rakouska.',
-    tip: 'Z nádraží 10 min tramvají do starého města. Linzer Torte v Jindrak povinnost.',
+    tip: 'Z nádraží 10 min tramvají do starého města.',
     mapsQuery: 'Hauptplatz Linz',
-    photoUrl: wiki('Linz_Altstadt_17.jpg'),
+    photos: [wiki('Linz_Altstadt_17.jpg')],
+  },
+  {
+    day: 3,
+    kind: 'kavárna',
+    name: 'Konditorei-Cafe Hofer',
+    where: 'Enns · Wiener Straße 8',
+    dist: 239,
+    blurb:
+      '30 průběžně se měnících domácích zmrzlinových příchutí a 45 zmrzlinových kreací, perníky, lanýže. Podloubí dvůr. Falstaff: 86 bodů.',
+    tip: 'Otevřeno v neděli (pondělí zavřeno). Dvůr je v teplém dni příjemnější než náměstí.',
+    mapsQuery: 'Konditorei Hofer Enns Wiener Straße',
+    website: 'https://erlebe.enns.at/geschaefte/cafe-konditorei-hofer/935',
+    photos: [
+      'https://erlebe.enns.at/uploads/images/thumbs_height_320/46be9a07-86e4-4d54-ae24-be3694acfc2b.jpg',
+    ],
+    hours: 'Ne 3.5.: 8:30–19',
+    rating: { stars: 4.3, count: 376, source: 'Google' },
+  },
+  {
+    day: 3,
+    kind: 'kavárna',
+    name: 'Konditorei Jindrak (Stammhaus)',
+    where: 'Linec · Herrenstraße 22–24',
+    dist: 263,
+    blurb:
+      'Rodinná Konditorei od roku 1929, peče přes 100 000 Linzer Torten ročně — nejznámější výrobce originálního Linzer Torte. „You can taste tradition in every bite."',
+    tip: 'Stammhaus Herrenstraße — ne pobočka Landstraße (ta má v neděli zavřeno). Původní Linzer Torte k snědení i s sebou.',
+    mapsQuery: 'Jindrak Herrenstraße Linz',
+    website: 'https://www.linzertorte.at/',
+    photos: [
+      'https://www.linzertorte.at/app/uploads/2025/07/original-linzer-torte-1.webp',
+    ],
+    hours: 'Ne 3.5.: obchod 9–18 · kavárna 10–17',
+    rating: { stars: 4.5, count: 1500, source: 'Google' },
+  },
+  {
+    day: 3,
+    kind: 'kavárna',
+    name: 'Café Traxlmayr',
+    where: 'Linec · Promenade 16',
+    dist: 263,
+    blurb:
+      'Jediné zachované Altwiener Kaffeehaus v Linci, rodinné od 1847. Interiér 1905 od žáka Otto Wagnera. „Kaiserschmarrn a aromatické kávové variace."',
+    tip: 'Cílové pivo nebo Melange v nejstarší kavárně Lince. Funguje i jako bar do večera.',
+    mapsQuery: 'Café Traxlmayr Linz Promenade',
+    website: 'https://www.cafe-traxlmayr.at/',
+    photos: [
+      'https://www.cafe-traxlmayr.at/wp-content/uploads/2020/01/Bild_1_neu.png',
+      'https://www.cafe-traxlmayr.at/wp-content/uploads/2020/01/Bild_3.png',
+      'https://www.cafe-traxlmayr.at/wp-content/uploads/2020/01/Bild_4_neu.png',
+    ],
+    hours: 'Ne 3.5.: 9–20',
+    rating: { stars: 4.1, count: 600, source: 'Google' },
   },
   {
     day: 3,
@@ -472,7 +615,7 @@ export const HIGHLIGHTS: Highlight[] = [
     mapsQuery: 'KZ-Gedenkstätte Mauthausen',
     website: 'https://www.mauthausen-memorial.org/',
     hours: 'Ne 3.5.: 9–17:30 (poslední vstup 16:45) · muzeum od 10',
-    photoUrl: wiki('Mauthausen-Retaining_Wall.jpg'),
+    photos: [wiki('Mauthausen-Retaining_Wall.jpg')],
   },
 ];
 
