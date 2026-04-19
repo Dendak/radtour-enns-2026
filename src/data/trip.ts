@@ -211,7 +211,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 25,
     blurb:
       'Lokální pivovar s vlastním ležákem. Recenze opakovaně chválí kombinaci hausbraus Märzen + Schnitzel mit Schwammerlsoße (řízek v houbové omáčce). Štýrská Brettljause a Kaspressknödel jako druhá volba.',
-    tip: 'Pro rychlou svačinu na kole: půllitr Märzen + Brettljause za ~€ 15.',
+    tip: 'Půllitr Märzen + Brettljause ~€ 15.',
     mapsQuery: 'Brauhaus Falkenstein Pichl',
     website: 'https://www.falkenstein-braeu.at/',
     hours: 'Pá 1.5. (st. svátek): obvykle 11:30–22 · před cestou ověřit',
@@ -245,9 +245,10 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 77,
     blurb:
       'Rakouská domácí kuchyně na náměstí. Polední bufet (každé 11. menu zdarma), Sonntagsbrunch, sezónní bílý chřest. „Ausgezeichnete Küche, großzügige Portionen."',
-    tip: 'Pozdní oběd dne 1, km 77 — 22 km do Admontu.',
+    tip: 'Polední bufet, každé 11. menu zdarma.',
     mapsQuery: 'Gasthof Goldener Hirsch Liezen Ausseer Straße',
     hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · o svátku zkrácené, telefonem ověřit',
+    rating: { stars: 4.2, count: 312, source: 'Google' },
   },
   {
     day: 1,
@@ -257,10 +258,11 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 99,
     blurb:
       'Hostinec hned vedle Stift Admont. V recenzích „best Schnitzel v okolí", domácí Bauerngröstl, štýrské suroviny. Bezpečné parkování kol.',
-    tip: 'První pivo po příjezdu do cíle dne 1 (~17:00).',
+    tip: 'Otevřeno do 23 i ve svátek. Bezpečné parkování kol u restaurace.',
     mapsQuery: 'Gasthof Kirchenwirt Admont',
     website: 'https://www.kirchenwirt-admont.at/',
     hours: 'Pá 1.5. (st. svátek): obvykle 11–23 · o svátku stabilně otevřeno',
+    rating: { stars: 4.4, count: 486, source: 'Google' },
   },
   {
     day: 1,
@@ -308,7 +310,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 42,
     blurb:
       'Štýrská pekárna-kavárna na náměstí — čerstvé pečivo, zákusky, káva z malé štýrské pražírny.',
-    tip: 'Rychlá snídaně nebo svačina na půli dne 1. Otevřeno i v neděli.',
+    tip: 'Otevřeno denně 7:30–20.',
     mapsQuery: 'Stefflbäck Gröbming Hauptplatz',
     website: 'https://www.stefflbaeck.at/',
     hours: 'Pá 1.5.: 7:30–20',
@@ -322,7 +324,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 99,
     blurb:
       'Signature „Admonter Marzizoni" — mandlový zákusek podle receptu z archivu benediktinského opatství. „Popular with locals — friendly service, delicious cakes, fantastic ice cream."',
-    tip: 'Otevřeno pátek i neděli 10–17:30 (úterý zavřeno). Po prohlídce knihovny pár kroků.',
+    tip: 'Úterý zavřeno. Kousek od Stift Admont.',
     mapsQuery: 'Konditorei Stockhammer Admont',
     website: 'https://konditorei-stockhammer.at/',
     photos: [
@@ -365,7 +367,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 145,
     blurb:
       'Překvapení ve vesnici: premium steak z vlastního dry-ageru, sezónní Wild- a Gansl-týdny. „Honest regional cooking and an atmospheric summer garden under the giant linden." Google 4.4★ (436 recenzí).',
-    tip: 'Oběd dne 2, km 145. Dry-aged rump steak cca € 30.',
+    tip: 'Dry-aged rump steak cca € 30. Velká zahrada pod lípou.',
     mapsQuery: 'Gasthof Post Altenmarkt bei Sankt Gallen',
     website: 'https://www.gasthofpost-altenmarkt.at/',
     photos: [
@@ -384,7 +386,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 167,
     blurb:
       'Barokní hostinec na náměstí Weyer se šéfkuchařem Hermannem Haidingerem. „Mix rakouské a středomořské kuchyně gelingt äußerst überzeugend" — hausgemachte pasta a chléb, istrijský olivový olej. Oceňováno Falstaff.',
-    tip: 'Po obědě v Altenmarktu stačí káva + Apfelstrudel na náměstí.',
+    tip: 'Hausgemachte pasta a chléb. Některé soboty zavřeno kvůli akcím — ověřit.',
     mapsQuery: 'Gasthof Kaiser von Österreich Weyer',
     website: 'https://www.kaiservonoesterreich.at/',
     photos: ['https://www.kaiservonoesterreich.at/upload/imgproc/1929316_head.jpg'],
@@ -411,7 +413,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 167,
     blurb:
       'Ručně dělané Mehlspeis-kreace, pralinky a přes 20 druhů domácí zmrzliny v létě. Rodinný podnik Hannese Schwarzlmüllera, 20+ let.',
-    tip: 'V sobotu odpoledne plno — rezervovat u stolu venku.',
+    tip: 'V sobotu plno, rezervace vhodná.',
     mapsQuery: 'Schwarzlmüller Weyer Oberer Markt',
     website: 'https://www.schwarzlmueller.at/',
     hours: 'So 2.5.: obvykle 7:30–18 · ověřit telefonem',
@@ -451,7 +453,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 214,
     blurb:
       'Mikropivovar v renesančním dvoře s toskánskými sloupy. „Perfectly cooked steaks in one of Steyr\'s most beautiful courtyards." Wagyu rump steak (BMS 6–8) s gnocchi, grilovaná chobotnice v sezóně. Google 4.7★.',
-    tip: 'Oběd dne 3 přímo na Stadtplatz, km 214. Teplá kuchyně 11–14 a 17–21.',
+    tip: 'Renesanční dvůr se stoly. Teplá kuchyně 11–14 a 17–21.',
     mapsQuery: 'Rahofer Bräu Steyr Stadtplatz',
     website: 'https://www.rahofer.at/',
     photos: [
@@ -475,6 +477,7 @@ export const HIGHLIGHTS: Highlight[] = [
     mapsQuery: 'Café Werndl Steyr Zwischenbrücken',
     photos: [wiki('Linzertorte_2.jpg')],
     hours: 'Ne 3.5.: 8–18 · v neděli otevřeno',
+    rating: { stars: 4.3, count: 241, source: 'Google' },
   },
   {
     day: 3,
@@ -484,7 +487,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 239,
     blurb:
       'Mladý hostinec na hlavním náměstí pod Stadtturmem. Signature „Pfandl" — pánvička s bramborami, knedlíky a pečení, navrch volské oko. K tomu studený Mostdudler (mošt + tonic). „Pfandl mit eiskaltem Mostdudler ist sehr zu empfehlen."',
-    tip: 'Pokud je Steyr už za tebou, tady jen Pfandl na sdílení + Mostdudler.',
+    tip: 'Pfandl pro dva + Mostdudler.',
     mapsQuery: 'Platzhirsch Enns Hauptplatz',
     hours: 'Ne 3.5.: 10–22 · v neděli otevřeno',
     rating: { stars: 4.4, count: 100, source: 'TripAdvisor' },
@@ -497,7 +500,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 243,
     blurb:
       'Hostinec u Dunaje na Donauradwegu, kousek za Ennsem. Sezónní speciality — Spargel (chřest), Eierschwammerl (lišky), Wildwochen, Martinigansl. „Hearty homemade dishes with fantastic wine recommendations."',
-    tip: 'Po návštěvě památníku Mauthausen — pozdní oběd před tahem do Lince.',
+    tip: 'Terasa nad Dunajem. Teplá kuchyně do 20.',
     mapsQuery: 'Donauhof Mauthausen',
     website: 'https://www.donau-hof.at/',
     photos: [
@@ -517,7 +520,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 255,
     blurb:
       'Hornorakouský Gasthof v Steyreggu, 8 km před Lincem. Signature Steckerlfisch (ryba na špejli), v recenzích „vynikající a hostinští velmi milí".',
-    tip: 'Finální pivo před cílem, pokud zbývá čas do vlaku.',
+    tip: '8 km před Lincem, poslední hospoda na trase.',
     mapsQuery: 'Gasthaus Panglmayr Steyregg',
     hours: 'Ne 3.5.: obvykle 11–22 · v neděli ověřit',
     rating: { stars: 4.2, count: 120, source: 'Google' },
@@ -558,7 +561,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 239,
     blurb:
       '30 průběžně se měnících domácích zmrzlinových příchutí a 45 zmrzlinových kreací, perníky, lanýže. Podloubí dvůr. Falstaff: 86 bodů.',
-    tip: 'Otevřeno v neděli (pondělí zavřeno). Dvůr je v teplém dni příjemnější než náměstí.',
+    tip: 'Pondělí zavřeno. Dvůr s podloubím místo stolů u ulice.',
     mapsQuery: 'Konditorei Hofer Enns Wiener Straße',
     website: 'https://erlebe.enns.at/geschaefte/cafe-konditorei-hofer/935',
     photos: [
@@ -575,7 +578,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 263,
     blurb:
       'Rodinná Konditorei od roku 1929, peče přes 100 000 Linzer Torten ročně — nejznámější výrobce originálního Linzer Torte. „You can taste tradition in every bite."',
-    tip: 'Stammhaus Herrenstraße — ne pobočka Landstraße (ta má v neděli zavřeno). Původní Linzer Torte k snědení i s sebou.',
+    tip: 'Stammhaus Herrenstraße — pobočka Landstraße má v neděli zavřeno. Dort i s sebou v krabici.',
     mapsQuery: 'Jindrak Herrenstraße Linz',
     website: 'https://www.linzertorte.at/',
     photos: [
@@ -592,7 +595,7 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 263,
     blurb:
       'Jediné zachované Altwiener Kaffeehaus v Linci, rodinné od 1847. Interiér 1905 od žáka Otto Wagnera. „Kaiserschmarrn a aromatické kávové variace."',
-    tip: 'Cílové pivo nebo Melange v nejstarší kavárně Lince. Funguje i jako bar do večera.',
+    tip: 'Otevřeno do 20 i v neděli, funguje i jako bar.',
     mapsQuery: 'Café Traxlmayr Linz Promenade',
     website: 'https://www.cafe-traxlmayr.at/',
     photos: [
