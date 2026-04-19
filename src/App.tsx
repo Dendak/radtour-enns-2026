@@ -7,6 +7,7 @@ import { PrecipitationChart } from '@/components/PrecipitationChart';
 import { WeatherDays } from '@/components/WeatherDays';
 import { Stays } from '@/components/Stays';
 import { Cities } from '@/components/Cities';
+import { FunFacts } from '@/components/FunFacts';
 import { Highlights } from '@/components/Highlights';
 import { PracticalInfo } from '@/components/PracticalInfo';
 import { AboutRoute } from '@/components/AboutRoute';
@@ -81,6 +82,10 @@ export default function App() {
 
         <div id="mesta" className="scroll-mt-20">
           <Cities />
+        </div>
+
+        <div id="fun-facts" className="scroll-mt-20">
+          <FunFacts />
         </div>
 
         <div id="o-trase" className="scroll-mt-20">
