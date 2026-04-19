@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Cloud, CloudRain, Sun, CloudSnow, Wind, Thermometer, MapPin, Clock, RefreshCw } from 'lucide-react';
+import { Cloud, CloudSun, CloudRain, Sun, CloudSnow, CloudFog, CloudDrizzle, CloudLightning, Wind, Thermometer, MapPin, Clock, RefreshCw } from 'lucide-react';
 import { DAY_COLORS, DAY_NAMES, DAY_CAPTIONS, DAY_PHOTOS, wmoText, type Waypoint } from '@/data/trip';
 import { TopoPattern } from './TopoPattern';
 import type { WeatherPoint } from '@/hooks/useWeather';
@@ -7,11 +7,16 @@ import { cn } from '@/lib/utils';
 
 function wmoIcon(code: number | undefined) {
   if (code === undefined) return <Cloud className="h-5 w-5" />;
-  if ([0, 1].includes(code)) return <Sun className="h-5 w-5 text-amber-500" />;
-  if ([2, 3, 45, 48].includes(code)) return <Cloud className="h-5 w-5 text-slate-500" />;
+  if (code === 0) return <Sun className="h-5 w-5 text-amber-500" />;
+  if (code === 1) return <CloudSun className="h-5 w-5 text-amber-400" />;
+  if (code === 2) return <CloudSun className="h-5 w-5 text-slate-500" />;
+  if (code === 3) return <Cloud className="h-5 w-5 text-slate-600" />;
+  if (code === 45 || code === 48) return <CloudFog className="h-5 w-5 text-slate-400" />;
+  if (code >= 95) return <CloudLightning className="h-5 w-5 text-purple-600" />;
   if (code >= 71 && code <= 77) return <CloudSnow className="h-5 w-5 text-sky-400" />;
-  if (code >= 80 || (code >= 51 && code <= 67)) return <CloudRain className="h-5 w-5 text-sky-600" />;
-  if (code >= 95) return <CloudRain className="h-5 w-5 text-purple-600" />;
+  if (code >= 51 && code <= 57) return <CloudDrizzle className="h-5 w-5 text-sky-500" />;
+  if (code >= 61 && code <= 67) return <CloudRain className="h-5 w-5 text-sky-600" />;
+  if (code >= 80 && code <= 86) return <CloudRain className="h-5 w-5 text-sky-600" />;
   return <Cloud className="h-5 w-5" />;
 }
 
