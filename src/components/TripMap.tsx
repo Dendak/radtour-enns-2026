@@ -18,11 +18,23 @@ import type { WeatherPoint } from '@/hooks/useWeather';
 import { cn } from '@/lib/utils';
 import { Layers } from 'lucide-react';
 
-function FitBounds({ bounds }: { bounds: LatLngBoundsExpression | null }) {
+function FitBounds({
+  bounds,
+  animate = true,
+}: {
+  bounds: LatLngBoundsExpression | null;
+  animate?: boolean;
+}) {
   const map = useMap();
   useEffect(() => {
-    if (bounds) map.fitBounds(bounds, { padding: [30, 30] });
-  }, [bounds, map]);
+    if (!bounds) return;
+    map.flyToBounds(bounds, {
+      padding: [40, 40],
+      animate,
+      duration: 0.9,
+      easeLinearity: 0.25,
+    });
+  }, [bounds, map, animate]);
   return null;
 }
 
@@ -95,16 +107,24 @@ export type TripMapProps = {
 };
 
 export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }: TripMapProps) {
-  const [visibleDays, setVisibleDays] = useState<Record<1 | 2 | 3, boolean>>({ 1: true, 2: true, 3: true });
+  // null = celá trasa. 1|2|3 = vybraná etapa (mapa přiblíží na ni).
+  const [focusDay, setFocusDay] = useState<1 | 2 | 3 | null>(null);
 
   const byDay = useMemo(() => splitTrackByDay(track, dayEnd), [track, dayEnd]);
-  const bounds = useMemo<LatLngBoundsExpression | null>(() => {
+  const fullBounds = useMemo<LatLngBoundsExpression | null>(() => {
     if (!track.length) return null;
-    const pts: LatLngTuple[] = track.map((p) => [p.lat, p.lon]);
-    return L.latLngBounds(pts);
+    return L.latLngBounds(track.map((p) => [p.lat, p.lon] as LatLngTuple));
   }, [track]);
+  const dayBounds = useMemo<Record<1 | 2 | 3, LatLngBoundsExpression | null>>(() => {
+    const mk = (d: 1 | 2 | 3): LatLngBoundsExpression | null => {
+      const pts = byDay[d];
+      if (!pts?.length) return null;
+      return L.latLngBounds(pts.map((p) => [p.lat, p.lon] as LatLngTuple));
+    };
+    return { 1: mk(1), 2: mk(2), 3: mk(3) };
+  }, [byDay]);
 
-  const toggleDay = (d: 1 | 2 | 3) => setVisibleDays((v) => ({ ...v, [d]: !v[d] }));
+  const activeBounds = focusDay ? dayBounds[focusDay] : fullBounds;
 
   const fmtTime = (iso: string) =>
     new Date(iso).toLocaleString('cs-CZ', { weekday: 'short', hour: '2-digit', minute: '2-digit' });
@@ -113,23 +133,41 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }
     <div className="relative">
       <div className="flex flex-wrap items-center gap-2 p-3 md:p-4 bg-slate-50/60 border-b border-slate-200/70">
         <div className="flex items-center gap-1.5 text-slate-600 text-xs font-medium mr-1">
-          <Layers className="h-3.5 w-3.5" /> Dny:
+          <Layers className="h-3.5 w-3.5" /> Etapa:
         </div>
-        {[1, 2, 3].map((d) => (
-          <button
-            key={d}
-            onClick={() => toggleDay(d as 1 | 2 | 3)}
-            className={cn(
-              'chip cursor-pointer select-none border transition',
-              visibleDays[d as 1 | 2 | 3]
-                ? 'bg-white border-slate-200 shadow-sm'
-                : 'bg-slate-100 border-slate-200/50 opacity-50 line-through',
-            )}
-            style={{ color: DAY_COLORS[d as 1 | 2 | 3] }}>
-            <span className="inline-block w-2 h-2 rounded-full" style={{ background: DAY_COLORS[d as 1 | 2 | 3] }} />
-            {DAY_NAMES[d as 1 | 2 | 3]}
-          </button>
-        ))}
+        <button
+          onClick={() => setFocusDay(null)}
+          className={cn(
+            'chip cursor-pointer select-none border transition',
+            focusDay === null
+              ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50',
+          )}>
+          Celá trasa
+        </button>
+        {[1, 2, 3].map((d) => {
+          const day = d as 1 | 2 | 3;
+          const active = focusDay === day;
+          return (
+            <button
+              key={d}
+              onClick={() => setFocusDay(active ? null : day)}
+              className={cn(
+                'chip cursor-pointer select-none border transition',
+                active ? 'shadow-sm ring-2' : 'bg-white border-slate-200 hover:bg-slate-50',
+              )}
+              style={{
+                color: DAY_COLORS[day],
+                background: active ? `${DAY_COLORS[day]}15` : undefined,
+                borderColor: active ? DAY_COLORS[day] : undefined,
+                boxShadow: active ? `0 0 0 2px ${DAY_COLORS[day]}40` : undefined,
+              }}
+              title={active ? 'Zpět na celou trasu' : `Přiblížit na ${DAY_NAMES[day]}`}>
+              <span className="inline-block w-2 h-2 rounded-full" style={{ background: DAY_COLORS[day] }} />
+              {DAY_NAMES[day]}
+            </button>
+          );
+        })}
       </div>
       <div className="relative">
         <MapContainer
@@ -164,18 +202,20 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }
           </LayersControl>
 
           {([1, 2, 3] as const).map((d) => {
-            if (!visibleDays[d]) return null;
             const pts = byDay[d];
             if (!pts.length) return null;
             const color = DAY_COLORS[d];
+            const dimmed = focusDay !== null && focusDay !== d;
+            const weight = dimmed ? 3 : 5;
+            const opacity = dimmed ? 0.3 : 0.9;
             if (d === 3) {
               const main = pts.filter((p) => p.dist <= donauStart).map((p) => [p.lat, p.lon] as LatLngTuple);
               const donau = pts.filter((p) => p.dist >= donauStart).map((p) => [p.lat, p.lon] as LatLngTuple);
               return (
                 <LayerGroup key={d}>
-                  {main.length > 0 && <Polyline positions={main} pathOptions={{ color, weight: 5, opacity: 0.9 }} />}
+                  {main.length > 0 && <Polyline positions={main} pathOptions={{ color, weight, opacity }} />}
                   {donau.length > 0 && (
-                    <Polyline positions={donau} pathOptions={{ color: DONAU_COLOR, weight: 5, opacity: 0.9, dashArray: '8 6' }} />
+                    <Polyline positions={donau} pathOptions={{ color: DONAU_COLOR, weight, opacity, dashArray: '8 6' }} />
                   )}
                 </LayerGroup>
               );
@@ -184,18 +224,23 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }
               <Polyline
                 key={d}
                 positions={pts.map((p) => [p.lat, p.lon] as LatLngTuple)}
-                pathOptions={{ color, weight: 5, opacity: 0.9 }}
+                pathOptions={{ color, weight, opacity }}
               />
             );
           })}
 
           {waypoints.map((w, i) => {
-            if (!visibleDays[w.day]) return null;
+            const dimmed = focusDay !== null && focusDay !== w.day;
             const wx = weather[i];
             const stay = w.tag === 'Nocleh 1' ? STAYS[0] : w.tag === 'Nocleh 2' ? STAYS[1] : null;
             if (stay) {
               return (
-                <Marker key={i} position={[w.lat, w.lon]} icon={stayIcon(DAY_COLORS[w.day])} zIndexOffset={1000}>
+                <Marker
+                  key={i}
+                  position={[w.lat, w.lon]}
+                  icon={stayIcon(DAY_COLORS[w.day])}
+                  opacity={dimmed ? 0.4 : 1}
+                  zIndexOffset={dimmed ? 200 : 1000}>
                   <Popup>
                     <div className="min-w-[200px]">
                       <div className="text-[10px] uppercase tracking-[0.15em] font-semibold text-amber-700">
@@ -225,8 +270,14 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }
               <CircleMarker
                 key={i}
                 center={[w.lat, w.lon]}
-                radius={7}
-                pathOptions={{ color: DAY_COLORS[w.day], weight: 2, fillColor: '#fff', fillOpacity: 1 }}>
+                radius={dimmed ? 4 : 7}
+                pathOptions={{
+                  color: DAY_COLORS[w.day],
+                  weight: 2,
+                  fillColor: '#fff',
+                  fillOpacity: dimmed ? 0.6 : 1,
+                  opacity: dimmed ? 0.5 : 1,
+                }}>
                 <Popup>
                   <div className="min-w-[170px]">
                     <div className="text-xs uppercase tracking-wider font-semibold text-slate-500">{w.tag}</div>
@@ -250,7 +301,7 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }
             );
           })}
 
-          <FitBounds bounds={bounds} />
+          <FitBounds bounds={activeBounds} />
           <HoverMarkerLayer hover={hover} />
         </MapContainer>
       </div>

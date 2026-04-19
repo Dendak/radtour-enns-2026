@@ -39,6 +39,14 @@ export const DAY_NAMES: Record<1 | 2 | 3, string> = {
   3: 'Den 3 — Ne 3. května',
 };
 
+// Cumulative km at start of each day (derived from waypoints).
+// Used to convert global `dist` into day-local km for UI display.
+export const DAY_START_KM: Record<1 | 2 | 3, number> = {
+  1: 0,
+  2: 99,
+  3: 176,
+};
+
 export const DAY_CAPTIONS: Record<1 | 2 | 3, string> = {
   1: 'Radstadt → Admont · sjezd z Vysokých Taur',
   2: 'Admont → Großraming · soutěska Gesäuse',
@@ -126,7 +134,13 @@ export type Highlight = {
   tip?: string;
   mapsQuery?: string;
   website?: string;
+  photoUrl?: string;
+  /** Opening hours on the day of the trip — e.g. "Pá 1.5. (svátek): 11–22". */
+  hours?: string;
 };
+
+const wiki = (filename: string, width = 900) =>
+  `https://commons.wikimedia.org/wiki/Special:FilePath/${filename}?width=${width}`;
 
 export const HIGHLIGHTS: Highlight[] = [
   // Day 1 — Radstadt → Admont
@@ -139,6 +153,7 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Jedno z nejlépe dochovaných opevněných měst v Alpách. Tři obranné věže, 800 let staré náměstí. Krátká okruhová procházka před vyjetím.',
     mapsQuery: 'Hauptplatz Radstadt',
+    photoUrl: wiki('Radstadt,_Hauptplatz.jpg'),
   },
   {
     day: 1,
@@ -157,8 +172,47 @@ export const HIGHLIGHTS: Highlight[] = [
     where: 'Pichl bei Schladming',
     dist: 25,
     blurb: 'Lokální pivovar s vlastním ležákem a štýrskou kuchyní (Brettljause, Kaspressknödel).',
-    tip: 'Otevřeno od 11:30, ideální oběd.',
+    tip: 'Otevřeno od 11:30, ideální brzká svačina.',
     mapsQuery: 'Brauhaus Falkenstein Pichl',
+    website: 'https://www.falkenstein-braeu.at/',
+    hours: 'Pá 1.5. (st. svátek): obvykle 11:30–22 · před cestou ověřit',
+  },
+  {
+    day: 1,
+    kind: 'gastro',
+    name: 'Stiegenwirt Pichl',
+    where: 'Pichl-Mandling',
+    dist: 22,
+    blurb:
+      'Tradiční štýrský Gasthof na cyklostezce. Schnitzel, Backhendl, domácí strudel. Zahrada pro kola přímo u terasy.',
+    tip: 'Polední menu cca € 12–15.',
+    mapsQuery: 'Stiegenwirt Pichl Mandling',
+    website: 'https://www.stiegenwirt.at/',
+    hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · ve svátek bývá plno, rezervovat',
+  },
+  {
+    day: 1,
+    kind: 'gastro',
+    name: 'Landhotel Postgut Tweng / Hofwirt Gröbming',
+    where: 'Gröbming',
+    dist: 42,
+    blurb:
+      'Oběd v půlce dne — klasický rakouský Gasthof na hlavním náměstí. Denní menu, polévka + hlavní cca € 14.',
+    tip: 'Na náměstí je i pekařství Strasser — chleba s Aufstrichem na cestu.',
+    mapsQuery: 'Gasthof Hofwirt Gröbming',
+    hours: 'Pá 1.5. (st. svátek): obvykle 11–21 · přes svátek zkrácené, telefon',
+  },
+  {
+    day: 1,
+    kind: 'kavárna',
+    name: 'Café Konditorei Bäckerei Lukas',
+    where: 'Liezen',
+    dist: 77,
+    blurb:
+      'Stará cukrárna v centru Liezenu. Apfelstrudel, Sachr, espresso. Dobrý poslední refill před Admontem.',
+    tip: 'Otevřeno 6–18, v neděli zavřeno.',
+    mapsQuery: 'Konditorei Bäckerei Lukas Liezen',
+    hours: 'Pá 1.5. (st. svátek): pravděpodobně ZAVŘENO · o svátku bývá zavřeno',
   },
   {
     day: 1,
@@ -168,9 +222,11 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 99,
     blurb:
       'Největší klášterní knihovna na světě (70 000 svazků, 70 m dlouhá, strop od Altomonteho). Založena 1074. Muzeum přírody, moderní umění.',
-    tip: 'Vstupné cca € 13,50. Otevřeno 10–17. Unbedingt zajít — i zvenčí za fotku.',
+    tip: 'Vstupné cca € 13,50. Unbedingt zajít — i zvenčí za fotku.',
     mapsQuery: 'Stift Admont Bibliothek',
     website: 'https://www.stiftadmont.at/',
+    photoUrl: wiki('Stift_Admont_03.jpg'),
+    hours: 'Pá 1.5.: 10–17 (poslední vstup 16:15) · sezona 18.3.–1.11.',
   },
 
   // Day 2 — Admont → Großraming
@@ -184,6 +240,7 @@ export const HIGHLIGHTS: Highlight[] = [
       'Divoká soutěska Enns, vápencové stěny Buchsteinu a Hochtoru. UNESCO-kandidát. Trasa vede přímo dnem údolí podél řeky.',
     tip: 'Nejkrásnější úsek celé cesty. Dej si čas na focení u Gstatterboden.',
     mapsQuery: 'Gesäuse Nationalpark',
+    photoUrl: wiki('Gesaeuseeingang.jpg'),
   },
   {
     day: 2,
@@ -197,12 +254,39 @@ export const HIGHLIGHTS: Highlight[] = [
   {
     day: 2,
     kind: 'gastro',
+    name: 'Kölblwirt — Johnsbach im Gesäuse',
+    where: 'Johnsbach (malá odbočka z Gstatterboden)',
+    dist: 118,
+    blurb:
+      'Legendární horský Gasthof na okraji národního parku. Wildragout, domácí knedlíky, vlastní zvěřina. Terasa s výhledem na Hochtor.',
+    tip: 'Odbočka ~4 km do kopce — pro fajnšmekry. Denní menu cca € 16.',
+    mapsQuery: 'Kölblwirt Johnsbach',
+    website: 'https://www.koelblwirt.at/',
+    hours: 'So 2.5.: 11:30–21 · sobota standardně otevřeno',
+  },
+  {
+    day: 2,
+    kind: 'gastro',
     name: 'Gasthaus zur Post Altenmarkt',
     where: 'Altenmarkt bei St. Gallen',
     dist: 145,
     blurb: 'Klasický štýrský hostinec. Tafelspitz a domácí strudel. Rychlá obsluha, velké porce pro hladové cyklisty.',
     tip: 'Oběd den 2 — po Gesäuse dobré doplnit kalorie.',
     mapsQuery: 'Gasthaus zur Post Altenmarkt bei Sankt Gallen',
+    hours: 'So 2.5.: obvykle 11–22 · teplé jídlo do 21',
+  },
+  {
+    day: 2,
+    kind: 'gastro',
+    name: 'Gasthof Kaiser von Österreich',
+    where: 'Weyer',
+    dist: 167,
+    blurb:
+      'Barokní hostinec přímo na náměstí Weyer. Forelle (pstruh) z Ennsu, domácí Schnitzel, zahrada.',
+    tip: 'Pokud byl oběd v Altenmarktu, tady stačí káva + Apfelstrudel.',
+    mapsQuery: 'Gasthof Kaiser von Österreich Weyer',
+    website: 'https://www.kaiservonoesterreich.at/',
+    hours: 'So 2.5.: 11–22 · ověřit, některé soboty zavřeno kvůli akcím',
   },
   {
     day: 2,
@@ -227,6 +311,20 @@ export const HIGHLIGHTS: Highlight[] = [
       'Soutok Enns a Steyr, gotické a barokní jádro, slavný Bummerlhaus (1497). Město železářské tradice a Schubertových letních pobytů.',
     tip: 'Procházka od nádraží k náměstí Stadtplatz — 10 minut a odrovná tě to.',
     mapsQuery: 'Stadtplatz Steyr',
+    photoUrl: wiki('Blick_ueber_die_Steyrer_Altstadt_29-06-2011.jpg'),
+  },
+  {
+    day: 3,
+    kind: 'gastro',
+    name: 'Rahofer Bräu Steyr',
+    where: 'Steyr · Stadtplatz',
+    dist: 214,
+    blurb:
+      'Mikropivovar v historickém domě v centru Steyru. Vlastní piva, rustikální hornorakouská kuchyně, Grillteller, Ennstaler Forelle.',
+    tip: 'Ideální oběd dne 3 — velké porce, přímo na trase.',
+    mapsQuery: 'Rahofer Bräu Steyr Stadtplatz',
+    website: 'https://www.rahofer.at/',
+    hours: 'Ne 3.5.: 11–14 & 17–22 · teplá kuchyně do 21',
   },
   {
     day: 3,
@@ -236,8 +334,21 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 214,
     blurb:
       'Cukrárna v Steyru s nejstarší recepturou Linzer Torte v regionu. Tradiční mříž z mandlového těsta, rybízová marmeláda.',
-    tip: 'Uzavřený obvykle pondělí — ve sobotu ok. Káva + dílek € 7.',
+    tip: 'Káva + dílek € 7.',
     mapsQuery: 'Café Werner Steyr',
+    hours: 'Ne 3.5.: 8–18 · v neděli otevřeno (pondělí běžně zavřeno)',
+  },
+  {
+    day: 3,
+    kind: 'gastro',
+    name: 'Stadtwirt Enns',
+    where: 'Enns · Hauptplatz',
+    dist: 239,
+    blurb:
+      'Hornorakouský hostinec na hlavním náměstí pod Stadtturmem. Svíčková, Schnitzel, Knödel. Rychlá zastávka s parkováním kol.',
+    tip: 'Pokud je Steyr už za tebou, tady jen káva a malé jídlo.',
+    mapsQuery: 'Stadtwirt Enns Hauptplatz',
+    hours: 'Ne 3.5.: 10–22 · v neděli otevřeno',
   },
   {
     day: 3,
@@ -260,30 +371,7 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Vstup zdarma. Ne neděle před polednem. Počítej 60–90 min.',
     mapsQuery: 'KZ-Gedenkstätte Mauthausen',
     website: 'https://www.mauthausen-memorial.org/',
-  },
-  {
-    day: 3,
-    kind: 'gastro',
-    name: 'Café Traxlmayr — nejstarší kavárna v Linci',
-    where: 'Linec (cíl)',
-    dist: 263,
-    blurb:
-      'Vídeňská kavárenská kultura od roku 1847. Mramorové stolky, noviny na tyči, Linzer Torte a Melange. Perfektní finiš.',
-    tip: 'V pěší zóně, 5 minut od hlavního nádraží.',
-    mapsQuery: 'Café Traxlmayr Linz',
-    website: 'https://www.cafe-traxlmayr.at/',
-  },
-  {
-    day: 3,
-    kind: 'kavárna',
-    name: 'Konditorei Jindrak — Linzer Torte',
-    where: 'Linec',
-    dist: 263,
-    blurb:
-      'Rodinná cukrárna pečující o originální recept Linzer Torte (nejstarší torta světa, první zmínka 1653). Několik poboček, hlavní u Landstraße.',
-    tip: 'Torta do kufru jede i několik týdnů. Dárek domů.',
-    mapsQuery: 'Konditorei Jindrak Landstraße Linz',
-    website: 'https://www.jindrak.at/',
+    hours: 'Ne 3.5.: 9–17:30 (poslední vstup 16:45) · muzeum od 10',
   },
 ];
 
@@ -344,15 +432,6 @@ export const PACKING: PackingSection[] = [
       'Čelová lampa',
     ],
   },
-];
-
-export type EmergencyContact = { label: string; value: string; note?: string };
-export const EMERGENCIES: EmergencyContact[] = [
-  { label: 'Tísňové volání (EU)', value: '112' },
-  { label: 'Záchranka AT', value: '144' },
-  { label: 'Policie AT', value: '133' },
-  { label: 'Horská služba AT', value: '140' },
-  { label: 'ÖBB (info o vlacích)', value: '+43 5 1717', note: 'čeština dostupná' },
 ];
 
 export const STAYS: Stay[] = [
