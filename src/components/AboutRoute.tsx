@@ -1,5 +1,13 @@
 import { motion } from 'framer-motion';
-import { Route, Mountain, Flag, Signpost, BedDouble, Gauge } from 'lucide-react';
+import {
+  Route,
+  Mountain,
+  Flag,
+  Signpost,
+  BedDouble,
+  Gauge,
+  ChevronDown,
+} from 'lucide-react';
 
 const FACTS: { icon: React.ReactNode; label: string; value: string; hint?: string }[] = [
   {
@@ -56,38 +64,15 @@ export function AboutRoute() {
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.45 }}
         className="card p-5 md:p-6">
-        <div className="prose prose-slate max-w-none text-[0.95rem] leading-relaxed">
-          <p className="text-slate-700">
-            <strong>Ennsradweg</strong> je jedna ze zakládajících rakouských
-            řekoradweg — „říčních cyklostezek“ typu Donauradweg, Drauradweg,
-            Mur­radweg. Vede podél řeky <strong>Enns</strong> (levý přítok Dunaje) od
-            jejího horního toku ve{' '}
-            <strong>Vysokých Taurách</strong> u Flachauwinkelu přes <strong>
-              Národní park Gesäuse
-            </strong>{' '}
-            až do města <strong>Enns</strong> — nejstaršího města Rakouska — kde se
-            Enns vlévá do Dunaje.
-          </p>
-          <p className="text-slate-700 mt-3">
-            Trasa je v celém průběhu značena jako rakouská národní cyklostezka{' '}
-            <strong>R7</strong> (zelené tabule s číslem). Prochází třemi spolkovými
-            zeměmi — Salzbursko, Štýrsko a Horní Rakousko — a kombinuje samostatné
-            asfaltové stezky podél řeky s klidnými vedlejšími silnicemi. Díky
-            souběžné železnici ÖBB (Ennstalbahn) lze trasu kdykoli zkrátit nebo
-            přerušit vlakem — ideál pro vícedenní etapu.
-          </p>
-          <p className="text-slate-700 mt-3">
-            Trasa je <em>převážně z kopce</em> (pramen Enns &gt; 1 000 m n. m.,
-            soutok s Dunajem 248 m), takže i přes 263 km je zvládnutelná ve
-            třech dnech bez extrémní kondice. Nejkrásnější úsek — průlom Enns
-            v Gesäuse — je zároveň nejbohatší na výhledy a nejméně zatížený
-            motorizmem. Ubytování podél trasy je často v síti{' '}
-            <strong>ADFC bett+bike</strong> (uzamykatelná garáž kol, časná
-            snídaně, drobné nářadí).
-          </p>
-        </div>
+        <p className="text-slate-700 text-[0.95rem] leading-relaxed">
+          Rakouská národní cyklotrasa <strong>R7</strong> podél řeky Enns — od
+          ledovců <strong>Vysokých Taur</strong> přes{' '}
+          <strong>Národní park Gesäuse</strong> až k Dunaji. Třemi spolkovými
+          zeměmi, převážně z kopce, se souběžnou železnicí ÖBB pro případný
+          vlakový bailout.
+        </p>
 
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-3">
           {FACTS.map((f) => (
             <div
               key={f.label}
@@ -112,19 +97,48 @@ export function AboutRoute() {
           ))}
         </div>
 
-        <p className="text-xs text-slate-500 mt-4 leading-relaxed">
-          Oficiální zdroj trasy:{' '}
-          <a
-            href="https://www.ennsradweg.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-amber-700">
-            ennsradweg.com
-          </a>
-          . Pozn.: přesný rok oficiálního vyznačení R7 a statistiky nájezdů se
-          v otevřených zdrojích nepodařilo dohledat; údaje v tabulce pocházejí
-          z tourism boardů a ADFC.
-        </p>
+        <details className="group mt-4">
+          <summary className="list-none cursor-pointer inline-flex items-center gap-1.5 text-sm font-medium text-amber-800 hover:text-amber-900">
+            <span>Přečíst víc o trase</span>
+            <ChevronDown className="h-4 w-4 group-open:rotate-180 transition-transform" />
+          </summary>
+          <div className="mt-3 space-y-3 text-[0.95rem] leading-relaxed text-slate-700">
+            <p>
+              Ennsradweg patří mezi klasické rakouské dálkové cyklostezky vedené
+              podél řek — stejná rodina jako Dunajská, Drávská nebo Murská
+              cyklostezka. Kopíruje řeku Enns (největší alpský přítok Dunaje)
+              od jejího horního toku u Flachauwinkelu až po město Enns —
+              nejstarší město Rakouska — kde se řeka vlévá do Dunaje.
+            </p>
+            <p>
+              Značka R7 (zelená cedule s číslem) provází trasu přes
+              Salzbursko, Štýrsko a Horní Rakousko. Střídá samostatné asfaltové
+              stezky u řeky s klidnými vedlejšími silnicemi. Souběžná železnice
+              ÖBB Ennstalbahn umožňuje kteroukoli etapu zkrátit nebo přerušit
+              vlakem — ideální pro vícedenní výjezd.
+            </p>
+            <p>
+              Trasa je převážně z kopce (pramen nad 1 000 m, Dunaj ve 248 m),
+              takže 263 km se dá v klidu ujet za tři dny bez vrcholové kondice.
+              Nejhezčí úsek — průlom Enns skrz Gesäuse — je zároveň
+              nejvýhledovější a s nejmenším provozem. Ubytování podél trasy je
+              často v síti ADFC bett+bike (uzamykatelná garáž, časná snídaně,
+              základní nářadí).
+            </p>
+            <p className="text-xs text-slate-500">
+              Oficiální zdroj:{' '}
+              <a
+                href="https://www.ennsradweg.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-amber-700">
+                ennsradweg.com
+              </a>
+              . Pozn.: přesný rok oficiálního vyznačení R7 a statistiky jezdců
+              se v otevřených zdrojích nepodařilo dohledat.
+            </p>
+          </div>
+        </details>
       </motion.div>
     </section>
   );
