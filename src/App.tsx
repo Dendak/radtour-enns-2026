@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Hero } from '@/components/Hero';
 import { SectionTitle } from '@/components/SectionTitle';
 import { TripMap, type UserLocation } from '@/components/TripMap';
@@ -13,14 +13,15 @@ import { StickyNav } from '@/components/StickyNav';
 import { Footer } from '@/components/Footer';
 import { useGpxTrack } from '@/hooks/useGpxTrack';
 import { useWeather } from '@/hooks/useWeather';
+import { setHover } from '@/hooks/useHoverStore';
 
 export default function App() {
   const gpxUrl = `${import.meta.env.BASE_URL}ennsradweg_osm.gpx`;
   const { track, waypoints, dayEnd, donauStart, loaded } = useGpxTrack(gpxUrl);
   const { byWaypoint: weather, updatedAt, loading, refresh } = useWeather(waypoints);
 
-  const [hover, setHover] = useState<{ lat: number; lon: number; label: string } | null>(null);
   const [userLoc, setUserLoc] = useState<UserLocation | null>(null);
+  const handleLocate = useCallback((loc: UserLocation | null) => setUserLoc(loc), []);
 
   return (
     <>
@@ -39,8 +40,7 @@ export default function App() {
                   dayEnd={dayEnd}
                   donauStart={donauStart}
                   weather={weather}
-                  hover={hover}
-                  onLocate={setUserLoc}
+                  onLocate={handleLocate}
                 />
                 <div className="border-t border-slate-200/70">
                   <ElevationProfile

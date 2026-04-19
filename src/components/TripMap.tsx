@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -15,6 +15,7 @@ import L from 'leaflet';
 import { DAY_COLORS, DAY_NAMES, DONAU_COLOR, STAYS, wmoText, type Waypoint } from '@/data/trip';
 import { splitTrackByDay, type TrackPoint } from '@/hooks/useGpxTrack';
 import type { WeatherPoint } from '@/hooks/useWeather';
+import { useHover } from '@/hooks/useHoverStore';
 import { cn } from '@/lib/utils';
 import { Layers, LocateFixed, LocateOff } from 'lucide-react';
 
@@ -146,8 +147,9 @@ function LocateLayer({
   return null;
 }
 
-function HoverMarkerLayer({ hover }: { hover: { lat: number; lon: number; label: string } | null }) {
+function HoverMarkerLayer() {
   const map = useMap();
+  const hover = useHover();
   const markerRef = useRef<L.Marker | null>(null);
   useEffect(() => {
     if (!hover) {
@@ -211,25 +213,30 @@ export type TripMapProps = {
   dayEnd: Record<1 | 2, number>;
   donauStart: number;
   weather: WeatherPoint[];
-  hover: { lat: number; lon: number; label: string } | null;
   onLocate: (loc: UserLocation | null) => void;
 };
 
-export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover, onLocate }: TripMapProps) {
+function TripMapInner({ track, waypoints, dayEnd, donauStart, weather, onLocate }: TripMapProps) {
   // null = celá trasa. 1|2|3 = vybraná etapa (mapa přiblíží na ni).
   const [focusDay, setFocusDay] = useState<1 | 2 | 3 | null>(null);
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState<string | null>(null);
 
-  const handleLocationFound = (loc: UserLocation) => {
-    setLocError(null);
-    onLocate(loc);
-  };
-  const handleLocationStop = (reason?: string) => {
-    if (reason) setLocError(reason);
-    setLocating(false);
-    onLocate(null);
-  };
+  const handleLocationFound = useCallback(
+    (loc: UserLocation) => {
+      setLocError(null);
+      onLocate(loc);
+    },
+    [onLocate],
+  );
+  const handleLocationStop = useCallback(
+    (reason?: string) => {
+      if (reason) setLocError(reason);
+      setLocating(false);
+      onLocate(null);
+    },
+    [onLocate],
+  );
 
   const byDay = useMemo(() => splitTrackByDay(track, dayEnd), [track, dayEnd]);
   const fullBounds = useMemo<LatLngBoundsExpression | null>(() => {
@@ -448,7 +455,7 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover, 
           })}
 
           <FitBounds bounds={activeBounds} />
-          <HoverMarkerLayer hover={hover} />
+          <HoverMarkerLayer />
           <LocateLayer
             active={locating}
             track={track}
@@ -472,3 +479,5 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover, 
     </div>
   );
 }
+
+export const TripMap = memo(TripMapInner);
