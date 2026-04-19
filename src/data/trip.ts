@@ -31,8 +31,8 @@ export const DAY_NAMES: Record<1 | 2 | 3, string> = {
 };
 
 export const DAY_CAPTIONS: Record<1 | 2 | 3, string> = {
-  1: 'Radstadt → Liezen · sjezd z Vysokých Taur',
-  2: 'Liezen → Großraming · soutěska Gesäuse',
+  1: 'Radstadt → Admont · sjezd z Vysokých Taur',
+  2: 'Admont → Großraming · soutěska Gesäuse',
   3: 'Großraming → Linec · Donauradweg',
 };
 
@@ -57,10 +57,10 @@ export const WAYPOINTS: Waypoint[] = [
   { day: 1, dist: 20,  lat: 47.3950, lon: 13.6858, name: 'Schladming',         time: '2026-05-01T10:00', tag: 'Přestávka' },
   { day: 1, dist: 42,  lat: 47.4403, lon: 13.9067, name: 'Gröbming',           time: '2026-05-01T12:00', tag: 'Oběd' },
   { day: 1, dist: 60,  lat: 47.4944, lon: 14.1042, name: 'Irdning',            time: '2026-05-01T14:00', tag: 'Přestávka' },
-  { day: 1, dist: 77,  lat: 47.5664, lon: 14.2406, name: 'Liezen',             time: '2026-05-01T15:30', tag: 'Nocleh 1' },
-  { day: 2, dist: 77,  lat: 47.5664, lon: 14.2406, name: 'Liezen',             time: '2026-05-02T09:00', tag: 'Start' },
-  { day: 2, dist: 99,  lat: 47.5749, lon: 14.4601, name: 'Klášter Admont',     time: '2026-05-02T10:30', tag: 'Přestávka' },
-  { day: 2, dist: 118, lat: 47.5747, lon: 14.6200, name: 'Gesäuse',            time: '2026-05-02T12:00', tag: 'Zajímavost' },
+  { day: 1, dist: 77,  lat: 47.5664, lon: 14.2406, name: 'Liezen',             time: '2026-05-01T15:30', tag: 'Přestávka' },
+  { day: 1, dist: 99,  lat: 47.5749, lon: 14.4601, name: 'Admont',             time: '2026-05-01T17:00', tag: 'Nocleh 1' },
+  { day: 2, dist: 99,  lat: 47.5749, lon: 14.4601, name: 'Admont',             time: '2026-05-02T09:00', tag: 'Start' },
+  { day: 2, dist: 118, lat: 47.5747, lon: 14.6200, name: 'Gesäuse',            time: '2026-05-02T11:00', tag: 'Zajímavost' },
   { day: 2, dist: 125, lat: 47.6067, lon: 14.7489, name: 'Hieflau',            time: '2026-05-02T12:30', tag: 'Přestávka' },
   { day: 2, dist: 134, lat: 47.6956, lon: 14.7283, name: 'Großreifling',       time: '2026-05-02T13:00', tag: 'Průjezd' },
   { day: 2, dist: 145, lat: 47.6833, lon: 14.6333, name: 'Altenmarkt u St. Gallen', time: '2026-05-02T13:30', tag: 'Oběd' },
@@ -96,11 +96,11 @@ export const wmoText = (code: number | undefined) =>
 export const STAYS = [
   {
     night: 'Nocleh 1 · Pá 1. května',
-    name: 'EEE Hotel Liezen',
-    loc: 'Liezen',
-    tentative: true,
-    mapsQuery: 'EEE Hotel Liezen',
-    embedQuery: 'EEE Hotel Liezen',
+    name: 'Hotel Spirodom Admont',
+    loc: 'Admont',
+    tentative: false,
+    mapsQuery: 'Hotel Spirodom Admont',
+    embedQuery: 'Hotel Spirodom Admont, Hauptstraße 58, 8911 Admont, Österreich',
   },
   {
     night: 'Nocleh 2 · So 2. května',

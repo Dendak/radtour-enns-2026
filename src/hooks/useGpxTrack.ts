@@ -16,7 +16,7 @@ export type TrackData = {
 const DEFAULT: TrackData = {
   track: [],
   waypoints: WAYPOINTS,
-  dayEnd: { 1: 77, 2: 176 },
+  dayEnd: { 1: 99, 2: 176 },
   donauStart: 239,
   totalKm: 263,
   loaded: false,
@@ -49,7 +49,7 @@ async function fetchGpx(url: string): Promise<TrackPoint[] | null> {
 function synthesizeTrack(): TrackPoint[] {
   const WP_ELEV: Record<string, number> = {
     'Radstadt (nádraží)': 856, 'Schladming': 745, 'Gröbming': 768, 'Irdning': 640, 'Liezen': 659,
-    'Klášter Admont': 638, 'Gesäuse': 580, 'Hieflau': 498, 'Großreifling': 480,
+    'Admont': 638, 'Gesäuse': 580, 'Hieflau': 498, 'Großreifling': 480,
     'Altenmarkt u St. Gallen': 490, 'Weyer': 420, 'Großraming': 347,
     'Reichraming': 345, 'Losenstein': 329, 'Steyr': 311, 'Enns': 281,
     'Mauthausen': 250, 'Steyregg': 249, 'Linec hlavní nádraží': 266,
@@ -103,7 +103,7 @@ function snapWaypoints(track: TrackPoint[]): {
   const n1 = snapped.find((w) => w.day === 1 && w.tag === 'Nocleh 1');
   const n2 = snapped.find((w) => w.day === 2 && w.tag === 'Nocleh 2');
   const enns = snapped.find((w) => w.name === 'Enns');
-  const dayEnd = { 1: n1?.dist ?? 77, 2: n2?.dist ?? 176 };
+  const dayEnd = { 1: n1?.dist ?? 99, 2: n2?.dist ?? 176 };
   const donauStart = enns?.dist ?? 239;
   snapped.forEach((w) => {
     if (w.day === 2 && w.tag === 'Start') w.dist = dayEnd[1];
@@ -123,7 +123,7 @@ export function useGpxTrack(url: string) {
       if (!track) track = synthesizeTrack();
       const snap = fromGpx ? snapWaypoints(track) : {
         waypoints: WAYPOINTS,
-        dayEnd: { 1: 77, 2: 176 } as Record<1 | 2, number>,
+        dayEnd: { 1: 99, 2: 176 } as Record<1 | 2, number>,
         donauStart: 239,
       };
       if (alive) {
