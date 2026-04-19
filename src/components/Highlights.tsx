@@ -13,7 +13,8 @@ import {
   Clock,
   LayoutGrid,
   Star,
-  ImageOff,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import {
   HIGHLIGHTS,
@@ -28,37 +29,55 @@ type FilterKey = 'all' | KindKey;
 
 const KIND_META: Record<
   Highlight['kind'],
-  { label: string; icon: React.ReactNode; tint: string }
+  {
+    label: string;
+    icon: React.ReactNode;
+    bigIcon: React.ReactNode;
+    tint: string;
+    gradient: string;
+  }
 > = {
   kultura: {
     label: 'Kultura',
     icon: <BookOpen className="h-3.5 w-3.5" />,
+    bigIcon: <BookOpen className="h-14 w-14" />,
     tint: 'bg-violet-50 text-violet-800 border-violet-200',
+    gradient: 'from-violet-400 via-violet-500 to-violet-700',
   },
   příroda: {
     label: 'Příroda',
     icon: <Leaf className="h-3.5 w-3.5" />,
+    bigIcon: <Leaf className="h-14 w-14" />,
     tint: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    gradient: 'from-emerald-400 via-emerald-500 to-emerald-700',
   },
   historie: {
     label: 'Historie',
     icon: <Landmark className="h-3.5 w-3.5" />,
+    bigIcon: <Landmark className="h-14 w-14" />,
     tint: 'bg-amber-50 text-amber-800 border-amber-200',
+    gradient: 'from-amber-400 via-amber-500 to-amber-700',
   },
   gastro: {
     label: 'Gastro',
     icon: <Utensils className="h-3.5 w-3.5" />,
+    bigIcon: <Utensils className="h-14 w-14" />,
     tint: 'bg-rose-50 text-rose-800 border-rose-200',
+    gradient: 'from-rose-400 via-rose-500 to-rose-700',
   },
   kavárna: {
     label: 'Kavárna',
     icon: <Coffee className="h-3.5 w-3.5" />,
+    bigIcon: <Coffee className="h-14 w-14" />,
     tint: 'bg-orange-50 text-orange-800 border-orange-200',
+    gradient: 'from-orange-400 via-orange-500 to-orange-700',
   },
   památka: {
     label: 'Památka',
     icon: <Church className="h-3.5 w-3.5" />,
+    bigIcon: <Church className="h-14 w-14" />,
     tint: 'bg-sky-50 text-sky-800 border-sky-200',
+    gradient: 'from-sky-400 via-sky-500 to-sky-700',
   },
 };
 
@@ -139,37 +158,80 @@ export function Highlights({ embedded = false }: HighlightsProps = {}) {
             (h) => h.day === day && (filter === 'all' || h.kind === filter),
           );
           if (!items.length) return null;
-          const color = DAY_COLORS[day];
           return (
-            <motion.div
+            <DayGroup
               key={day}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.45 }}>
-              <div className="flex items-center gap-3 mb-3">
-                <span
-                  className="h-3 w-3 rounded-full shrink-0"
-                  style={{ background: color }}
-                />
-                <h3 className="font-display font-bold text-base md:text-lg text-ink">
-                  {DAY_NAMES[day]}
-                </h3>
-                <span className="text-xs text-slate-400 tabular-nums">
-                  · {items.length}{' '}
-                  {items.length === 1 ? 'místo' : items.length < 5 ? 'místa' : 'míst'}
-                </span>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {items.map((h, idx) => (
-                  <HighlightCard key={`${day}-${idx}`} h={h} accent={color} />
-                ))}
-              </div>
-            </motion.div>
+              day={day}
+              items={items}
+              color={DAY_COLORS[day]}
+            />
           );
         })}
       </div>
     </Wrapper>
+  );
+}
+
+const INITIAL_VISIBLE = 3;
+
+function DayGroup({
+  day,
+  items,
+  color,
+}: {
+  day: 1 | 2 | 3;
+  items: Highlight[];
+  color: string;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? items : items.slice(0, INITIAL_VISIBLE);
+  const hiddenCount = items.length - visible.length;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.45 }}>
+      <div className="flex items-center gap-3 mb-3">
+        <span
+          className="h-3 w-3 rounded-full shrink-0"
+          style={{ background: color }}
+        />
+        <h3 className="font-display font-bold text-base md:text-lg text-ink">
+          {DAY_NAMES[day]}
+        </h3>
+        <span className="text-xs text-slate-400 tabular-nums">
+          · {items.length}{' '}
+          {items.length === 1 ? 'místo' : items.length < 5 ? 'místa' : 'míst'}
+        </span>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {visible.map((h, idx) => (
+          <HighlightCard key={`${day}-${idx}`} h={h} accent={color} />
+        ))}
+      </div>
+      {items.length > INITIAL_VISIBLE && (
+        <div className="mt-3 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:border-amber-300 transition">
+            {expanded ? (
+              <>
+                <ChevronUp className="h-3.5 w-3.5" />
+                Skrýt zbytek
+              </>
+            ) : (
+              <>
+                <ChevronDown className="h-3.5 w-3.5" />
+                Ukázat dalších {hiddenCount}
+              </>
+            )}
+          </button>
+        </div>
+      )}
+    </motion.div>
   );
 }
 
@@ -218,8 +280,12 @@ function HighlightCard({ h, accent }: { h: Highlight; accent: string }) {
             onError={() => currentPhoto && markFailed(currentPhoto)}
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-slate-300">
-            <ImageOff className="h-10 w-10" />
+          <div
+            className={`absolute inset-0 flex flex-col items-center justify-center gap-2 text-white bg-gradient-to-br ${meta.gradient}`}>
+            <div className="opacity-90">{meta.bigIcon}</div>
+            <div className="px-3 text-center font-display font-bold text-sm md:text-base leading-tight drop-shadow">
+              {h.name}
+            </div>
           </div>
         )}
         {hasPhoto && (
