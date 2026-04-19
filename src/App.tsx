@@ -8,6 +8,7 @@ import { WeatherDays } from '@/components/WeatherDays';
 import { Stays } from '@/components/Stays';
 import { Highlights } from '@/components/Highlights';
 import { PracticalInfo } from '@/components/PracticalInfo';
+import { AboutRoute } from '@/components/AboutRoute';
 import { StickyNav } from '@/components/StickyNav';
 import { Footer } from '@/components/Footer';
 import { useGpxTrack } from '@/hooks/useGpxTrack';
@@ -55,6 +56,10 @@ export default function App() {
             )}
           </div>
         </section>
+
+        <div id="o-trase" className="scroll-mt-20">
+          <AboutRoute />
+        </div>
 
         <div id="pocasi" className="scroll-mt-20">
           <WeatherDays

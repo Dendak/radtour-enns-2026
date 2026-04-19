@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Map, CloudSun, Sparkles, BedDouble, Info } from 'lucide-react';
+import { Map, CloudSun, Sparkles, BedDouble, Info, Route } from 'lucide-react';
 
 const SECTIONS: { id: string; label: string; icon: React.ReactNode }[] = [
   { id: 'mapa', label: 'Mapa', icon: <Map className="h-3.5 w-3.5" /> },
+  { id: 'o-trase', label: 'O trase', icon: <Route className="h-3.5 w-3.5" /> },
   { id: 'pocasi', label: 'Počasí', icon: <CloudSun className="h-3.5 w-3.5" /> },
   { id: 'poi', label: 'Co uvidíme', icon: <Sparkles className="h-3.5 w-3.5" /> },
   { id: 'ubytovani', label: 'Nocleh', icon: <BedDouble className="h-3.5 w-3.5" /> },
