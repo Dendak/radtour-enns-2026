@@ -531,6 +531,6 @@ export const STAYS: Stay[] = [
       'Tradiční hostinec v srdci Großramingu. Domácí kuchyně s rakouskými klasikami (Schnitzel, Tafelspitz), pivo Stiegl, pokoje nad restaurací.',
     amenities: ['WiFi zdarma', 'Snídaně', 'Úschovna kol', 'Restaurace', 'Centrum obce', 'Sauna'],
     website: 'https://www.kirchenwirt-grossraming.at/',
-    pricePerPerson: '€ 63–67 / os. / noc se snídaní (DZ) · EZ +€ 16 · místní poplatek € 2,40',
+    pricePerPerson: '€ 67 / os. / noc se snídaní · + místní poplatek € 2,40',
   },
 ];
