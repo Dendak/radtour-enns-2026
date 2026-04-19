@@ -60,10 +60,6 @@ export default function App() {
           </div>
         </section>
 
-        <div id="o-trase" className="scroll-mt-20">
-          <AboutRoute />
-        </div>
-
         <div id="pocasi" className="scroll-mt-20">
           <WeatherDays
             waypoints={waypoints}
@@ -80,6 +76,10 @@ export default function App() {
 
         <div id="ubytovani" className="scroll-mt-20">
           <Stays />
+        </div>
+
+        <div id="o-trase" className="scroll-mt-20">
+          <AboutRoute />
         </div>
 
         <div id="info" className="scroll-mt-20">
