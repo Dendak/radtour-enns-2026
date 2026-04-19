@@ -521,10 +521,13 @@ export const STAYS: Stay[] = [
     tentative: false,
     mapsQuery: 'Landgasthof Kirchenwirt Kirchenplatz 4 Großraming',
     photos: [
-      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/2024/03/BILD_5079-600x399.jpg',
-      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/2020/03/DSCN7926-600x451.jpg',
-      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/landschaft.jpg',
-      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/2019/12/P1010819-c-TVB-Ennstal.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/2019/12/Kirchenwirt-013-1900x500.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/hausansicht1-600x400.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/Kirchenwirt-118-600x399.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/Kirchenwirt-133-600x459.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/Kirchenwirt-044-600x399.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/dsc1921-kopie.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/kirchenwirt-grossraming-zi_10.jpg',
     ],
     photoCredit: 'kirchenwirt-grossraming.at',
     description:
