@@ -6,6 +6,7 @@ import { ElevationProfile } from '@/components/ElevationProfile';
 import { PrecipitationChart } from '@/components/PrecipitationChart';
 import { WeatherDays } from '@/components/WeatherDays';
 import { Stays } from '@/components/Stays';
+import { Highlights } from '@/components/Highlights';
 import { PracticalInfo } from '@/components/PracticalInfo';
 import { Footer } from '@/components/Footer';
 import { useGpxTrack } from '@/hooks/useGpxTrack';
@@ -59,6 +60,8 @@ export default function App() {
           loading={loading}
           onRefresh={refresh}
         />
+
+        <Highlights />
 
         <Stays />
 

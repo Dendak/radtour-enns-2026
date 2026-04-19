@@ -15,6 +15,15 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover }:
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const hoverXRef = useRef<number | undefined>(undefined);
+  const rafRef = useRef<number | null>(null);
+
+  const scheduleDraw = () => {
+    if (rafRef.current !== null) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      draw();
+    });
+  };
 
   const byDay = useMemo(() => splitTrackByDay(track, dayEnd), [track, dayEnd]);
 
@@ -173,7 +182,10 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover }:
     draw();
     const onResize = () => draw();
     window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [track, waypoints, byDay, dayEnd]);
 
@@ -198,7 +210,7 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover }:
     if (clientX === undefined) return;
     const x = clientX - rect.left;
     hoverXRef.current = x;
-    draw();
+    scheduleDraw();
     const padL = 50, padR = 14;
     const innerLeft = padL, innerRight = rect.width - padR;
     const maxD = track.length ? track[track.length - 1].dist : 0;
@@ -222,7 +234,7 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover }:
 
   const onLeave = () => {
     hoverXRef.current = undefined;
-    draw();
+    scheduleDraw();
     onHover(null);
   };
 

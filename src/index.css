@@ -6,6 +6,9 @@
   html {
     scroll-behavior: smooth;
   }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
   body {
     @apply font-sans text-ink bg-paper antialiased;
   }
@@ -17,6 +20,14 @@
       radial-gradient(1000px 600px at 100% 0%, rgba(21, 128, 61, 0.05), transparent 60%),
       radial-gradient(800px 500px at 0% 40%, rgba(180, 83, 9, 0.04), transparent 55%);
     background-attachment: fixed;
+  }
+  :focus-visible {
+    outline: 2px solid #b45309;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+    outline-offset: 3px;
   }
 }
 

@@ -65,8 +65,7 @@ export function WeatherDays({
                 }}>
                 <img
                   src={DAY_PHOTOS[day].url}
-                  alt=""
-                  aria-hidden
+                  alt={DAY_CAPTIONS[day]}
                   loading="lazy"
                   decoding="async"
                   className="absolute inset-0 w-full h-full object-cover"

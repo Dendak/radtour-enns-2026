@@ -17,6 +17,29 @@ export type WeatherState = {
 };
 
 const OPEN_METEO = 'https://api.open-meteo.com/v1/forecast';
+const CACHE_KEY = 'ennsradweg-weather-v1';
+
+type CacheShape = { byWaypoint: WeatherPoint[]; updatedAt: string };
+
+function loadCache(): { byWaypoint: WeatherPoint[]; updatedAt: Date } | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as CacheShape;
+    return { byWaypoint: parsed.byWaypoint, updatedAt: new Date(parsed.updatedAt) };
+  } catch {
+    return null;
+  }
+}
+
+function saveCache(byWaypoint: WeatherPoint[], updatedAt: Date) {
+  try {
+    const data: CacheShape = { byWaypoint, updatedAt: updatedAt.toISOString() };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  } catch {
+    // storage full / disabled — ignore
+  }
+}
 
 function buildUrl(waypoints: Waypoint[]) {
   const lat = waypoints.map((w) => w.lat.toFixed(4)).join(',');
@@ -59,11 +82,11 @@ function pickHour(
 }
 
 export function useWeather(waypoints: Waypoint[], refreshMs = 10 * 60 * 1000) {
-  const [state, setState] = useState<WeatherState>({
-    byWaypoint: [],
-    updatedAt: null,
-    loading: false,
-    error: null,
+  const [state, setState] = useState<WeatherState>(() => {
+    const cached = loadCache();
+    return cached
+      ? { byWaypoint: cached.byWaypoint, updatedAt: cached.updatedAt, loading: false, error: null }
+      : { byWaypoint: [], updatedAt: null, loading: false, error: null };
   });
 
   const fetchAll = useCallback(async () => {
@@ -86,7 +109,9 @@ export function useWeather(waypoints: Waypoint[], refreshMs = 10 * 60 * 1000) {
           hourly.wind_speed_10m,
         );
       });
-      setState({ byWaypoint: results, updatedAt: new Date(), loading: false, error: null });
+      const now = new Date();
+      setState({ byWaypoint: results, updatedAt: now, loading: false, error: null });
+      saveCache(results, now);
     } catch (e: any) {
       setState((s) => ({ ...s, loading: false, error: e.message || 'fetch failed' }));
     }

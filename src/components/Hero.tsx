@@ -14,7 +14,7 @@ const item = {
 
 // Austrian Alps / Enns valley photo (Unsplash, public)
 const HERO_PHOTO =
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=80';
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=75';
 
 export function Hero() {
   return (
@@ -37,7 +37,7 @@ export function Hero() {
       <div className="relative max-w-6xl mx-auto px-5 md:px-8 pt-16 md:pt-28 pb-20 md:pb-28">
         <motion.div initial="hidden" animate="show" variants={stagger} className="space-y-5 max-w-3xl">
           <motion.div variants={item} className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 backdrop-blur px-3 py-1.5 text-xs tracking-[0.18em] uppercase text-amber-200 shadow-sm">
-            <Bike className="h-3.5 w-3.5" /> Cyklovýlet · R7 + R1
+            <Bike className="h-3.5 w-3.5" /> Cyklovýlet
           </motion.div>
           <motion.h1 variants={item} className="font-display font-extrabold text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] tracking-tight drop-shadow-sm">
             {TRIP.title}
@@ -52,7 +52,7 @@ export function Hero() {
             <Stat icon={<Calendar className="h-4 w-4" />} label={TRIP.dateLabel} />
             <Stat icon={<MapPin className="h-4 w-4" />} label={`${TRIP.totalKm} km`} />
             <Stat icon={<MoveRight className="h-4 w-4" />} label={`${TRIP.days} dny`} />
-            <Stat icon={<Users className="h-4 w-4" />} label={`${TRIP.riders} kola`} />
+            <Stat icon={<Users className="h-4 w-4" />} label={`${TRIP.riders} lidí`} />
           </motion.div>
         </motion.div>
       </div>
