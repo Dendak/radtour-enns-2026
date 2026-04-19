@@ -6,9 +6,7 @@ import { ElevationProfile } from '@/components/ElevationProfile';
 import { PrecipitationChart } from '@/components/PrecipitationChart';
 import { WeatherDays } from '@/components/WeatherDays';
 import { Stays } from '@/components/Stays';
-import { Cities } from '@/components/Cities';
-import { FunFacts } from '@/components/FunFacts';
-import { Highlights } from '@/components/Highlights';
+import { OnRoute } from '@/components/OnRoute';
 import { PracticalInfo } from '@/components/PracticalInfo';
 import { AboutRoute } from '@/components/AboutRoute';
 import { StickyNav } from '@/components/StickyNav';
@@ -72,20 +70,12 @@ export default function App() {
           />
         </div>
 
-        <div id="poi" className="scroll-mt-20">
-          <Highlights />
+        <div id="na-trase" className="scroll-mt-20">
+          <OnRoute />
         </div>
 
         <div id="ubytovani" className="scroll-mt-20">
           <Stays />
-        </div>
-
-        <div id="mesta" className="scroll-mt-20">
-          <Cities />
-        </div>
-
-        <div id="fun-facts" className="scroll-mt-20">
-          <FunFacts />
         </div>
 
         <div id="o-trase" className="scroll-mt-20">

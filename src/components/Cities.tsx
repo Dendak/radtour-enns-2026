@@ -423,19 +423,27 @@ const CITIES: CityInfo[] = [
   },
 ];
 
-export function Cities() {
+export type CitiesProps = { embedded?: boolean };
+
+export function Cities({ embedded = false }: CitiesProps = {}) {
+  const outerClass = embedded ? '' : 'mt-10 md:mt-14';
+  const Wrapper = (props: React.HTMLAttributes<HTMLElement>) =>
+    embedded ? <div {...props} /> : <section {...props} />;
+
   return (
-    <section className="mt-10 md:mt-14">
-      <div className="mb-5">
-        <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">
-          Města na trase
+    <Wrapper className={outerClass}>
+      {!embedded && (
+        <div className="mb-5">
+          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">
+            Města na trase
+          </div>
+          <h2 className="section-title">Čím jsou tady zajímavé</h2>
+          <p className="text-sm text-slate-500 mt-2 max-w-2xl">
+            Devatenáct měst mezi Radstadtem a Lincem — každé se svou historií.
+            Klikni na libovolné pro více kontextu.
+          </p>
         </div>
-        <h2 className="section-title">Čím jsou tady zajímavé</h2>
-        <p className="text-sm text-slate-500 mt-2 max-w-2xl">
-          Devatenáct měst mezi Radstadtem a Lincem — každé se svou historií.
-          Klikni na libovolné pro více kontextu.
-        </p>
-      </div>
+      )}
 
       <div className="space-y-6">
         {([1, 2, 3] as const).map((day) => {
@@ -513,6 +521,6 @@ export function Cities() {
           );
         })}
       </div>
-    </section>
+    </Wrapper>
   );
 }

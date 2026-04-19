@@ -8,6 +8,7 @@ import {
   Gauge,
   ChevronDown,
 } from 'lucide-react';
+import { FunFacts } from '@/components/FunFacts';
 
 const FACTS: { icon: React.ReactNode; label: string; value: string; hint?: string }[] = [
   {
@@ -53,7 +54,7 @@ export function AboutRoute() {
     <section className="mt-10 md:mt-14">
       <div className="mb-5">
         <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">
-          O cyklostezce
+          O trase & zajímavosti
         </div>
         <h2 className="section-title">Ennsradweg — co to vlastně je</h2>
       </div>
@@ -195,6 +196,16 @@ export function AboutRoute() {
           </div>
         </details>
       </motion.div>
+
+      <div className="mt-6 md:mt-8">
+        <div className="flex items-baseline justify-between mb-3">
+          <h3 className="font-display font-bold text-lg md:text-xl text-ink">
+            Fun Facts — co asi nevíš
+          </h3>
+          <span className="text-xs text-slate-400">ověřené zdroje</span>
+        </div>
+        <FunFacts embedded />
+      </div>
     </section>
   );
 }

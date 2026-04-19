@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Landmark,
@@ -10,10 +10,10 @@ import {
   MapPin,
   ExternalLink,
   Lightbulb,
-  ChevronDown,
   Clock,
   LayoutGrid,
   Star,
+  ImageOff,
 } from 'lucide-react';
 import {
   HIGHLIGHTS,
@@ -62,7 +62,9 @@ const KIND_META: Record<
   },
 };
 
-export function Highlights() {
+export type HighlightsProps = { embedded?: boolean };
+
+export function Highlights({ embedded = false }: HighlightsProps = {}) {
   const [filter, setFilter] = useState<FilterKey>('all');
 
   const counts = HIGHLIGHTS.reduce(
@@ -82,19 +84,25 @@ export function Highlights() {
     'příroda',
   ];
 
+  const outerClass = embedded ? '' : 'mt-10 md:mt-14';
+  const Wrapper = (props: React.HTMLAttributes<HTMLElement>) =>
+    embedded ? <div {...props} /> : <section {...props} />;
+
   return (
-    <section className="mt-10 md:mt-14">
-      <div className="mb-5">
-        <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">
-          Co uvidíme
+    <Wrapper className={outerClass}>
+      {!embedded && (
+        <div className="mb-5">
+          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-700/90">
+            Co uvidíme
+          </div>
+          <h2 className="section-title">Zajímavosti, památky & gastro tipy</h2>
+          <p className="text-sm text-slate-500 mt-2 max-w-2xl">
+            Enns teče kolem klášterů, národních parků a nejstaršího města
+            Rakouska. Tady je kultura, kterou míjíme, a místa, kde se vyplatí
+            zastavit — na oběd, kafe nebo fotku.
+          </p>
         </div>
-        <h2 className="section-title">Zajímavosti, památky & gastro tipy</h2>
-        <p className="text-sm text-slate-500 mt-2 max-w-2xl">
-          Enns teče kolem klášterů, národních parků a nejstaršího města Rakouska.
-          Tady je kultura, kterou míjíme, a místa, kde se vyplatí zastavit — na
-          oběd, kafe nebo fotku.
-        </p>
-      </div>
+      )}
 
       <div className="flex flex-wrap gap-1.5 mb-5">
         {filterKinds.map((key) => {
@@ -125,7 +133,7 @@ export function Highlights() {
         })}
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {([1, 2, 3] as const).map((day) => {
           const items = HIGHLIGHTS.filter(
             (h) => h.day === day && (filter === 'all' || h.kind === filter),
@@ -138,68 +146,50 @@ export function Highlights() {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.45 }}
-              className="card overflow-hidden">
-              <div
-                className="px-5 py-3 flex items-center gap-3 border-b border-slate-200/60"
-                style={{
-                  background: `linear-gradient(90deg, ${color}12 0%, transparent 70%)`,
-                }}>
+              transition={{ duration: 0.45 }}>
+              <div className="flex items-center gap-3 mb-3">
                 <span
-                  className="h-2.5 w-2.5 rounded-full shrink-0"
+                  className="h-3 w-3 rounded-full shrink-0"
                   style={{ background: color }}
                 />
                 <h3 className="font-display font-bold text-base md:text-lg text-ink">
                   {DAY_NAMES[day]}
                 </h3>
+                <span className="text-xs text-slate-400 tabular-nums">
+                  · {items.length}{' '}
+                  {items.length === 1 ? 'místo' : items.length < 5 ? 'místa' : 'míst'}
+                </span>
               </div>
-              <ul className="divide-y divide-slate-100">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((h, idx) => (
-                  <HighlightRow key={idx} h={h} />
+                  <HighlightCard key={`${day}-${idx}`} h={h} accent={color} />
                 ))}
-              </ul>
+              </div>
             </motion.div>
           );
         })}
       </div>
-    </section>
+    </Wrapper>
   );
 }
 
-function HighlightRow({ h }: { h: Highlight }) {
+function HighlightCard({ h, accent }: { h: Highlight; accent: string }) {
   const photos = h.photos ?? [];
   const [failedUrls, setFailedUrls] = useState<Set<string>>(() => new Set());
   const validPhotos = useMemo(
     () => photos.filter((url) => !failedUrls.has(url)),
     [photos, failedUrls],
   );
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const [open, setOpen] = useState(false);
+
   const n = validPhotos.length;
   const hasPhoto = n > 0;
-
-  const [aIdx, setAIdx] = useState(0);
-  const [bIdx, setBIdx] = useState(-1);
-  const [activeSlot, setActiveSlot] = useState<'A' | 'B'>('A');
-  const [displayIdx, setDisplayIdx] = useState(0);
+  const currentPhoto = hasPhoto ? validPhotos[Math.min(photoIdx, n - 1)] : null;
 
   const meta = KIND_META[h.kind];
   const dayKm =
     h.dist !== undefined ? Math.max(0, h.dist - DAY_START_KM[h.day]) : undefined;
-
-  useEffect(() => {
-    if (n < 2) return;
-    const id = window.setInterval(() => {
-      setActiveSlot((slot) => {
-        setDisplayIdx((cur) => {
-          const next = (cur + 1) % n;
-          if (slot === 'A') setBIdx(next);
-          else setAIdx(next);
-          return next;
-        });
-        return slot === 'A' ? 'B' : 'A';
-      });
-    }, 4500);
-    return () => window.clearInterval(id);
-  }, [n]);
 
   const markFailed = (url: string) =>
     setFailedUrls((prev) => {
@@ -209,177 +199,149 @@ function HighlightRow({ h }: { h: Highlight }) {
       return next;
     });
 
-  const aUrl = n > 0 ? validPhotos[Math.min(aIdx, n - 1)] : null;
-  const bUrl = bIdx >= 0 && n > 0 ? validPhotos[Math.min(bIdx, n - 1)] : null;
-
   return (
-    <li>
-      <details className="group">
-        <summary
-          className={`relative cursor-pointer list-none transition-colors overflow-hidden ${
-            hasPhoto
-              ? 'text-white min-h-[220px] md:min-h-[260px] flex items-end bg-slate-800'
-              : 'p-4 md:p-5 flex items-center gap-4 hover:bg-slate-50/60'
-          }`}>
-          {hasPhoto && (
-            <>
-              {aUrl && (
-                <img
-                  key="slot-a"
-                  src={aUrl}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                    activeSlot === 'A' ? 'opacity-100' : 'opacity-0'
-                  }`}
-                  onError={() => markFailed(aUrl)}
-                />
-              )}
-              {bUrl && (
-                <img
-                  key="slot-b"
-                  src={bUrl}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                    activeSlot === 'B' ? 'opacity-100' : 'opacity-0'
-                  }`}
-                  onError={() => markFailed(bUrl)}
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
-              {n > 1 && (
-                <div className="absolute top-3 right-3 z-10 flex gap-1">
-                  {validPhotos.map((_, i) => (
-                    <span
-                      key={i}
-                      className={`h-1.5 rounded-full transition-all ${
-                        i === displayIdx ? 'w-5 bg-white' : 'w-1.5 bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-          <div
-            className={
-              hasPhoto
-                ? 'relative flex items-center gap-4 p-4 md:p-5 w-full'
-                : 'contents'
-            }>
-            <div
-              className={`relative inline-flex items-center justify-center h-10 w-10 rounded-full border shrink-0 ${
-                hasPhoto ? 'bg-white/90 border-white/40 text-slate-800' : meta.tint
-              }`}>
-              {meta.icon}
-            </div>
-            <div className="relative flex-1 min-w-0">
-              <div
-                className={`font-display font-semibold text-base md:text-lg leading-tight ${
-                  hasPhoto ? 'text-white drop-shadow' : 'text-ink truncate'
-                }`}>
-                {h.name}
-              </div>
-              <div
-                className={`text-xs mt-1 flex items-center gap-2 flex-wrap ${
-                  hasPhoto ? 'text-white/90' : 'text-slate-500'
-                }`}>
-                <span
-                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 ${
-                    hasPhoto
-                      ? 'bg-white/15 backdrop-blur border-white/30 text-white'
-                      : meta.tint
-                  }`}>
-                  {meta.label}
-                </span>
-                <span className="inline-flex items-center gap-1 min-w-0">
-                  <MapPin className="h-3 w-3 shrink-0" />
-                  <span className="truncate">{h.where}</span>
-                  {dayKm !== undefined && (
-                    <span
-                      className={`tabular-nums shrink-0 ${
-                        hasPhoto ? 'text-white/75' : 'text-slate-400'
-                      }`}
-                      title={`${h.dist} km od startu trasy (Radstadt)`}>
-                      · km {dayKm} dne
-                    </span>
-                  )}
-                </span>
-                {h.rating && (
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 tabular-nums shrink-0 font-medium ${
-                      hasPhoto
-                        ? 'bg-yellow-400/90 text-slate-900'
-                        : 'bg-yellow-100 text-yellow-900 border border-yellow-200'
-                    }`}
-                    title={`${h.rating.source ?? 'Google'}: ${h.rating.stars}★ z ${h.rating.count} recenzí`}>
-                    <Star className="h-3 w-3 fill-current" />
-                    {h.rating.stars.toFixed(1)}
-                    <span className="opacity-70">({h.rating.count}+)</span>
-                  </span>
-                )}
-              </div>
-            </div>
-            <ChevronDown
-              className={`relative h-5 w-5 shrink-0 group-open:rotate-180 transition-transform ${
-                hasPhoto ? 'text-white/90' : 'text-slate-400'
-              }`}
-            />
+    <article
+      className="card overflow-hidden flex flex-col group"
+      style={{ borderTop: `3px solid ${accent}` }}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="relative block aspect-[4/3] w-full bg-slate-100 overflow-hidden text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400">
+        {hasPhoto ? (
+          <img
+            src={currentPhoto!}
+            alt={h.name}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={() => currentPhoto && markFailed(currentPhoto)}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-slate-300">
+            <ImageOff className="h-10 w-10" />
           </div>
-        </summary>
-        <div className="px-4 md:px-5 pb-5 pt-4 md:pl-[4.5rem]">
-          <p className="text-sm text-slate-700 leading-relaxed">{h.blurb}</p>
-          {h.hours && (
-            <p className="text-sm text-sky-900/90 mt-3 flex gap-2 rounded-lg bg-sky-50 border border-sky-200 px-3 py-2">
-              <Clock className="h-4 w-4 shrink-0 mt-0.5 text-sky-600" />
-              <span>{h.hours}</span>
-            </p>
-          )}
-          {h.tip && (
-            <p className="text-sm text-amber-900/90 mt-3 flex gap-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
-              <Lightbulb className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
-              <span>{h.tip}</span>
-            </p>
-          )}
-          {(h.mapsQuery || h.website) && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {h.website && (
-                <a
-                  href={h.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn text-xs bg-slate-900 text-white hover:bg-slate-700">
-                  {h.kind === 'gastro' || h.kind === 'kavárna' ? 'Menu / web' : 'Web'}{' '}
-                  <ExternalLink className="h-3 w-3 opacity-80" />
-                </a>
-              )}
-              {h.mapsQuery && (
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.mapsQuery)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn text-xs bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
-                  <MapPin className="h-3.5 w-3.5" /> Maps{' '}
-                  <ExternalLink className="h-3 w-3 opacity-70" />
-                </a>
-              )}
-              {h.mapsQuery && h.rating && (
-                <a
-                  href={`https://www.google.com/search?q=${encodeURIComponent(h.mapsQuery + ' recenze')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn text-xs bg-yellow-50 border border-yellow-200 text-yellow-900 hover:bg-yellow-100">
-                  <Star className="h-3.5 w-3.5 fill-current" /> Recenze{' '}
-                  <ExternalLink className="h-3 w-3 opacity-70" />
-                </a>
-              )}
-            </div>
+        )}
+        {hasPhoto && (
+          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
+        )}
+        <div className="absolute top-2 left-2 flex gap-1.5 z-10">
+          <span
+            className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium ${
+              hasPhoto
+                ? 'bg-white/95 backdrop-blur border-white/60 text-slate-800'
+                : meta.tint
+            }`}>
+            {meta.icon}
+            {meta.label}
+          </span>
+          {dayKm !== undefined && (
+            <span
+              className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium tabular-nums ${
+                hasPhoto
+                  ? 'bg-black/55 text-white backdrop-blur'
+                  : 'bg-slate-100 text-slate-600'
+              }`}
+              title={`${h.dist} km od startu`}>
+              km {dayKm}
+            </span>
           )}
         </div>
-      </details>
-    </li>
+        {h.rating && (
+          <span
+            className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full bg-yellow-400/95 px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-900 shadow-sm"
+            title={`${h.rating.source ?? 'Google'}: ${h.rating.stars}★ z ${h.rating.count} recenzí`}>
+            <Star className="h-3 w-3 fill-current" />
+            {h.rating.stars.toFixed(1)}
+          </span>
+        )}
+        {n > 1 && (
+          <div className="absolute bottom-2 left-0 right-0 z-10 flex justify-center gap-1">
+            {validPhotos.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Fotka ${i + 1}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setPhotoIdx(i);
+                }}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === photoIdx ? 'w-5 bg-white' : 'w-1.5 bg-white/60 hover:bg-white/80'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </button>
+
+      <div className="p-4 flex flex-col flex-1">
+        <h4 className="font-display font-semibold text-base text-ink leading-tight mb-1">
+          {h.name}
+        </h4>
+        <div className="text-xs text-slate-500 flex items-center gap-1 mb-2 min-w-0">
+          <MapPin className="h-3 w-3 shrink-0" />
+          <span className="truncate">{h.where}</span>
+          {h.rating && (
+            <span className="text-slate-400 tabular-nums shrink-0">
+              · {h.rating.count}+ recenzí
+            </span>
+          )}
+        </div>
+        <p
+          className={`text-sm text-slate-600 leading-relaxed ${
+            open ? '' : 'line-clamp-3'
+          }`}>
+          {h.blurb}
+        </p>
+
+        {open && (
+          <div className="mt-3 space-y-2.5">
+            {h.hours && (
+              <p className="text-sm text-sky-900/90 flex gap-2 rounded-lg bg-sky-50 border border-sky-200 px-3 py-2">
+                <Clock className="h-4 w-4 shrink-0 mt-0.5 text-sky-600" />
+                <span>{h.hours}</span>
+              </p>
+            )}
+            {h.tip && (
+              <p className="text-sm text-amber-900/90 flex gap-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                <Lightbulb className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
+                <span>{h.tip}</span>
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="mt-auto pt-3 flex flex-wrap items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="text-xs font-medium text-amber-800 hover:text-amber-900 inline-flex items-center gap-0.5">
+            {open ? 'Skrýt' : 'Detaily'}
+          </button>
+          {(h.mapsQuery || h.website) && (
+            <span className="text-slate-200">·</span>
+          )}
+          {h.website && (
+            <a
+              href={h.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-medium text-slate-700 hover:text-amber-800 inline-flex items-center gap-0.5">
+              Web <ExternalLink className="h-3 w-3 opacity-70" />
+            </a>
+          )}
+          {h.mapsQuery && (
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.mapsQuery)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-medium text-slate-700 hover:text-amber-800 inline-flex items-center gap-0.5">
+              Maps <ExternalLink className="h-3 w-3 opacity-70" />
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
   );
 }
