@@ -1,7 +1,19 @@
 import { motion } from 'framer-motion';
-import { Bike, Calendar, MapPin, Users, MoveRight } from 'lucide-react';
+import { Bike, Calendar, MapPin, Users, MoveRight, Hourglass } from 'lucide-react';
 import { TRIP } from '@/data/trip';
 import { TopoPattern } from './TopoPattern';
+
+const TRIP_START = new Date('2026-05-01T09:00:00+02:00');
+function daysUntilTrip() {
+  const ms = TRIP_START.getTime() - Date.now();
+  return Math.ceil(ms / 86_400_000);
+}
+function plural(n: number, one: string, few: string, many: string) {
+  const abs = Math.abs(n);
+  if (abs === 1) return one;
+  if (abs >= 2 && abs <= 4) return few;
+  return many;
+}
 
 const stagger = {
   hidden: {},
@@ -54,6 +66,9 @@ export function Hero() {
             <Stat icon={<MoveRight className="h-4 w-4" />} label={`${TRIP.days} dny`} />
             <Stat icon={<Users className="h-4 w-4" />} label={`${TRIP.riders} lidí`} />
           </motion.div>
+          <motion.div variants={item}>
+            <Countdown />
+          </motion.div>
         </motion.div>
       </div>
 
@@ -70,6 +85,33 @@ function Stat({ icon, label }: { icon: React.ReactNode; label: string }) {
     <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3 py-1.5 text-sm backdrop-blur">
       <span className="text-amber-200">{icon}</span>
       <span>{label}</span>
+    </span>
+  );
+}
+
+function Countdown() {
+  const n = daysUntilTrip();
+  let text: string;
+  let tone = 'text-amber-100';
+  if (n > 0) {
+    text = `Za ${n} ${plural(n, 'den', 'dny', 'dní')} vyrážíme`;
+    if (n <= 14) tone = 'text-amber-200';
+    if (n <= 3) tone = 'text-emerald-200';
+  } else if (n === 0) {
+    text = 'Vyrážíme dnes!';
+    tone = 'text-emerald-200';
+  } else if (n >= -2) {
+    text = 'Cyklovýlet právě probíhá';
+    tone = 'text-emerald-200';
+  } else {
+    text = 'Cyklovýlet už máme za sebou';
+    tone = 'text-stone-200';
+  }
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full bg-black/20 border border-white/20 px-3 py-1.5 text-sm font-semibold backdrop-blur ${tone}`}>
+      <Hourglass className="h-4 w-4" />
+      {text}
     </span>
   );
 }

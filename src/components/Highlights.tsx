@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Landmark,
@@ -11,6 +12,7 @@ import {
   Lightbulb,
   ChevronDown,
   Clock,
+  LayoutGrid,
 } from 'lucide-react';
 import {
   HIGHLIGHTS,
@@ -19,6 +21,9 @@ import {
   DAY_START_KM,
   type Highlight,
 } from '@/data/trip';
+
+type KindKey = Highlight['kind'];
+type FilterKey = 'all' | KindKey;
 
 const KIND_META: Record<
   Highlight['kind'],
@@ -57,6 +62,25 @@ const KIND_META: Record<
 };
 
 export function Highlights() {
+  const [filter, setFilter] = useState<FilterKey>('all');
+
+  const counts = HIGHLIGHTS.reduce(
+    (acc, h) => {
+      acc[h.kind] = (acc[h.kind] ?? 0) + 1;
+      return acc;
+    },
+    {} as Record<KindKey, number>,
+  );
+  const filterKinds: FilterKey[] = [
+    'all',
+    'gastro',
+    'kavárna',
+    'kultura',
+    'památka',
+    'historie',
+    'příroda',
+  ];
+
   return (
     <section className="mt-10 md:mt-14">
       <div className="mb-5">
@@ -71,9 +95,40 @@ export function Highlights() {
         </p>
       </div>
 
+      <div className="flex flex-wrap gap-1.5 mb-5">
+        {filterKinds.map((key) => {
+          const active = filter === key;
+          const label = key === 'all' ? 'Vše' : KIND_META[key].label;
+          const count = key === 'all' ? HIGHLIGHTS.length : counts[key] ?? 0;
+          if (key !== 'all' && count === 0) return null;
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setFilter(key)}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition ${
+                active
+                  ? 'bg-ink text-white border-ink shadow-sm'
+                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+              }`}>
+              {key === 'all' ? <LayoutGrid className="h-3.5 w-3.5" /> : KIND_META[key].icon}
+              {label}
+              <span
+                className={`tabular-nums text-[10px] font-semibold rounded-full px-1.5 ${
+                  active ? 'bg-white/20' : 'bg-slate-100 text-slate-600'
+                }`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       <div className="space-y-6">
         {([1, 2, 3] as const).map((day) => {
-          const items = HIGHLIGHTS.filter((h) => h.day === day);
+          const items = HIGHLIGHTS.filter(
+            (h) => h.day === day && (filter === 'all' || h.kind === filter),
+          );
           if (!items.length) return null;
           const color = DAY_COLORS[day];
           return (

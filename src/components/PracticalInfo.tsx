@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { Check, Users, Train, Wrench } from 'lucide-react';
-import { PACKING, TEAM } from '@/data/trip';
+import { Check, Train, Wrench } from 'lucide-react';
+import { PACKING } from '@/data/trip';
 
 export function PracticalInfo() {
   return (
@@ -13,20 +13,6 @@ export function PracticalInfo() {
       </div>
 
       <div className="grid gap-4 md:gap-5 md:grid-cols-2">
-        <InfoCard
-          icon={<Users className="h-5 w-5" />}
-          title="Tým"
-          subtitle={`${TEAM.length} cyklistů`}>
-          <ul className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-sm text-slate-700">
-            {TEAM.map((name) => (
-              <li key={name} className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-                {name}
-              </li>
-            ))}
-          </ul>
-        </InfoCard>
-
         <InfoCard
           icon={<Train className="h-5 w-5" />}
           title="Doprava"
