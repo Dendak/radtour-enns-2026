@@ -153,138 +153,140 @@ export function Highlights() {
                 </h3>
               </div>
               <ul className="divide-y divide-slate-100">
-                {items.map((h, idx) => {
-                  const meta = KIND_META[h.kind];
-                  const hasPhoto = Boolean(h.photoUrl);
-                  const dayKm =
-                    h.dist !== undefined
-                      ? Math.max(0, h.dist - DAY_START_KM[h.day])
-                      : undefined;
-                  return (
-                    <li key={idx}>
-                      <details className="group">
-                        <summary
-                          className={`relative flex items-center gap-4 cursor-pointer list-none transition-colors overflow-hidden ${
-                            hasPhoto
-                              ? 'p-4 md:p-5 text-white'
-                              : 'p-4 md:p-5 hover:bg-slate-50/60'
-                          }`}>
-                          {hasPhoto && (
-                            <>
-                              <img
-                                src={h.photoUrl}
-                                alt=""
-                                loading="lazy"
-                                decoding="async"
-                                className="absolute inset-0 w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                  e.currentTarget.parentElement?.classList.add('bg-slate-50');
-                                }}
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/20" />
-                            </>
-                          )}
-                          <div
-                            className={`relative inline-flex items-center justify-center h-10 w-10 rounded-full border shrink-0 ${
-                              hasPhoto
-                                ? 'bg-white/90 border-white/40 text-slate-800'
-                                : meta.tint
-                            }`}>
-                            {meta.icon}
-                          </div>
-                          <div className="relative flex-1 min-w-0">
-                            <div
-                              className={`font-display font-semibold text-base leading-tight truncate ${
-                                hasPhoto ? 'text-white drop-shadow' : 'text-ink'
-                              }`}>
-                              {h.name}
-                            </div>
-                            <div
-                              className={`text-xs mt-1 flex items-center gap-2 flex-wrap ${
-                                hasPhoto ? 'text-white/85' : 'text-slate-500'
-                              }`}>
-                              <span
-                                className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 ${
-                                  hasPhoto
-                                    ? 'bg-white/15 backdrop-blur border-white/30 text-white'
-                                    : meta.tint
-                                }`}>
-                                {meta.label}
-                              </span>
-                              <span className="inline-flex items-center gap-1 min-w-0">
-                                <MapPin className="h-3 w-3 shrink-0" />
-                                <span className="truncate">{h.where}</span>
-                                {dayKm !== undefined && (
-                                  <span
-                                    className={`tabular-nums shrink-0 ${
-                                      hasPhoto ? 'text-white/70' : 'text-slate-400'
-                                    }`}
-                                    title={`${h.dist} km od startu trasy (Radstadt)`}>
-                                    · km {dayKm} dne
-                                  </span>
-                                )}
-                              </span>
-                            </div>
-                          </div>
-                          <ChevronDown
-                            className={`relative h-5 w-5 shrink-0 group-open:rotate-180 transition-transform ${
-                              hasPhoto ? 'text-white/80' : 'text-slate-400'
-                            }`}
-                          />
-                        </summary>
-                        <div className="px-4 md:px-5 pb-5 pl-[4.5rem]">
-                          <p className="text-sm text-slate-700 leading-relaxed">
-                            {h.blurb}
-                          </p>
-                          {h.hours && (
-                            <p className="text-sm text-sky-900/90 mt-3 flex gap-2 rounded-lg bg-sky-50 border border-sky-200 px-3 py-2">
-                              <Clock className="h-4 w-4 shrink-0 mt-0.5 text-sky-600" />
-                              <span>{h.hours}</span>
-                            </p>
-                          )}
-                          {h.tip && (
-                            <p className="text-sm text-amber-900/90 mt-3 flex gap-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
-                              <Lightbulb className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
-                              <span>{h.tip}</span>
-                            </p>
-                          )}
-                          {(h.mapsQuery || h.website) && (
-                            <div className="mt-3 flex flex-wrap gap-2">
-                              {h.website && (
-                                <a
-                                  href={h.website}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="btn text-xs bg-slate-900 text-white hover:bg-slate-700">
-                                  {h.kind === 'gastro' || h.kind === 'kavárna'
-                                    ? 'Menu / web'
-                                    : 'Web'}{' '}
-                                  <ExternalLink className="h-3 w-3 opacity-80" />
-                                </a>
-                              )}
-                              {h.mapsQuery && (
-                                <a
-                                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.mapsQuery)}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="btn text-xs bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
-                                  <MapPin className="h-3.5 w-3.5" /> Maps{' '}
-                                  <ExternalLink className="h-3 w-3 opacity-70" />
-                                </a>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </details>
-                    </li>
-                  );
-                })}
+                {items.map((h, idx) => (
+                  <HighlightRow key={idx} h={h} />
+                ))}
               </ul>
             </motion.div>
           );
         })}
       </div>
     </section>
+  );
+}
+
+function HighlightRow({ h }: { h: Highlight }) {
+  const [photoFailed, setPhotoFailed] = useState(false);
+  const meta = KIND_META[h.kind];
+  const hasPhoto = Boolean(h.photoUrl) && !photoFailed;
+  const dayKm =
+    h.dist !== undefined ? Math.max(0, h.dist - DAY_START_KM[h.day]) : undefined;
+
+  return (
+    <li>
+      <details className="group">
+        <summary
+          className={`relative cursor-pointer list-none transition-colors overflow-hidden ${
+            hasPhoto
+              ? 'text-white min-h-[220px] md:min-h-[260px] flex items-end bg-slate-800'
+              : 'p-4 md:p-5 flex items-center gap-4 hover:bg-slate-50/60'
+          }`}>
+          {hasPhoto && (
+            <>
+              <img
+                src={h.photoUrl}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={() => setPhotoFailed(true)}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
+            </>
+          )}
+          <div
+            className={
+              hasPhoto
+                ? 'relative flex items-center gap-4 p-4 md:p-5 w-full'
+                : 'contents'
+            }>
+            <div
+              className={`relative inline-flex items-center justify-center h-10 w-10 rounded-full border shrink-0 ${
+                hasPhoto ? 'bg-white/90 border-white/40 text-slate-800' : meta.tint
+              }`}>
+              {meta.icon}
+            </div>
+            <div className="relative flex-1 min-w-0">
+              <div
+                className={`font-display font-semibold text-base md:text-lg leading-tight ${
+                  hasPhoto ? 'text-white drop-shadow' : 'text-ink truncate'
+                }`}>
+                {h.name}
+              </div>
+              <div
+                className={`text-xs mt-1 flex items-center gap-2 flex-wrap ${
+                  hasPhoto ? 'text-white/90' : 'text-slate-500'
+                }`}>
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 ${
+                    hasPhoto
+                      ? 'bg-white/15 backdrop-blur border-white/30 text-white'
+                      : meta.tint
+                  }`}>
+                  {meta.label}
+                </span>
+                <span className="inline-flex items-center gap-1 min-w-0">
+                  <MapPin className="h-3 w-3 shrink-0" />
+                  <span className="truncate">{h.where}</span>
+                  {dayKm !== undefined && (
+                    <span
+                      className={`tabular-nums shrink-0 ${
+                        hasPhoto ? 'text-white/75' : 'text-slate-400'
+                      }`}
+                      title={`${h.dist} km od startu trasy (Radstadt)`}>
+                      · km {dayKm} dne
+                    </span>
+                  )}
+                </span>
+              </div>
+            </div>
+            <ChevronDown
+              className={`relative h-5 w-5 shrink-0 group-open:rotate-180 transition-transform ${
+                hasPhoto ? 'text-white/90' : 'text-slate-400'
+              }`}
+            />
+          </div>
+        </summary>
+        <div className="px-4 md:px-5 pb-5 pt-4 md:pl-[4.5rem]">
+          <p className="text-sm text-slate-700 leading-relaxed">{h.blurb}</p>
+          {h.hours && (
+            <p className="text-sm text-sky-900/90 mt-3 flex gap-2 rounded-lg bg-sky-50 border border-sky-200 px-3 py-2">
+              <Clock className="h-4 w-4 shrink-0 mt-0.5 text-sky-600" />
+              <span>{h.hours}</span>
+            </p>
+          )}
+          {h.tip && (
+            <p className="text-sm text-amber-900/90 mt-3 flex gap-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+              <Lightbulb className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
+              <span>{h.tip}</span>
+            </p>
+          )}
+          {(h.mapsQuery || h.website) && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {h.website && (
+                <a
+                  href={h.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn text-xs bg-slate-900 text-white hover:bg-slate-700">
+                  {h.kind === 'gastro' || h.kind === 'kavárna' ? 'Menu / web' : 'Web'}{' '}
+                  <ExternalLink className="h-3 w-3 opacity-80" />
+                </a>
+              )}
+              {h.mapsQuery && (
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.mapsQuery)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn text-xs bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
+                  <MapPin className="h-3.5 w-3.5" /> Maps{' '}
+                  <ExternalLink className="h-3 w-3 opacity-70" />
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </details>
+    </li>
   );
 }

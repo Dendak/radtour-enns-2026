@@ -166,6 +166,41 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Nejvyšší hora Štýrska (2 995 m) se otevírá ze sedla nad údolím. Za jasného dne vidět ledovec Hallstätter.',
     tip: 'Výhled nejlepší dopoledne, kdy slunce svítí zepředu.',
+    photoUrl: wiki('Dachstein_Para.JPG'),
+  },
+  {
+    day: 1,
+    kind: 'historie',
+    name: 'Schladming — horské staré město',
+    where: 'Schladming',
+    dist: 20,
+    blurb:
+      'Staré hornické město pod Dachsteinem (od 11. století). Dnes zimní středisko, ale Hauptplatz si drží historickou tvář.',
+    tip: 'Krátká procházka po náměstí a na řeku Enns.',
+    mapsQuery: 'Hauptplatz Schladming',
+    photoUrl: wiki('Schladming-aerial.jpg'),
+  },
+  {
+    day: 1,
+    kind: 'památka',
+    name: 'Gröbming — staré centrum',
+    where: 'Gröbming',
+    dist: 42,
+    blurb:
+      'Malé historické jádro se štýrskými měšťanskými domy a krámky. Přirozený polední stop v půlce dne.',
+    mapsQuery: 'Altstadt Gröbming',
+    photoUrl: wiki('Altstadt_Groebming.jpg'),
+  },
+  {
+    day: 1,
+    kind: 'památka',
+    name: 'Liezen — brána do Ennstalu',
+    where: 'Liezen',
+    dist: 77,
+    blurb:
+      'Největší město v horním Ennstalu. Praktické refresh místo s obchody, lékárnou a cukrárnou před posledním tahem do Admontu.',
+    mapsQuery: 'Liezen Hauptplatz',
+    photoUrl: wiki('Liezen_294A2422_Styria.jpg'),
   },
   {
     day: 1,
@@ -277,6 +312,8 @@ export const HIGHLIGHTS: Highlight[] = [
     dist: 125,
     blurb:
       'Po staletí centrum zpracování železné rudy z Erzbergu. Dochovaný industriální ráz, vodní kanál a most.',
+    mapsQuery: 'Hieflau',
+    photoUrl: wiki('Hieflau_Ort.jpg'),
   },
   {
     day: 2,
@@ -337,6 +374,7 @@ export const HIGHLIGHTS: Highlight[] = [
       'Jedno z nejkrásnějších náměstí v Horním Rakousku — barevné kupecké domy ze 16.–18. století, nepoznamenané válkou.',
     tip: 'Krátká zastávka, 10 minut projít pěšky.',
     mapsQuery: 'Marktplatz Weyer',
+    photoUrl: wiki('2012.01.15_-_Weyer31_-_Ehem._Marktgericht,_Soldatenhaus,_Marktplatz_8_-_01.jpg'),
   },
 
   // Day 3 — Großraming → Linec
@@ -350,7 +388,19 @@ export const HIGHLIGHTS: Highlight[] = [
       'Soutok Enns a Steyr, gotické a barokní jádro, slavný Bummerlhaus (1497). Město železářské tradice a Schubertových letních pobytů.',
     tip: 'Procházka od nádraží k náměstí Stadtplatz — 10 minut a odrovná tě to.',
     mapsQuery: 'Stadtplatz Steyr',
-    photoUrl: wiki('Blick_ueber_die_Steyrer_Altstadt_29-06-2011.jpg'),
+    photoUrl: wiki('Blick_ueber_die_Steyrer_Altstadt.jpg'),
+  },
+  {
+    day: 3,
+    kind: 'příroda',
+    name: 'Losenstein — hradní skála',
+    where: 'Losenstein',
+    dist: 191,
+    blurb:
+      'Romantická zřícenina hradu ze 12. století na skále nad Ennsem. Symbol Ennstalu, trasa vede přímo pod skalou.',
+    tip: 'Fotostop u mostu — 5 minut a krásný záběr na hrad i řeku.',
+    mapsQuery: 'Burgruine Losenstein',
+    photoUrl: wiki('Losenstein_-_Westsüdwestansicht_(2).JPG'),
   },
   {
     day: 3,
@@ -422,6 +472,19 @@ export const HIGHLIGHTS: Highlight[] = [
     blurb:
       'Městská práva 1212, římské kořeny (Lauriacum). Stadtturm z 1568, 60 m vysoká renesanční zvonice uprostřed náměstí.',
     mapsQuery: 'Stadtturm Enns',
+    photoUrl: wiki('Enns_-_Hauptplatz_mit_Stadtturm.JPG'),
+  },
+  {
+    day: 3,
+    kind: 'kultura',
+    name: 'Linec — cíl u Dunaje',
+    where: 'Linec (cíl)',
+    dist: 263,
+    blurb:
+      'Hlavní město Horního Rakouska, barokní Hauptplatz, Ars Electronica Center u Dunaje, Nový dóm — největší kostel Rakouska.',
+    tip: 'Z nádraží 10 min tramvají do starého města. Linzer Torte v Jindrak povinnost.',
+    mapsQuery: 'Hauptplatz Linz',
+    photoUrl: wiki('Linz_Altstadt_17.jpg'),
   },
   {
     day: 3,
@@ -435,6 +498,7 @@ export const HIGHLIGHTS: Highlight[] = [
     mapsQuery: 'KZ-Gedenkstätte Mauthausen',
     website: 'https://www.mauthausen-memorial.org/',
     hours: 'Ne 3.5.: 9–17:30 (poslední vstup 16:45) · muzeum od 10',
+    photoUrl: wiki('Mauthausen-Retaining_Wall.jpg'),
   },
 ];
 
