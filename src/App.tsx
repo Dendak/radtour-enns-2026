@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Hero } from '@/components/Hero';
 import { SectionTitle } from '@/components/SectionTitle';
-import { TripMap } from '@/components/TripMap';
+import { TripMap, type UserLocation } from '@/components/TripMap';
 import { ElevationProfile } from '@/components/ElevationProfile';
 import { PrecipitationChart } from '@/components/PrecipitationChart';
 import { WeatherDays } from '@/components/WeatherDays';
@@ -20,6 +20,7 @@ export default function App() {
   const { byWaypoint: weather, updatedAt, loading, refresh } = useWeather(waypoints);
 
   const [hover, setHover] = useState<{ lat: number; lon: number; label: string } | null>(null);
+  const [userLoc, setUserLoc] = useState<UserLocation | null>(null);
 
   return (
     <>
@@ -39,6 +40,7 @@ export default function App() {
                   donauStart={donauStart}
                   weather={weather}
                   hover={hover}
+                  onLocate={setUserLoc}
                 />
                 <div className="border-t border-slate-200/70">
                   <ElevationProfile
@@ -47,6 +49,7 @@ export default function App() {
                     weather={weather}
                     dayEnd={dayEnd}
                     onHover={setHover}
+                    userLoc={userLoc}
                   />
                 </div>
                 <PrecipitationChart waypoints={waypoints} weather={weather} dayEnd={dayEnd} />

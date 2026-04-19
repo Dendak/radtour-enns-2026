@@ -16,7 +16,7 @@ import { DAY_COLORS, DAY_NAMES, DONAU_COLOR, STAYS, wmoText, type Waypoint } fro
 import { splitTrackByDay, type TrackPoint } from '@/hooks/useGpxTrack';
 import type { WeatherPoint } from '@/hooks/useWeather';
 import { cn } from '@/lib/utils';
-import { Layers } from 'lucide-react';
+import { Layers, LocateFixed, LocateOff } from 'lucide-react';
 
 function FitBounds({
   bounds,
@@ -35,6 +35,114 @@ function FitBounds({
       easeLinearity: 0.25,
     });
   }, [bounds, map, animate]);
+  return null;
+}
+
+export type UserLocation = {
+  lat: number;
+  lon: number;
+  accuracy: number;
+  distKm: number;
+};
+
+function nearestDistKm(track: TrackPoint[], lat: number, lon: number): number {
+  if (!track.length) return 0;
+  const cosLat = Math.cos((lat * Math.PI) / 180);
+  let best = Infinity;
+  let bestIdx = 0;
+  for (let i = 0; i < track.length; i++) {
+    const dx = (track[i].lon - lon) * cosLat;
+    const dy = track[i].lat - lat;
+    const d2 = dx * dx + dy * dy;
+    if (d2 < best) {
+      best = d2;
+      bestIdx = i;
+    }
+  }
+  return track[bestIdx].dist;
+}
+
+function LocateLayer({
+  active,
+  track,
+  onLocate,
+  onStop,
+}: {
+  active: boolean;
+  track: TrackPoint[];
+  onLocate: (loc: UserLocation) => void;
+  onStop: (reason?: string) => void;
+}) {
+  const map = useMap();
+  const markerRef = useRef<L.Marker | null>(null);
+  const circleRef = useRef<L.Circle | null>(null);
+  const firstFixRef = useRef<boolean>(true);
+
+  useEffect(() => {
+    if (!active) {
+      if (markerRef.current) {
+        markerRef.current.remove();
+        markerRef.current = null;
+      }
+      if (circleRef.current) {
+        circleRef.current.remove();
+        circleRef.current = null;
+      }
+      map.stopLocate();
+      firstFixRef.current = true;
+      return;
+    }
+
+    const onFound = (e: L.LocationEvent) => {
+      const { lat, lng } = e.latlng;
+      const acc = e.accuracy;
+      const icon = L.divIcon({
+        className: 'user-loc',
+        html:
+          '<div style="width:16px;height:16px;border-radius:999px;background:#2563eb;border:3px solid #fff;box-shadow:0 0 0 3px rgba(37,99,235,.28)"></div>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+      });
+      if (!markerRef.current) {
+        markerRef.current = L.marker([lat, lng], { icon, interactive: false, keyboard: false }).addTo(map);
+      } else {
+        markerRef.current.setLatLng([lat, lng]);
+      }
+      if (!circleRef.current) {
+        circleRef.current = L.circle([lat, lng], {
+          radius: acc,
+          color: '#2563eb',
+          weight: 1,
+          fillColor: '#2563eb',
+          fillOpacity: 0.08,
+          interactive: false,
+        }).addTo(map);
+      } else {
+        circleRef.current.setLatLng([lat, lng]);
+        circleRef.current.setRadius(acc);
+      }
+      if (firstFixRef.current) {
+        firstFixRef.current = false;
+        map.flyTo([lat, lng], Math.max(map.getZoom(), 13), { duration: 0.6 });
+      }
+      onLocate({ lat, lon: lng, accuracy: acc, distKm: nearestDistKm(track, lat, lng) });
+    };
+
+    const onError = (e: L.ErrorEvent) => {
+      onStop(e.message || 'Geolokace nedostupná');
+    };
+
+    map.on('locationfound', onFound);
+    map.on('locationerror', onError);
+    map.locate({ watch: true, enableHighAccuracy: true, setView: false });
+
+    return () => {
+      map.off('locationfound', onFound);
+      map.off('locationerror', onError);
+      map.stopLocate();
+    };
+  }, [active, map, track, onLocate, onStop]);
+
   return null;
 }
 
@@ -104,11 +212,24 @@ export type TripMapProps = {
   donauStart: number;
   weather: WeatherPoint[];
   hover: { lat: number; lon: number; label: string } | null;
+  onLocate: (loc: UserLocation | null) => void;
 };
 
-export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }: TripMapProps) {
+export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover, onLocate }: TripMapProps) {
   // null = celá trasa. 1|2|3 = vybraná etapa (mapa přiblíží na ni).
   const [focusDay, setFocusDay] = useState<1 | 2 | 3 | null>(null);
+  const [locating, setLocating] = useState(false);
+  const [locError, setLocError] = useState<string | null>(null);
+
+  const handleLocationFound = (loc: UserLocation) => {
+    setLocError(null);
+    onLocate(loc);
+  };
+  const handleLocationStop = (reason?: string) => {
+    if (reason) setLocError(reason);
+    setLocating(false);
+    onLocate(null);
+  };
 
   const byDay = useMemo(() => splitTrackByDay(track, dayEnd), [track, dayEnd]);
   const fullBounds = useMemo<LatLngBoundsExpression | null>(() => {
@@ -168,7 +289,32 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }
             </button>
           );
         })}
+        <button
+          onClick={() => {
+            if (locating) {
+              setLocating(false);
+              onLocate(null);
+            } else {
+              setLocError(null);
+              setLocating(true);
+            }
+          }}
+          className={cn(
+            'chip cursor-pointer select-none border transition ml-auto',
+            locating
+              ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50',
+          )}
+          title={locating ? 'Vypnout sledování polohy' : 'Zjistit moji polohu'}>
+          {locating ? <LocateFixed className="h-3.5 w-3.5" /> : <LocateOff className="h-3.5 w-3.5" />}
+          Moje poloha
+        </button>
       </div>
+      {locError && (
+        <div className="px-3 md:px-4 py-2 text-xs bg-rose-50 text-rose-800 border-b border-rose-200">
+          Polohu se nepodařilo zjistit ({locError}). Zkontroluj oprávnění v prohlížeči.
+        </div>
+      )}
       <div className="relative">
         <MapContainer
           style={{ height: 520, width: '100%' }}
@@ -303,6 +449,12 @@ export function TripMap({ track, waypoints, dayEnd, donauStart, weather, hover }
 
           <FitBounds bounds={activeBounds} />
           <HoverMarkerLayer hover={hover} />
+          <LocateLayer
+            active={locating}
+            track={track}
+            onLocate={handleLocationFound}
+            onStop={handleLocationStop}
+          />
         </MapContainer>
       </div>
       <style>{`

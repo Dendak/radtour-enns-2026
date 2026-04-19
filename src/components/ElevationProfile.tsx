@@ -9,9 +9,10 @@ export type ElevationProfileProps = {
   weather: WeatherPoint[];
   dayEnd: Record<1 | 2, number>;
   onHover: (point: { lat: number; lon: number; label: string } | null) => void;
+  userLoc?: { distKm: number; accuracy: number } | null;
 };
 
-export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover }: ElevationProfileProps) {
+export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, userLoc }: ElevationProfileProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const hoverXRef = useRef<number | undefined>(undefined);
@@ -153,6 +154,31 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover }:
       ctx.beginPath(); ctx.arc(x, yDot, 3.4, 0, Math.PI * 2); ctx.stroke();
     });
 
+    if (userLoc && userLoc.distKm >= 0 && userLoc.distKm <= maxD) {
+      const x = xForDist(userLoc.distKm);
+      const p = pointAtDist(track, userLoc.distKm);
+      const yDot = yForEle(p.ele);
+      ctx.strokeStyle = 'rgba(37,99,235,0.9)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(x, innerTop);
+      ctx.lineTo(x, innerBottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(37,99,235,0.18)';
+      ctx.beginPath(); ctx.arc(x, yDot, 10, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#2563eb';
+      ctx.beginPath(); ctx.arc(x, yDot, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, yDot, 5, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = '#2563eb';
+      ctx.font = '600 11px Inter, system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(`Ty · km ${userLoc.distKm.toFixed(0)}`, x, yDot - 14);
+    }
+
     const hoverX = hoverXRef.current;
     if (hoverX !== undefined) {
       ctx.strokeStyle = 'rgba(14,165,233,0.6)';
@@ -187,7 +213,7 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover }:
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [track, waypoints, byDay, dayEnd]);
+  }, [track, waypoints, byDay, dayEnd, userLoc]);
 
   const timeForDist = (d: number): string => {
     let lo: Waypoint | null = null, hi: Waypoint | null = null;
