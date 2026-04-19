@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Landmark,
@@ -167,21 +167,50 @@ export function Highlights() {
 }
 
 function HighlightRow({ h }: { h: Highlight }) {
-  const [failedIdx, setFailedIdx] = useState<Set<number>>(() => new Set());
-  const [idx, setIdx] = useState(0);
   const photos = h.photos ?? [];
-  const validPhotos = photos.filter((_, i) => !failedIdx.has(i));
-  const hasPhoto = validPhotos.length > 0;
-  const activePhoto = hasPhoto ? validPhotos[idx % validPhotos.length] : null;
+  const [failedUrls, setFailedUrls] = useState<Set<string>>(() => new Set());
+  const validPhotos = useMemo(
+    () => photos.filter((url) => !failedUrls.has(url)),
+    [photos, failedUrls],
+  );
+  const n = validPhotos.length;
+  const hasPhoto = n > 0;
+
+  const [aIdx, setAIdx] = useState(0);
+  const [bIdx, setBIdx] = useState(-1);
+  const [activeSlot, setActiveSlot] = useState<'A' | 'B'>('A');
+  const [displayIdx, setDisplayIdx] = useState(0);
+
   const meta = KIND_META[h.kind];
   const dayKm =
     h.dist !== undefined ? Math.max(0, h.dist - DAY_START_KM[h.day]) : undefined;
 
   useEffect(() => {
-    if (validPhotos.length < 2) return;
-    const id = window.setInterval(() => setIdx((i) => i + 1), 4500);
+    if (n < 2) return;
+    const id = window.setInterval(() => {
+      setActiveSlot((slot) => {
+        setDisplayIdx((cur) => {
+          const next = (cur + 1) % n;
+          if (slot === 'A') setBIdx(next);
+          else setAIdx(next);
+          return next;
+        });
+        return slot === 'A' ? 'B' : 'A';
+      });
+    }, 4500);
     return () => window.clearInterval(id);
-  }, [validPhotos.length]);
+  }, [n]);
+
+  const markFailed = (url: string) =>
+    setFailedUrls((prev) => {
+      if (prev.has(url)) return prev;
+      const next = new Set(prev);
+      next.add(url);
+      return next;
+    });
+
+  const aUrl = n > 0 ? validPhotos[Math.min(aIdx, n - 1)] : null;
+  const bUrl = bIdx >= 0 && n > 0 ? validPhotos[Math.min(bIdx, n - 1)] : null;
 
   return (
     <li>
@@ -194,39 +223,40 @@ function HighlightRow({ h }: { h: Highlight }) {
           }`}>
           {hasPhoto && (
             <>
-              {photos.map((url, i) => {
-                if (failedIdx.has(i)) return null;
-                const isActive = url === activePhoto;
-                return (
-                  <img
-                    key={url + i}
-                    src={url}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                      isActive ? 'opacity-100' : 'opacity-0'
-                    }`}
-                    onError={() =>
-                      setFailedIdx((prev) => {
-                        const next = new Set(prev);
-                        next.add(i);
-                        return next;
-                      })
-                    }
-                  />
-                );
-              })}
+              {aUrl && (
+                <img
+                  key="slot-a"
+                  src={aUrl}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                    activeSlot === 'A' ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  onError={() => markFailed(aUrl)}
+                />
+              )}
+              {bUrl && (
+                <img
+                  key="slot-b"
+                  src={bUrl}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                    activeSlot === 'B' ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  onError={() => markFailed(bUrl)}
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
-              {validPhotos.length > 1 && (
+              {n > 1 && (
                 <div className="absolute top-3 right-3 z-10 flex gap-1">
                   {validPhotos.map((_, i) => (
                     <span
                       key={i}
                       className={`h-1.5 rounded-full transition-all ${
-                        i === idx % validPhotos.length
-                          ? 'w-5 bg-white'
-                          : 'w-1.5 bg-white/50'
+                        i === displayIdx ? 'w-5 bg-white' : 'w-1.5 bg-white/50'
                       }`}
                     />
                   ))}

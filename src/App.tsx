@@ -83,7 +83,7 @@ export default function App() {
         </div>
 
         <div id="info" className="scroll-mt-20">
-          <PracticalInfo />
+          <PracticalInfo track={track} dayEnd={dayEnd} />
         </div>
       </main>
       <Footer />

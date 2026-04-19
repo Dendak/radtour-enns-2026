@@ -1,8 +1,15 @@
 import { motion } from 'framer-motion';
 import { Check, Train, Wrench } from 'lucide-react';
 import { PACKING } from '@/data/trip';
+import { GpxDownloads } from '@/components/GpxDownloads';
+import type { TrackPoint } from '@/hooks/useGpxTrack';
 
-export function PracticalInfo() {
+export type PracticalInfoProps = {
+  track: TrackPoint[];
+  dayEnd: Record<1 | 2, number>;
+};
+
+export function PracticalInfo({ track, dayEnd }: PracticalInfoProps) {
   return (
     <section className="mt-10 md:mt-14">
       <div className="mb-5">
@@ -124,6 +131,8 @@ export function PracticalInfo() {
           </div>
         </InfoCard>
       </div>
+
+      <GpxDownloads track={track} dayEnd={dayEnd} />
     </section>
   );
 }
