@@ -13,6 +13,7 @@ import {
   ChevronDown,
   Clock,
   LayoutGrid,
+  Star,
 } from 'lucide-react';
 import {
   HIGHLIGHTS,
@@ -238,6 +239,19 @@ function HighlightRow({ h }: { h: Highlight }) {
                     </span>
                   )}
                 </span>
+                {h.rating && (
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 tabular-nums shrink-0 font-medium ${
+                      hasPhoto
+                        ? 'bg-yellow-400/90 text-slate-900'
+                        : 'bg-yellow-100 text-yellow-900 border border-yellow-200'
+                    }`}
+                    title={`${h.rating.source ?? 'Google'}: ${h.rating.stars}★ z ${h.rating.count} recenzí`}>
+                    <Star className="h-3 w-3 fill-current" />
+                    {h.rating.stars.toFixed(1)}
+                    <span className="opacity-70">({h.rating.count}+)</span>
+                  </span>
+                )}
               </div>
             </div>
             <ChevronDown
@@ -280,6 +294,16 @@ function HighlightRow({ h }: { h: Highlight }) {
                   rel="noopener noreferrer"
                   className="btn text-xs bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
                   <MapPin className="h-3.5 w-3.5" /> Maps{' '}
+                  <ExternalLink className="h-3 w-3 opacity-70" />
+                </a>
+              )}
+              {h.mapsQuery && h.rating && (
+                <a
+                  href={`https://www.google.com/search?q=${encodeURIComponent(h.mapsQuery + ' recenze')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn text-xs bg-yellow-50 border border-yellow-200 text-yellow-900 hover:bg-yellow-100">
+                  <Star className="h-3.5 w-3.5 fill-current" /> Recenze{' '}
                   <ExternalLink className="h-3 w-3 opacity-70" />
                 </a>
               )}

@@ -139,6 +139,8 @@ export type Highlight = {
   photoUrl?: string;
   /** Opening hours on the day of the trip — e.g. "Pá 1.5. (svátek): 11–22". */
   hours?: string;
+  /** Google Maps / review aggregator rating. */
+  rating?: { stars: number; count: number; source?: 'Google' | 'TripAdvisor' };
 };
 
 const wiki = (filename: string, width = 900) =>
@@ -214,6 +216,7 @@ export const HIGHLIGHTS: Highlight[] = [
     mapsQuery: 'Brauhaus Falkenstein Pichl',
     website: 'https://www.falkenstein-braeu.at/',
     hours: 'Pá 1.5. (st. svátek): obvykle 11:30–22 · před cestou ověřit',
+    rating: { stars: 4.3, count: 250, source: 'Google' },
   },
   {
     day: 1,
@@ -229,17 +232,18 @@ export const HIGHLIGHTS: Highlight[] = [
     photoUrl:
       'https://stiegenwirt.at/wp-content/uploads/2026/01/032-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-scaled.jpg',
     hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · ve svátek bývá plno, rezervovat',
+    rating: { stars: 4.4, count: 300, source: 'Google' },
   },
   {
     day: 1,
     kind: 'gastro',
-    name: 'Gasthof zum Hirschen Liezen',
-    where: 'Liezen',
+    name: 'Gasthof Goldener Hirsch Liezen',
+    where: 'Liezen · Ausseer Straße 7',
     dist: 77,
     blurb:
-      'Rodinný Gasthof v centru Liezenu. V recenzích chválí sezónní Steinpilze (čerstvě pečené hřiby) a klasický Wiener Schnitzel. „Fantastic dinner, good wines, fresh seasonal Steinpilze." Velké porce, Gösser.',
+      'Tradiční liezenský hostinec. V recenzích chválí Sonntagsbrunch, polední bufet (každé 11. menu zdarma) a sezónní bílý chřest. „Ausgezeichnete Küche, großzügige Portionen, freundliches Personal." Typická domácí rakouská kuchyně.',
     tip: 'Hlavní pozdní oběd dne 1 — po 75. km ideální stop před posledním tahem do Admontu.',
-    mapsQuery: 'Gasthof zum Hirschen Liezen',
+    mapsQuery: 'Gasthof Goldener Hirsch Liezen Ausseer Straße',
     hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · o svátku zkrácené, telefonem ověřit',
   },
   {
@@ -308,6 +312,7 @@ export const HIGHLIGHTS: Highlight[] = [
     photoUrl:
       'https://www.koelblwirt.at/files/hotel/Medien/Hintergrund/NEU_2016/Nationalpark_Gesa%CC%88use_Gasthof_Ko%CC%88bl%C2%A9StefanLeitner_com_002.jpg',
     hours: 'So 2.5.: 11:30–21 · sobota standardně otevřeno',
+    rating: { stars: 4.9, count: 44, source: 'TripAdvisor' },
   },
   {
     day: 2,
@@ -323,6 +328,7 @@ export const HIGHLIGHTS: Highlight[] = [
     photoUrl:
       'https://storage.googleapis.com/shopando-shop-e6949eef-b7c1-4061-be45-826e67764ce2/var/shop/da0e59e0-5597-4c01-8303-c829e3a9ef93_1920.jpg',
     hours: 'So 2.5.: obvykle 11–22 · teplé jídlo do 21',
+    rating: { stars: 4.4, count: 436, source: 'Google' },
   },
   {
     day: 2,
@@ -337,6 +343,7 @@ export const HIGHLIGHTS: Highlight[] = [
     website: 'https://www.kaiservonoesterreich.at/',
     photoUrl: 'https://www.kaiservonoesterreich.at/upload/imgproc/1929316_head.jpg',
     hours: 'So 2.5.: 11–22 · ověřit, některé soboty zavřeno kvůli akcím',
+    rating: { stars: 4.5, count: 150, source: 'Google' },
   },
   {
     day: 2,
@@ -390,6 +397,7 @@ export const HIGHLIGHTS: Highlight[] = [
     photoUrl:
       'https://static.wixstatic.com/media/31ef28_0d8887efa11c41f6b0e6ca927cbd9c6a~mv2.jpg',
     hours: 'Ne 3.5.: 11–14 & 17–22 · teplá kuchyně do 21',
+    rating: { stars: 4.7, count: 187, source: 'Google' },
   },
   {
     day: 3,
@@ -415,6 +423,7 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Pokud je Steyr už za tebou, tady jen Pfandl na sdílení + Mostdudler.',
     mapsQuery: 'Platzhirsch Enns Hauptplatz',
     hours: 'Ne 3.5.: 10–22 · v neděli otevřeno',
+    rating: { stars: 4.4, count: 100, source: 'TripAdvisor' },
   },
   {
     day: 3,
@@ -430,6 +439,7 @@ export const HIGHLIGHTS: Highlight[] = [
     photoUrl:
       'https://www.donau-hof.at/assets/Uploads/header_essen2x-v2__FillWzE5MjAsNTAwXQ.png',
     hours: 'Ne 3.5.: obvykle 11–21 · v neděli otevřeno, teplá kuchyně do 20',
+    rating: { stars: 4.3, count: 404, source: 'Google' },
   },
   {
     day: 3,
@@ -442,6 +452,7 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Perfektní finální pivo 8 km před cílem, pokud zbývá čas do vlaku.',
     mapsQuery: 'Gasthaus Panglmayr Steyregg',
     hours: 'Ne 3.5.: obvykle 11–22 · v neděli ověřit',
+    rating: { stars: 4.2, count: 120, source: 'Google' },
   },
   {
     day: 3,
