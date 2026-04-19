@@ -96,11 +96,11 @@ export function PracticalInfo() {
           </ul>
           <div className="flex flex-wrap gap-2 mt-3">
             <a
-              href="https://fahrplan.oebb.at/webapp/?S=Salzburg+Hbf&Z=Radstadt&date=01.05.2026"
+              href="https://fahrplan.oebb.at/webapp/?S=Salzburg+Hbf&Z=Radstadt&date=01.05.2026&time=07:00&timesel=depart"
               target="_blank"
               rel="noopener noreferrer"
               className="btn text-xs bg-slate-900 text-white hover:bg-slate-700">
-              ÖBB spojení (pá 1. 5.)
+              ÖBB spojení (pá 1. 5., od 7:00)
             </a>
             <a
               href="https://www.oebb.at/en/reiseplanung-services/rad-und-bahn"

@@ -116,7 +116,7 @@ export type Stay = {
   loc: string;
   tentative: boolean;
   mapsQuery: string;
-  photoUrl: string;
+  photos: string[];
   photoCredit: string;
   description: string;
   amenities: string[];
@@ -216,6 +216,31 @@ export const HIGHLIGHTS: Highlight[] = [
   },
   {
     day: 1,
+    kind: 'gastro',
+    name: 'Gasthof zum Hirschen Liezen',
+    where: 'Liezen',
+    dist: 77,
+    blurb:
+      'Rodinný Gasthof v centru Liezenu — rakouská klasika, velké porce, pivo Gösser. Kousek od Hauptplatzu, kola na dvoře.',
+    tip: 'Hlavní pozdní oběd dne 1 — po 75. km ideální stop před posledním tahem do Admontu.',
+    mapsQuery: 'Gasthof zum Hirschen Liezen',
+    hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · o svátku zkrácené, telefonem ověřit',
+  },
+  {
+    day: 1,
+    kind: 'gastro',
+    name: 'Gasthof Kirchenwirt Admont',
+    where: 'Admont · u kláštera',
+    dist: 99,
+    blurb:
+      'Tradiční hostinec přímo vedle Stift Admont. Štýrská kuchyně, domácí Schnitzel, Bauerngröstl. Bezpečné parkování kol.',
+    tip: 'Pozdní oběd / první pivo po příjezdu do cíle dne 1 (~17:00).',
+    mapsQuery: 'Gasthof Kirchenwirt Admont',
+    website: 'https://www.kirchenwirt-admont.at/',
+    hours: 'Pá 1.5. (st. svátek): obvykle 11–23 · o svátku stabilně otevřeno',
+  },
+  {
+    day: 1,
     kind: 'kultura',
     name: 'Stift Admont — benediktinské opatství',
     where: 'Admont (cíl dne)',
@@ -290,6 +315,18 @@ export const HIGHLIGHTS: Highlight[] = [
   },
   {
     day: 2,
+    kind: 'gastro',
+    name: 'Gasthof Schober Großraming',
+    where: 'Großraming · u nádraží',
+    dist: 176,
+    blurb:
+      'Rodinný Gasthof blízko cíle dne 2. Hornorakouské Schnitzel, domácí guláš, Bauernkrapfen. Pokud náš Kirchenwirt bude plný, dobrá záloha.',
+    tip: 'Pozdní oběd / první pivo po příjezdu na nocleh 2 (~17:00).',
+    mapsQuery: 'Gasthof Schober Großraming',
+    hours: 'So 2.5.: obvykle 11:30–22 · sobota večer rezervovat',
+  },
+  {
+    day: 2,
     kind: 'památka',
     name: 'Weyer — dřevěné měšťanské náměstí',
     where: 'Weyer',
@@ -349,6 +386,30 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Pokud je Steyr už za tebou, tady jen káva a malé jídlo.',
     mapsQuery: 'Stadtwirt Enns Hauptplatz',
     hours: 'Ne 3.5.: 10–22 · v neděli otevřeno',
+  },
+  {
+    day: 3,
+    kind: 'gastro',
+    name: 'Donauhof Mauthausen',
+    where: 'Mauthausen · u přívozu',
+    dist: 243,
+    blurb:
+      'Hostinec přímo u Dunaje na Donauradwegu, po odbočce 2 km z Ennsu. Rybí speciality (Saibling, Forelle), terasa s výhledem na řeku.',
+    tip: 'Po památníku Mauthausen — pozdní oběd nebo velká svačina před finálním tahem do Lince.',
+    mapsQuery: 'Donauhof Mauthausen',
+    hours: 'Ne 3.5.: obvykle 11–21 · v neděli otevřeno, teplá kuchyně do 20',
+  },
+  {
+    day: 3,
+    kind: 'gastro',
+    name: 'Brückenwirt Steyregg',
+    where: 'Steyregg · u mostu na Linec',
+    dist: 255,
+    blurb:
+      'Klasický hornorakouský Gasthof na pravém břehu Dunaje, poslední zastávka před Lincem. Bauernkrapfen, palačinky, velký výběr piv.',
+    tip: 'Perfektní finální pivo / kafe 8 km před cílem, pokud zbývá čas do vlaku.',
+    mapsQuery: 'Brückenwirt Steyregg Donau',
+    hours: 'Ne 3.5.: obvykle 11–22 · v neděli ověřit',
   },
   {
     day: 3,
@@ -441,7 +502,12 @@ export const STAYS: Stay[] = [
     loc: 'Admont · u benediktinského opatství',
     tentative: false,
     mapsQuery: 'Hotel Spirodom Admont',
-    photoUrl: 'https://www.spirodom.at/fileadmin/spirodom/wellness/spirodom-pool-ausblick-sommer.jpg',
+    photos: [
+      'https://www.spirodom.at/fileadmin/spirodom/aussen/winter/spirodom-winteransicht-hotel-aussen.jpg',
+      'https://www.spirodom.at/fileadmin/spirodom/wellness/spirodom-pool-ausblick-sommer.jpg',
+      'https://www.spirodom.at/fileadmin/spirodom/zimmer/spirodom-superior-zimmer.jpg',
+      'https://www.spirodom.at/fileadmin/spirodom/kulinarik/spirodom-kulinarik-tischgedeck.jpg',
+    ],
     photoCredit: 'spirodom.at',
     description:
       'Čtyřhvězdičkový hotel kousek od slavné klášterní knihovny. Vlastní restaurace, wellness s bazénem, uzamykatelná kolárna a snídaně v ceně.',
@@ -454,8 +520,13 @@ export const STAYS: Stay[] = [
     loc: 'Großraming · náměstí u kostela',
     tentative: false,
     mapsQuery: 'Landgasthof Kirchenwirt Kirchenplatz 4 Großraming',
-    photoUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Grossraming_Ortszentrum.jpg?width=1400',
-    photoCredit: 'Wikimedia Commons · Großraming',
+    photos: [
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/2024/03/BILD_5079-600x399.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/2020/03/DSCN7926-600x451.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/landschaft.jpg',
+      'https://www.kirchenwirt-grossraming.at/wp/wp-content/uploads/2019/12/P1010819-c-TVB-Ennstal.jpg',
+    ],
+    photoCredit: 'kirchenwirt-grossraming.at',
     description:
       'Tradiční hostinec v srdci Großramingu. Domácí kuchyně s rakouskými klasikami (Schnitzel, Tafelspitz), pivo Stiegl, pokoje nad restaurací.',
     amenities: ['WiFi zdarma', 'Snídaně', 'Úschovna kol', 'Restaurace', 'Centrum obce', 'Sauna'],

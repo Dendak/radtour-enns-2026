@@ -1,5 +1,16 @@
-import { motion } from 'framer-motion';
-import { ExternalLink, BedDouble, AlertCircle, MapPin, Globe, Check, Euro } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  ExternalLink,
+  BedDouble,
+  AlertCircle,
+  MapPin,
+  Globe,
+  Check,
+  Euro,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { STAYS, type Stay } from '@/data/trip';
 
 export function Stays() {
@@ -26,21 +37,7 @@ function StayCard({ stay: s, index: i }: { stay: Stay; index: number }) {
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.45, delay: i * 0.05 }}
       className="card overflow-hidden flex flex-col">
-      <div className="relative h-56 md:h-64 bg-slate-100 overflow-hidden">
-        <img
-          src={s.photoUrl}
-          alt={`${s.name} — ${s.loc}`}
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-          }}
-        />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute bottom-2 right-3 text-[10px] text-white/70 tracking-wide">
-          {s.photoCredit}
-        </div>
+      <PhotoGallery photos={s.photos} alt={`${s.name} — ${s.loc}`} credit={s.photoCredit}>
         <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur px-2.5 py-1 text-[11px] font-semibold tracking-wide text-slate-700 shadow-sm">
           <BedDouble className="h-3.5 w-3.5 text-emerald-700" /> {s.night}
         </div>
@@ -49,7 +46,7 @@ function StayCard({ stay: s, index: i }: { stay: Stay; index: number }) {
             <AlertCircle className="h-3 w-3" /> předběžně
           </div>
         )}
-      </div>
+      </PhotoGallery>
 
       <div className="p-5 flex flex-col gap-3 flex-1">
         <div>
@@ -96,5 +93,118 @@ function StayCard({ stay: s, index: i }: { stay: Stay; index: number }) {
         </div>
       </div>
     </motion.article>
+  );
+}
+
+function PhotoGallery({
+  photos,
+  alt,
+  credit,
+  children,
+}: {
+  photos: string[];
+  alt: string;
+  credit: string;
+  children?: React.ReactNode;
+}) {
+  const [idx, setIdx] = useState(0);
+  const [broken, setBroken] = useState<Set<number>>(new Set());
+  const [paused, setPaused] = useState(false);
+  const timerRef = useRef<number | null>(null);
+
+  // Build the list of photos that have loaded successfully so far.
+  const valid = photos.filter((_, i) => !broken.has(i));
+  const total = valid.length;
+  const current = total > 0 ? valid[idx % total] : null;
+
+  // Auto-advance every 4s unless paused (hover / focus).
+  useEffect(() => {
+    if (paused || total <= 1) return;
+    timerRef.current = window.setTimeout(() => {
+      setIdx((v) => (v + 1) % total);
+    }, 4000);
+    return () => {
+      if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+    };
+  }, [idx, paused, total]);
+
+  const go = (delta: number) => {
+    if (total === 0) return;
+    setIdx((v) => (v + delta + total) % total);
+  };
+
+  return (
+    <div
+      className="relative h-56 md:h-64 bg-slate-100 overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}>
+      <AnimatePresence initial={false} mode="sync">
+        {current && (
+          <motion.img
+            key={current}
+            src={current}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="absolute inset-0 w-full h-full object-cover"
+            onError={() => {
+              const realIndex = photos.indexOf(current);
+              if (realIndex >= 0) {
+                setBroken((prev) => {
+                  const next = new Set(prev);
+                  next.add(realIndex);
+                  return next;
+                });
+              }
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+      <div className="absolute bottom-2 right-3 text-[10px] text-white/70 tracking-wide pointer-events-none">
+        {credit}
+      </div>
+
+      {total > 1 && (
+        <>
+          <button
+            type="button"
+            aria-label="Předchozí fotka"
+            onClick={() => go(-1)}
+            className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-8 w-8 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur text-white transition">
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            aria-label="Další fotka"
+            onClick={() => go(1)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-8 w-8 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur text-white transition">
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {valid.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Fotka ${i + 1} z ${total}`}
+                onClick={() => setIdx(i)}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === idx % total ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/75'
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      {children}
+    </div>
   );
 }
