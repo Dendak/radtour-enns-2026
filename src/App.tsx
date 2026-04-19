@@ -8,7 +8,6 @@ import { WeatherDays } from '@/components/WeatherDays';
 import { Stays } from '@/components/Stays';
 import { Highlights } from '@/components/Highlights';
 import { PracticalInfo } from '@/components/PracticalInfo';
-import { Team } from '@/components/Team';
 import { StickyNav } from '@/components/StickyNav';
 import { Footer } from '@/components/Footer';
 import { useGpxTrack } from '@/hooks/useGpxTrack';
@@ -27,10 +26,6 @@ export default function App() {
       <StickyNav />
       <Hero />
       <main className="max-w-6xl mx-auto px-5 md:px-8 -mt-4 relative z-10">
-        <div id="tym" className="scroll-mt-20">
-          <Team />
-        </div>
-
         <section id="mapa" className="mt-8 md:mt-10 scroll-mt-20">
           <SectionTitle eyebrow="Trasa" title="Mapa a výškový profil" hint="263 km podél Enns, tři dny" />
           <div className="card overflow-hidden">

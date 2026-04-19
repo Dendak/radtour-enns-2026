@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Bike, Calendar, MapPin, Users, MoveRight, Hourglass } from 'lucide-react';
-import { TRIP } from '@/data/trip';
+import { TRIP, TEAM } from '@/data/trip';
 import { TopoPattern } from './TopoPattern';
 
 const TRIP_START = new Date('2026-05-01T09:00:00+02:00');
@@ -65,6 +65,19 @@ export function Hero() {
             <Stat icon={<MapPin className="h-4 w-4" />} label={`${TRIP.totalKm} km`} />
             <Stat icon={<MoveRight className="h-4 w-4" />} label={`${TRIP.days} dny`} />
             <Stat icon={<Users className="h-4 w-4" />} label={`${TRIP.riders} lidí`} />
+          </motion.div>
+          <motion.div variants={item} className="flex flex-wrap items-center gap-1.5 pt-1">
+            <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-amber-200/90 mr-1">
+              <Users className="h-3.5 w-3.5" /> Tým
+            </span>
+            {TEAM.map((m) => (
+              <span
+                key={m.nick}
+                title={m.full}
+                className="inline-flex items-center rounded-full bg-white/10 border border-white/20 px-2.5 py-1 text-sm font-medium backdrop-blur">
+                {m.nick}
+              </span>
+            ))}
           </motion.div>
           <motion.div variants={item}>
             <Countdown />

@@ -17,13 +17,15 @@ export const TRIP = {
   riders: 6,
 };
 
-export const TEAM: string[] = [
-  'Dagmar Nutterová',
-  'Franz Ferdinand',
-  'Denis Holub',
-  'Karolína Masarová',
-  'Kevin Holub',
-  'Vojtěch Lapáček',
+export type TeamMember = { nick: string; full: string };
+
+export const TEAM: TeamMember[] = [
+  { nick: 'Dáša', full: 'Dagmar Nutterová' },
+  { nick: 'Franz', full: 'Franz Ferdinand' },
+  { nick: 'Denis', full: 'Denis Holub' },
+  { nick: 'Kája', full: 'Karolína Masarová' },
+  { nick: 'Kevin', full: 'Kevin Holub' },
+  { nick: 'Vojta', full: 'Vojtěch Lapáček' },
 ];
 
 export const DAY_COLORS: Record<1 | 2 | 3, string> = {
