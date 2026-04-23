@@ -121,6 +121,8 @@ export type Stay = {
   photos: string[];
   photoCredit: string;
   description: string;
+  /** Historický kontext nebo zajímavost — volitelné rozšíření k description. */
+  history?: string;
   amenities: string[];
   website?: string;
   pricePerPerson?: string;
@@ -718,6 +720,8 @@ export const STAYS: Stay[] = [
     photoCredit: 'spirodom.at',
     description:
       'Čtyřhvězdičkový hotel kousek od slavné klášterní knihovny. 3× Superior Doppelzimmer Bergblick (pokoj s výhledem na hory) s polopenzí, wellness s bazénem a uzamykatelná kolárna.',
+    history:
+      'Hotel otevřelo benediktinské opatství Stift Admont v říjnu 2012 — jméno „Spirodom" vzniklo spojením latinského spiro (dýchám) a domus (dům), tedy „dům dechu". Až do 1. února 2026 patřil přímo klášteru (provoz pod 1912 Hotel GmbH), pak jej Stift prodal zkušenému rakouskému hoteliérovi Thomasi Neblovi, který provozuje i Pavilon národního parku v Gstatterbodenu a oživený Xeis NeSt ve Wengu. Spíme tam tedy de facto „v klášterním hotelu" jen pár měsíců po změně majitele.',
     amenities: [
       'Polopenze',
       'Bergblick',
@@ -764,6 +768,8 @@ export const STAYS: Stay[] = [
     photoCredit: 'kirchenwirt-grossraming.at',
     description:
       'Tradiční hostinec v srdci Großramingu. Domácí kuchyně s rakouskými klasikami (Schnitzel, Tafelspitz), pivo Stiegl, pokoje nad restaurací.',
+    history:
+      'Jeden z nejstarších hostinců v regionu — první písemná zmínka je z roku 1524 jako „Wirth bey der Kirchen" (hostinský u kostela) s výčepním právem pod panstvím Steyr. V roce 2024 oslavil 500 let nepřetržitého provozu. Masivní klenby a zakouřený dřevěný strop v šenku jsou přímým dědictvím té doby. Kirchenwirt je také označován za „rodiště" Národního parku Kalkalpen — právě zde probíhala klíčová jednání o jeho založení.',
     amenities: ['WiFi zdarma', 'Snídaně', 'Úschovna kol', 'Restaurace', 'Centrum obce', 'Sauna'],
     website: 'https://www.kirchenwirt-grossraming.at/',
     pricePerPerson: '€ 67 / os. / noc se snídaní · + místní poplatek € 2,40',

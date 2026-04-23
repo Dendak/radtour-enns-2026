@@ -14,6 +14,7 @@ import {
   Phone,
   Clock,
   Users,
+  BookOpen,
 } from 'lucide-react';
 import { STAYS, type Stay } from '@/data/trip';
 
@@ -64,6 +65,21 @@ function StayCard({ stay: s, index: i }: { stay: Stay; index: number }) {
         </div>
 
         <p className="text-sm text-slate-700 leading-relaxed">{s.description}</p>
+
+        {s.history && (
+          <details className="group rounded-xl border border-amber-200/70 bg-amber-50/50 open:bg-amber-50/80 transition-colors">
+            <summary className="list-none cursor-pointer px-3 py-2 flex items-center justify-between gap-2 text-xs font-semibold text-amber-900">
+              <span className="inline-flex items-center gap-1.5">
+                <BookOpen className="h-3.5 w-3.5" />
+                Historie &amp; zajímavost
+              </span>
+              <span className="text-amber-700 group-open:rotate-180 transition-transform">▾</span>
+            </summary>
+            <div className="px-3 pb-3 pt-1 text-xs leading-relaxed text-slate-700">
+              {s.history}
+            </div>
+          </details>
+        )}
 
         {s.pricePerPerson && (
           <div className="inline-flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs px-3 py-2">
