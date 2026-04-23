@@ -10,6 +10,10 @@ import {
   Euro,
   ChevronLeft,
   ChevronRight,
+  CheckCircle2,
+  Phone,
+  Clock,
+  Users,
 } from 'lucide-react';
 import { STAYS, type Stay } from '@/data/trip';
 
@@ -46,6 +50,11 @@ function StayCard({ stay: s, index: i }: { stay: Stay; index: number }) {
             <AlertCircle className="h-3 w-3" /> předběžně
           </div>
         )}
+        {s.booking && !s.tentative && (
+          <div className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-emerald-50/95 border border-emerald-200 text-emerald-800 text-[11px] font-semibold px-2 py-0.5">
+            <CheckCircle2 className="h-3 w-3" /> potvrzeno
+          </div>
+        )}
       </PhotoGallery>
 
       <div className="p-5 flex flex-col gap-3 flex-1">
@@ -62,6 +71,8 @@ function StayCard({ stay: s, index: i }: { stay: Stay; index: number }) {
             <span className="leading-snug">{s.pricePerPerson}</span>
           </div>
         )}
+
+        {s.booking && <BookingDetails booking={s.booking} />}
 
         <ul className="flex flex-wrap gap-1.5">
           {s.amenities.map((a) => (
@@ -93,6 +104,52 @@ function StayCard({ stay: s, index: i }: { stay: Stay; index: number }) {
         </div>
       </div>
     </motion.article>
+  );
+}
+
+function BookingDetails({ booking: b }: { booking: NonNullable<Stay['booking']> }) {
+  return (
+    <details className="group rounded-xl border border-emerald-200 bg-emerald-50/60 open:bg-emerald-50/80 transition-colors">
+      <summary className="list-none cursor-pointer px-3 py-2 flex items-center justify-between gap-2 text-xs font-semibold text-emerald-900">
+        <span className="inline-flex items-center gap-1.5">
+          <CheckCircle2 className="h-3.5 w-3.5" />
+          Rezervace potvrzena · {b.source} {b.code}
+        </span>
+        <span className="text-emerald-700 group-open:rotate-180 transition-transform">▾</span>
+      </summary>
+      <div className="px-3 pb-3 pt-1 space-y-2 text-xs text-slate-700">
+        <div className="flex items-start gap-2">
+          <MapPin className="h-3.5 w-3.5 mt-0.5 text-emerald-700 shrink-0" />
+          <span>{b.address}</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <Phone className="h-3.5 w-3.5 mt-0.5 text-emerald-700 shrink-0" />
+          <a href={`tel:${b.phone.replace(/\s/g, '')}`} className="hover:underline">
+            {b.phone}
+          </a>
+        </div>
+        <div className="flex items-start gap-2">
+          <Clock className="h-3.5 w-3.5 mt-0.5 text-emerald-700 shrink-0" />
+          <span>
+            Check-in {b.checkIn} · check-out {b.checkOut}
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <BedDouble className="h-3.5 w-3.5 mt-0.5 text-emerald-700 shrink-0" />
+          <span>{b.rooms}</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <Users className="h-3.5 w-3.5 mt-0.5 text-emerald-700 shrink-0" />
+          <span>{b.pairs.join(' · ')}</span>
+        </div>
+        {b.total && (
+          <div className="flex items-start gap-2 pt-1 border-t border-emerald-200/70">
+            <Euro className="h-3.5 w-3.5 mt-0.5 text-emerald-700 shrink-0" />
+            <span className="font-semibold">{b.total}</span>
+          </div>
+        )}
+      </div>
+    </details>
   );
 }
 

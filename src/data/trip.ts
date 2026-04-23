@@ -124,6 +124,18 @@ export type Stay = {
   amenities: string[];
   website?: string;
   pricePerPerson?: string;
+  /** Potvrzená rezervace (vyplněno, když máme potvrzení na e-mail). */
+  booking?: {
+    code: string;
+    source: string;
+    address: string;
+    phone: string;
+    checkIn: string;
+    checkOut: string;
+    rooms: string;
+    pairs: string[];
+    total?: string;
+  };
 };
 
 export type Highlight = {
@@ -705,9 +717,29 @@ export const STAYS: Stay[] = [
     ],
     photoCredit: 'spirodom.at',
     description:
-      'Čtyřhvězdičkový hotel kousek od slavné klášterní knihovny. Vlastní restaurace, wellness s bazénem, uzamykatelná kolárna a snídaně v ceně.',
-    amenities: ['WiFi zdarma', 'Snídaně', 'Uzamykatelná kolárna', 'Restaurace', 'Wellness', 'Parking'],
+      'Čtyřhvězdičkový hotel kousek od slavné klášterní knihovny. 3× Superior Doppelzimmer Bergblick (pokoj s výhledem na hory) s polopenzí, wellness s bazénem a uzamykatelná kolárna.',
+    amenities: [
+      'Polopenze',
+      'Bergblick',
+      'Uzamykatelná kolárna',
+      'Wellness & bazén',
+      'Restaurace',
+      'WiFi zdarma',
+      'Parking',
+    ],
     website: 'https://www.spirodom.at/',
+    pricePerPerson: '€ 93 / os. · 3× Superior Doppelzimmer s polopenzí · zaplaceno',
+    booking: {
+      code: '5527750965',
+      source: 'booking.com',
+      address: 'Eichenweg 616, 8911 Admont',
+      phone: '+43 3613 36600',
+      checkIn: 'od 15:00',
+      checkOut: 'do 11:00',
+      rooms: '3× Superior Doppelzimmer Bergblick s polopenzí',
+      pairs: ['Denis + Kája', 'Kevin + Vojta', 'Franz + Dáša'],
+      total: '€ 560 celkem (6 osob, 1 noc)',
+    },
   },
   {
     night: 'Nocleh 2 · So 2. května',
