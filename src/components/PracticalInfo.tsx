@@ -61,8 +61,11 @@ export function PracticalInfo({ track, dayEnd }: PracticalInfoProps) {
             <li className="flex gap-2">
               <Check className="h-4 w-4 text-emerald-700 shrink-0 mt-0.5" />
               <span>
-                <strong>Doporučený spoj:</strong> odjezd ~7:59 ze Salzburg Hbf,
-                v Bischofshofenu ~8:54, přestup, v Radstadtu ~9:35.
+                <strong>Spoj potvrzený:</strong> příjezd do{' '}
+                <strong>Radstadtu v 10:35</strong>, start na trase ~10:45
+                (čas na složení kol). Přesné odjezdové časy ze Salzburgu
+                a přestup v Bischofshofenu před cestou ještě ověřit na
+                scotty.at.
               </span>
             </li>
             <li className="flex gap-2">
