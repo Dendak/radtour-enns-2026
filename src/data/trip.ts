@@ -407,7 +407,10 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Hausgemachte pasta a chléb. Některé soboty zavřeno kvůli akcím — ověřit.',
     mapsQuery: 'Gasthof Kaiser von Österreich Weyer',
     website: 'https://www.kaiservonoesterreich.at/',
-    photos: ['https://www.kaiservonoesterreich.at/upload/imgproc/1929316_head.jpg'],
+    photos: [
+      wiki('2012.01.15_-_Weyer15_-_Bürgerhaus,_Dreherhaus,_Kompaniehof,_Marktplatz_1_-_01.jpg'),
+      wiki('2012.01.15_-_Weyer27_-_Schloss_Weyer,_Egerer_Schlössel,_Marktplatz_30_-_01.jpg'),
+    ],
     hours: 'So 2.5.: 11–22 · ověřit, některé soboty zavřeno kvůli akcím',
     rating: { stars: 4.5, count: 150, source: 'Google' },
   },
