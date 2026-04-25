@@ -245,24 +245,6 @@ export const HIGHLIGHTS: Highlight[] = [
   {
     day: 1,
     kind: 'gastro',
-    name: 'Gasthof Goldener Hirsch Liezen',
-    where: 'Liezen · Ausseer Straße 7',
-    dist: 77,
-    blurb:
-      'Rakouská domácí kuchyně na náměstí. Polední bufet (každé 11. menu zdarma), Sonntagsbrunch, sezónní bílý chřest. „Ausgezeichnete Küche, großzügige Portionen."',
-    tip: 'Polední bufet, každé 11. menu zdarma.',
-    mapsQuery: 'Gasthof Goldener Hirsch Liezen Ausseer Straße',
-    photos: [
-      wiki('Tafelspitz.jpg'),
-      wiki('Liezen-stadt1386.JPG'),
-    ],
-    photosAreIllustrative: true,
-    hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · o svátku zkrácené, telefonem ověřit',
-    rating: { stars: 4.2, count: 312, source: 'Google' },
-  },
-  {
-    day: 1,
-    kind: 'gastro',
     name: 'Gasthof Kirchenwirt Admont',
     where: 'Admont · u kláštera',
     dist: 99,
