@@ -218,7 +218,7 @@ function PhotoGallery({
           Fotky se nenačetly
         </div>
       )}
-      <AnimatePresence initial={false} mode="sync">
+      <AnimatePresence initial={false} mode="popLayout">
         {current && (
           <motion.img
             key={current}
@@ -226,10 +226,10 @@ function PhotoGallery({
             alt={alt}
             loading="lazy"
             decoding="async"
-            initial={{ opacity: 0, scale: 1.04 }}
+            initial={{ opacity: 1, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
+            exit={{ opacity: 0, transition: { duration: 0.6, ease: 'easeOut' } }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
             className="absolute inset-0 w-full h-full object-cover"
             onError={() => {
               const realIndex = photos.indexOf(current);
