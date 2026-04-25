@@ -224,25 +224,6 @@ export const HIGHLIGHTS: Highlight[] = [
   {
     day: 1,
     kind: 'gastro',
-    name: 'Brauhaus Falkenstein',
-    where: 'Pichl bei Schladming',
-    dist: 25,
-    blurb:
-      'Lokální pivovar s vlastním ležákem. Recenze opakovaně chválí kombinaci hausbraus Märzen + Schnitzel mit Schwammerlsoße (řízek v houbové omáčce). Štýrská Brettljause a Kaspressknödel jako druhá volba.',
-    tip: 'Půllitr Märzen + Brettljause ~€ 15.',
-    mapsQuery: 'Brauhaus Falkenstein Pichl',
-    website: 'https://www.falkenstein-braeu.at/',
-    photos: [
-      wiki('Brettljause_01.jpg'),
-      wiki('Kärntner_Brettljause_Buschenschenke_Kurasch.jpg'),
-    ],
-    photosAreIllustrative: true,
-    hours: 'Pá 1.5. (st. svátek): obvykle 11:30–22 · před cestou ověřit',
-    rating: { stars: 4.3, count: 250, source: 'Google' },
-  },
-  {
-    day: 1,
-    kind: 'gastro',
     name: 'Stiegenwirt Pichl',
     where: 'Pichl-Mandling',
     dist: 22,
