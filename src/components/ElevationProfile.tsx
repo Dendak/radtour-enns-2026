@@ -18,6 +18,7 @@ type HoverInfo = {
   km: number;
   dayKm: number;
   dayTotalKm: number;
+  remainingUpM: number;
   ele: number;
   time: string;
   wpName: string;
@@ -41,6 +42,32 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
   };
 
   const byDay = useMemo(() => splitTrackByDay(track, dayEnd), [track, dayEnd]);
+
+  // Cumulative ascent (positive elevation gain) at each track point. Used to
+  // compute remaining climb between any two distances along the route.
+  const cumUp = useMemo(() => {
+    const arr = new Float32Array(track.length);
+    let acc = 0;
+    for (let i = 1; i < track.length; i++) {
+      const diff = track[i].ele - track[i - 1].ele;
+      if (diff > 0) acc += diff;
+      arr[i] = acc;
+    }
+    return arr;
+  }, [track]);
+
+  const cumUpAtDist = (d: number): number => {
+    if (track.length < 2) return 0;
+    let lo = 0, hi = track.length - 1;
+    while (lo < hi - 1) {
+      const m = (lo + hi) >> 1;
+      if (track[m].dist < d) lo = m;
+      else hi = m;
+    }
+    const a = track[lo], b = track[hi];
+    const f = (d - a.dist) / Math.max(0.0001, b.dist - a.dist);
+    return cumUp[lo] + (cumUp[hi] - cumUp[lo]) * Math.max(0, Math.min(1, f));
+  };
 
   const stats = useMemo(() => {
     if (track.length < 2) return { up: 0, down: 0, min: 0, max: 0 };
@@ -299,12 +326,14 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
     const totalDist = track[track.length - 1].dist;
     const dayStart = day === 1 ? 0 : day === 2 ? dayEnd[1] : dayEnd[2];
     const dayEndDist = day === 1 ? dayEnd[1] : day === 2 ? dayEnd[2] : totalDist;
+    const remainingUpM = Math.max(0, cumUpAtDist(dayEndDist) - cumUpAtDist(d));
     setHoverInfo({
       x,
       canvasWidth: rect.width,
       km: d,
       dayKm: Math.max(0, d - dayStart),
       dayTotalKm: dayEndDist - dayStart,
+      remainingUpM: Math.round(remainingUpM),
       ele: Math.round(p.ele),
       time,
       wpName: nearWp.name,
@@ -368,7 +397,7 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
               {hoverInfo.time} · km {hoverInfo.km.toFixed(0)} · {hoverInfo.ele} m n. m.
             </div>
             <div className="text-slate-600">
-              Den {hoverInfo.day} · {hoverInfo.dayKm.toFixed(0)} / {hoverInfo.dayTotalKm.toFixed(0)} km
+              Den {hoverInfo.day} · {hoverInfo.dayKm.toFixed(0)} / {hoverInfo.dayTotalKm.toFixed(0)} km · zbývá ↑ {hoverInfo.remainingUpM} m
             </div>
             <div className="text-slate-600">{hoverInfo.wpName}</div>
             <div className="text-slate-500">{hoverInfo.weather}</div>
