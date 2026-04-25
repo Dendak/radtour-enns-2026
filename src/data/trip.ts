@@ -151,6 +151,10 @@ export type Highlight = {
   mapsQuery?: string;
   website?: string;
   photos?: string[];
+  /** True when photos are stock illustrations (e.g. generic Schnitzel from Wikimedia)
+   * rather than real shots from this specific establishment. Triggers a small
+   * "Ilustrační foto" badge on the card. */
+  photosAreIllustrative?: boolean;
   /** Opening hours on the day of the trip — e.g. "Pá 1.5. (svátek): 11–22". */
   hours?: string;
   /** Google Maps / review aggregator rating. */
@@ -232,6 +236,7 @@ export const HIGHLIGHTS: Highlight[] = [
       wiki('Brettljause_01.jpg'),
       wiki('Kärntner_Brettljause_Buschenschenke_Kurasch.jpg'),
     ],
+    photosAreIllustrative: true,
     hours: 'Pá 1.5. (st. svátek): obvykle 11:30–22 · před cestou ověřit',
     rating: { stars: 4.3, count: 250, source: 'Google' },
   },
@@ -270,6 +275,7 @@ export const HIGHLIGHTS: Highlight[] = [
       wiki('Tafelspitz.jpg'),
       wiki('Liezen-stadt1386.JPG'),
     ],
+    photosAreIllustrative: true,
     hours: 'Pá 1.5. (st. svátek): obvykle 11–22 · o svátku zkrácené, telefonem ověřit',
     rating: { stars: 4.2, count: 312, source: 'Google' },
   },
@@ -288,6 +294,7 @@ export const HIGHLIGHTS: Highlight[] = [
       wiki('2017-05-28_Wiener_Schnitzel_mit_Pommes_frites_anagoria.jpg'),
       wiki('Alte_kath._Pfarrkirche,_Admont.jpg'),
     ],
+    photosAreIllustrative: true,
     hours: 'Pá 1.5. (st. svátek): obvykle 11–23 · o svátku stabilně otevřeno',
     rating: { stars: 4.4, count: 486, source: 'Google' },
   },
@@ -344,6 +351,7 @@ export const HIGHLIGHTS: Highlight[] = [
       wiki('Apfelstrudel_with_whipped_cream.jpg'),
       wiki('Kulturhalle_Groebming.jpg'),
     ],
+    photosAreIllustrative: true,
     hours: 'Pá 1.5.: 7:30–20',
     rating: { stars: 4.3, count: 80, source: 'Google' },
   },
@@ -424,6 +432,7 @@ export const HIGHLIGHTS: Highlight[] = [
       wiki('2012.01.15_-_Weyer15_-_Bürgerhaus,_Dreherhaus,_Kompaniehof,_Marktplatz_1_-_01.jpg'),
       wiki('2012.01.15_-_Weyer27_-_Schloss_Weyer,_Egerer_Schlössel,_Marktplatz_30_-_01.jpg'),
     ],
+    photosAreIllustrative: true,
     hours: 'So 2.5.: 11–22 · ověřit, některé soboty zavřeno kvůli akcím',
     rating: { stars: 4.5, count: 150, source: 'Google' },
   },
@@ -454,6 +463,7 @@ export const HIGHLIGHTS: Highlight[] = [
       wiki('Kaiserschmarrn_und_Apfelmus.jpg'),
       wiki('Apfelstrudel_with_whipped_cream.jpg'),
     ],
+    photosAreIllustrative: true,
     hours: 'So 2.5.: obvykle 7:30–18 · ověřit telefonem',
     rating: { stars: 4.5, count: 100, source: 'Google' },
   },
@@ -517,6 +527,7 @@ export const HIGHLIGHTS: Highlight[] = [
       wiki('Sacher_Torte_sliced,_closeup,_February_2010.jpg'),
       wiki('Wiener_Melange_im_Sacher.JPG'),
     ],
+    photosAreIllustrative: true,
     hours: 'Ne 3.5.: 8–18 · v neděli otevřeno',
     rating: { stars: 4.3, count: 241, source: 'Google' },
   },
@@ -534,6 +545,7 @@ export const HIGHLIGHTS: Highlight[] = [
       wiki('2017-05-28_Wiener_Schnitzel_mit_Pommes_frites_anagoria.jpg'),
       wiki('Enns_-_Hauptplatz_mit_Stadtturm.JPG'),
     ],
+    photosAreIllustrative: true,
     hours: 'Ne 3.5.: 10–22 · v neděli otevřeno',
     rating: { stars: 4.4, count: 100, source: 'TripAdvisor' },
   },
