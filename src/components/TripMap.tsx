@@ -167,14 +167,9 @@ function HoverMarkerLayer() {
     });
     if (!markerRef.current) {
       markerRef.current = L.marker([hover.lat, hover.lon], { icon, interactive: false, keyboard: false }).addTo(map);
-      markerRef.current.bindTooltip('', {
-        permanent: true, direction: 'top', offset: [0, -12], opacity: 1,
-        className: 'hover-weather-tooltip',
-      });
     } else {
       markerRef.current.setLatLng([hover.lat, hover.lon]);
     }
-    markerRef.current.getTooltip()?.setContent(hover.label);
   }, [hover, map]);
   return null;
 }
@@ -239,6 +234,15 @@ function TripMapInner({ track, waypoints, dayEnd, donauStart, weather, onLocate 
   );
 
   const byDay = useMemo(() => splitTrackByDay(track, dayEnd), [track, dayEnd]);
+  const totalKm = useMemo(() => (track.length ? track[track.length - 1].dist : 0), [track]);
+  const dayKm = useMemo<Record<1 | 2 | 3, number>>(() => {
+    const km = (d: 1 | 2 | 3) => {
+      const pts = byDay[d];
+      if (!pts || pts.length < 2) return 0;
+      return pts[pts.length - 1].dist - pts[0].dist;
+    };
+    return { 1: km(1), 2: km(2), 3: km(3) };
+  }, [byDay]);
   const fullBounds = useMemo<LatLngBoundsExpression | null>(() => {
     if (!track.length) return null;
     return L.latLngBounds(track.map((p) => [p.lat, p.lon] as LatLngTuple));
@@ -272,6 +276,11 @@ function TripMapInner({ track, waypoints, dayEnd, donauStart, weather, onLocate 
               : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50',
           )}>
           Celá trasa
+          {totalKm > 0 && (
+            <span className={cn('ml-1 text-[11px]', focusDay === null ? 'text-white/70' : 'text-slate-400')}>
+              · {totalKm.toFixed(0)} km
+            </span>
+          )}
         </button>
         {[1, 2, 3].map((d) => {
           const day = d as 1 | 2 | 3;
@@ -290,9 +299,12 @@ function TripMapInner({ track, waypoints, dayEnd, donauStart, weather, onLocate 
                 borderColor: active ? DAY_COLORS[day] : undefined,
                 boxShadow: active ? `0 0 0 2px ${DAY_COLORS[day]}40` : undefined,
               }}
-              title={active ? 'Zpět na celou trasu' : `Přiblížit na ${DAY_NAMES[day]}`}>
+              title={active ? 'Zpět na celou trasu' : `Přiblížit na ${DAY_NAMES[day]} (${dayKm[day].toFixed(0)} km)`}>
               <span className="inline-block w-2 h-2 rounded-full" style={{ background: DAY_COLORS[day] }} />
               {DAY_NAMES[day]}
+              {dayKm[day] > 0 && (
+                <span className="ml-1 text-[11px] opacity-70">· {dayKm[day].toFixed(0)} km</span>
+              )}
             </button>
           );
         })}
@@ -464,18 +476,6 @@ function TripMapInner({ track, waypoints, dayEnd, donauStart, weather, onLocate 
           />
         </MapContainer>
       </div>
-      <style>{`
-        .hover-weather-tooltip {
-          background: rgba(15, 23, 42, 0.92);
-          color: white;
-          border: none;
-          border-radius: 10px;
-          padding: 6px 10px;
-          font-size: 12px;
-          box-shadow: 0 10px 20px -8px rgba(0,0,0,.35);
-        }
-        .hover-weather-tooltip::before { display: none; }
-      `}</style>
     </div>
   );
 }

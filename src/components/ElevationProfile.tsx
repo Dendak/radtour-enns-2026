@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DAY_COLORS, type Waypoint, wmoText } from '@/data/trip';
 import { dayForDist, pointAtDist, splitTrackByDay, type TrackPoint } from '@/hooks/useGpxTrack';
 import type { WeatherPoint } from '@/hooks/useWeather';
@@ -12,11 +12,23 @@ export type ElevationProfileProps = {
   userLoc?: { distKm: number; accuracy: number } | null;
 };
 
+type HoverInfo = {
+  x: number;
+  canvasWidth: number;
+  km: number;
+  ele: number;
+  time: string;
+  wpName: string;
+  weather: string;
+  day: 1 | 2 | 3;
+};
+
 export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, userLoc }: ElevationProfileProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const hoverXRef = useRef<number | undefined>(undefined);
   const rafRef = useRef<number | null>(null);
+  const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
 
   const scheduleDraw = () => {
     if (rafRef.current !== null) return;
@@ -254,13 +266,23 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
     const wline = !wx ? 'Načítání počasí …'
       : wx.error ? 'předpověď nedostupná'
       : `${wmoText(wx.code)} · ${wx.temp?.toFixed(0)} °C · ${wx.precip?.toFixed(1)} mm · ${wx.wind?.toFixed(0)} km/h`;
-    const label = `<div style="font-weight:600;color:${DAY_COLORS[day]}">${time} · km ${d.toFixed(0)} · ${Math.round(p.ele)} m n. m.</div><div style="opacity:.85">${nearWp.name}</div><div style="opacity:.85">${wline}</div>`;
-    onHover({ lat: p.lat, lon: p.lon, label });
+    setHoverInfo({
+      x,
+      canvasWidth: rect.width,
+      km: d,
+      ele: Math.round(p.ele),
+      time,
+      wpName: nearWp.name,
+      weather: wline,
+      day,
+    });
+    onHover({ lat: p.lat, lon: p.lon, label: '' });
   };
 
   const onLeave = () => {
     hoverXRef.current = undefined;
     scheduleDraw();
+    setHoverInfo(null);
     onHover(null);
   };
 
@@ -289,16 +311,33 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
           </span>
         </div>
       </div>
-      <canvas
-        ref={canvasRef}
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
-        onTouchMove={(e) => { onMove(e); e.preventDefault(); }}
-        onTouchEnd={onLeave}
-        className="w-full h-[320px] md:h-[360px] block rounded-xl bg-gradient-to-b from-white to-slate-50 shadow-inner"
-        style={{ touchAction: 'none' }}
-      />
-      <div className="text-xs text-slate-500 mt-2">Přejeďte myší po křivce — ukáže polohu na mapě a počasí v plánovaném čase.</div>
+      <div className="relative">
+        <canvas
+          ref={canvasRef}
+          onMouseMove={onMove}
+          onMouseLeave={onLeave}
+          onTouchMove={(e) => { onMove(e); e.preventDefault(); }}
+          onTouchEnd={onLeave}
+          className="w-full h-[320px] md:h-[360px] block rounded-xl bg-gradient-to-b from-white to-slate-50 shadow-inner"
+          style={{ touchAction: 'none' }}
+        />
+        {hoverInfo && (
+          <div
+            className="absolute pointer-events-none rounded-lg bg-slate-900/92 text-white text-[11px] leading-snug px-3 py-2 shadow-lg backdrop-blur whitespace-nowrap"
+            style={{
+              left: Math.min(Math.max(hoverInfo.x, 90), hoverInfo.canvasWidth - 90),
+              top: 8,
+              transform: 'translateX(-50%)',
+            }}>
+            <div style={{ fontWeight: 600, color: DAY_COLORS[hoverInfo.day] }}>
+              {hoverInfo.time} · km {hoverInfo.km.toFixed(0)} · {hoverInfo.ele} m n. m.
+            </div>
+            <div style={{ opacity: 0.85 }}>{hoverInfo.wpName}</div>
+            <div style={{ opacity: 0.85 }}>{hoverInfo.weather}</div>
+          </div>
+        )}
+      </div>
+      <div className="text-xs text-slate-500 mt-2">Přejeďte myší po křivce — ukáže polohu na mapě a aktuální výšku, čas i počasí.</div>
     </div>
   );
 }
