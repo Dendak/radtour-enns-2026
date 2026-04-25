@@ -254,7 +254,7 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
     const wline = !wx ? 'Načítání počasí …'
       : wx.error ? 'předpověď nedostupná'
       : `${wmoText(wx.code)} · ${wx.temp?.toFixed(0)} °C · ${wx.precip?.toFixed(1)} mm · ${wx.wind?.toFixed(0)} km/h`;
-    const label = `<div style="font-weight:600;color:${DAY_COLORS[day]}">${time} · km ${d.toFixed(0)}</div><div style="opacity:.85">${nearWp.name}</div><div style="opacity:.85">${wline}</div>`;
+    const label = `<div style="font-weight:600;color:${DAY_COLORS[day]}">${time} · km ${d.toFixed(0)} · ${Math.round(p.ele)} m n. m.</div><div style="opacity:.85">${nearWp.name}</div><div style="opacity:.85">${wline}</div>`;
     onHover({ lat: p.lat, lon: p.lon, label });
   };
 
