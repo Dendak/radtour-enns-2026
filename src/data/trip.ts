@@ -151,10 +151,6 @@ export type Highlight = {
   mapsQuery?: string;
   website?: string;
   photos?: string[];
-  /** True when photos are stock illustrations (e.g. generic Schnitzel from Wikimedia)
-   * rather than real shots from this specific establishment. Triggers a small
-   * "Ilustrační foto" badge on the card. */
-  photosAreIllustrative?: boolean;
   /** Opening hours on the day of the trip — e.g. "Pá 1.5. (svátek): 11–22". */
   hours?: string;
   /** Google Maps / review aggregator rating. */
@@ -233,7 +229,6 @@ export const HIGHLIGHTS: Highlight[] = [
     mapsQuery: 'Stiegenwirt Pichl Mandling',
     website: 'https://www.stiegenwirt.at/',
     photos: [
-      wiki('Wiener_Backhendl_5.jpg'),
       'https://stiegenwirt.at/wp-content/uploads/2026/01/032-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-scaled.jpg',
       'https://stiegenwirt.at/wp-content/uploads/2026/01/002-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-Kopie.jpg',
       'https://stiegenwirt.at/wp-content/uploads/2026/01/044-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-scaled.jpg',
@@ -253,11 +248,6 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Otevřeno do 23 i ve svátek. Bezpečné parkování kol u restaurace.',
     mapsQuery: 'Gasthof Kirchenwirt Admont',
     website: 'https://www.kirchenwirt-admont.at/',
-    photos: [
-      wiki('2017-05-28_Wiener_Schnitzel_mit_Pommes_frites_anagoria.jpg'),
-      wiki('Alte_kath._Pfarrkirche,_Admont.jpg'),
-    ],
-    photosAreIllustrative: true,
     hours: 'Pá 1.5. (st. svátek): obvykle 11–23 · o svátku stabilně otevřeno',
     rating: { stars: 4.4, count: 486, source: 'Google' },
   },
@@ -310,11 +300,6 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Otevřeno denně 7:30–20.',
     mapsQuery: 'Stefflbäck Gröbming Hauptplatz',
     website: 'https://www.stefflbaeck.at/',
-    photos: [
-      wiki('Apfelstrudel_with_whipped_cream.jpg'),
-      wiki('Kulturhalle_Groebming.jpg'),
-    ],
-    photosAreIllustrative: true,
     hours: 'Pá 1.5.: 7:30–20',
     rating: { stars: 4.3, count: 80, source: 'Google' },
   },
@@ -424,11 +409,6 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Dry-aged rump steak cca € 30. Velká zahrada pod lípou.',
     mapsQuery: 'Gasthof Post Altenmarkt bei Sankt Gallen',
     website: 'https://www.gasthofpost-altenmarkt.at/',
-    photos: [
-      wiki('Strip-steak-MCB-MaggieO.jpg'),
-      wiki('Bunter_Salatteller_mit_Rumpsteak_und_Champignons.JPG'),
-    ],
-    photosAreIllustrative: true,
     hours: 'So 2.5.: obvykle 11–22 · teplé jídlo do 21',
     rating: { stars: 4.4, count: 436, source: 'Google' },
   },
@@ -443,11 +423,6 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Hausgemachte pasta a chléb. Některé soboty zavřeno kvůli akcím — ověřit.',
     mapsQuery: 'Gasthof Kaiser von Österreich Weyer',
     website: 'https://www.kaiservonoesterreich.at/',
-    photos: [
-      wiki('2012.01.15_-_Weyer15_-_Bürgerhaus,_Dreherhaus,_Kompaniehof,_Marktplatz_1_-_01.jpg'),
-      wiki('2012.01.15_-_Weyer27_-_Schloss_Weyer,_Egerer_Schlössel,_Marktplatz_30_-_01.jpg'),
-    ],
-    photosAreIllustrative: true,
     hours: 'So 2.5.: 11–22 · ověřit, některé soboty zavřeno kvůli akcím',
     rating: { stars: 4.5, count: 150, source: 'Google' },
   },
@@ -474,11 +449,6 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'V sobotu plno, rezervace vhodná.',
     mapsQuery: 'Schwarzlmüller Weyer Oberer Markt',
     website: 'https://www.schwarzlmueller.at/',
-    photos: [
-      wiki('Kaiserschmarrn_und_Apfelmus.jpg'),
-      wiki('Apfelstrudel_with_whipped_cream.jpg'),
-    ],
-    photosAreIllustrative: true,
     hours: 'So 2.5.: obvykle 7:30–18 · ověřit telefonem',
     rating: { stars: 4.5, count: 100, source: 'Google' },
   },
@@ -584,11 +554,6 @@ export const HIGHLIGHTS: Highlight[] = [
       'Vídeňský kaffeehaus u soutoku Enns a Steyr. Domácí Malakoff torte, krémové řezy, snídaně a brunch. Nabíječka na e-kola.',
     tip: 'V neděli otevřeno 8–18 (na rozdíl od většiny cukráren v Steyru). Káva + dílek cca € 7.',
     mapsQuery: 'Café Werndl Steyr Zwischenbrücken',
-    photos: [
-      wiki('Sacher_Torte_sliced,_closeup,_February_2010.jpg'),
-      wiki('Wiener_Melange_im_Sacher.JPG'),
-    ],
-    photosAreIllustrative: true,
     hours: 'Ne 3.5.: 8–18 · v neděli otevřeno',
     rating: { stars: 4.3, count: 241, source: 'Google' },
   },
@@ -602,11 +567,6 @@ export const HIGHLIGHTS: Highlight[] = [
       'Mladý hostinec na hlavním náměstí pod Stadtturmem. Signature „Pfandl" — pánvička s bramborami, knedlíky a pečení, navrch volské oko. K tomu studený Mostdudler (mošt + tonic). „Pfandl mit eiskaltem Mostdudler ist sehr zu empfehlen."',
     tip: 'Pfandl pro dva + Mostdudler.',
     mapsQuery: 'Platzhirsch Enns Hauptplatz',
-    photos: [
-      wiki('Bauerngröstl_Innerperskoler_Hof,_.JPG'),
-      wiki('Enns_-_Hauptplatz_mit_Stadtturm.JPG'),
-    ],
-    photosAreIllustrative: true,
     hours: 'Ne 3.5.: 10–22 · v neděli otevřeno',
     rating: { stars: 4.4, count: 100, source: 'TripAdvisor' },
   },

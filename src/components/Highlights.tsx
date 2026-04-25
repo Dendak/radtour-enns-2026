@@ -339,13 +339,6 @@ function HighlightCard({ h, accent }: { h: Highlight; accent: string }) {
             ))}
           </div>
         )}
-        {hasPhoto && h.photosAreIllustrative && (
-          <span
-            className="absolute bottom-2 right-2 z-10 inline-flex items-center rounded-full bg-black/55 backdrop-blur px-2 py-0.5 text-[10px] font-medium text-white/90"
-            title="Fotka pochází z Wikimedia Commons, ne přímo od tohoto podniku">
-            ilustrační foto
-          </span>
-        )}
       </button>
 
       <div className="p-4 flex flex-col flex-1">
