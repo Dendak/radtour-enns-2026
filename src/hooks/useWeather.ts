@@ -112,8 +112,9 @@ export function useWeather(waypoints: Waypoint[], refreshMs = 10 * 60 * 1000) {
       const now = new Date();
       setState({ byWaypoint: results, updatedAt: now, loading: false, error: null });
       saveCache(results, now);
-    } catch (e: any) {
-      setState((s) => ({ ...s, loading: false, error: e.message || 'fetch failed' }));
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'fetch failed';
+      setState((s) => ({ ...s, loading: false, error: msg }));
     }
   }, [waypoints]);
 

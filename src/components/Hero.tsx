@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Bike, Calendar, MapPin, Users, MoveRight, Hourglass } from 'lucide-react';
 import { TRIP, TEAM } from '@/data/trip';
@@ -103,7 +104,11 @@ function Stat({ icon, label }: { icon: React.ReactNode; label: string }) {
 }
 
 function Countdown() {
-  const n = daysUntilTrip();
+  const [n, setN] = useState(() => daysUntilTrip());
+  useEffect(() => {
+    const id = window.setInterval(() => setN(daysUntilTrip()), 60_000);
+    return () => window.clearInterval(id);
+  }, []);
   let text: string;
   let tone = 'text-amber-100';
   if (n > 0) {

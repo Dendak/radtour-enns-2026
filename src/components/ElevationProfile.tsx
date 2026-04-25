@@ -285,15 +285,21 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
   }, [track, waypoints, byDay, dayEnd, userLoc]);
 
   const timeForDist = (d: number): string => {
-    let lo: Waypoint | null = null, hi: Waypoint | null = null;
-    for (const w of waypoints) {
-      if (w.dist <= d) lo = w;
-      if (w.dist >= d && !hi) hi = w;
+    if (!waypoints.length) return '';
+    // Waypoints are sorted by dist — binary search for the interval [lo, hi].
+    let lo = 0, hi = waypoints.length - 1;
+    if (d <= waypoints[lo].dist) hi = Math.min(1, hi);
+    else if (d >= waypoints[hi].dist) lo = Math.max(0, hi - 1);
+    else {
+      while (lo < hi - 1) {
+        const m = (lo + hi) >> 1;
+        if (waypoints[m].dist <= d) lo = m;
+        else hi = m;
+      }
     }
-    if (!lo) lo = waypoints[0];
-    if (!hi) hi = waypoints[waypoints.length - 1];
-    const f = hi.dist === lo.dist ? 0 : (d - lo.dist) / (hi.dist - lo.dist);
-    const t = new Date(lo.time).getTime() + f * (new Date(hi.time).getTime() - new Date(lo.time).getTime());
+    const a = waypoints[lo], b = waypoints[hi];
+    const f = b.dist === a.dist ? 0 : (d - a.dist) / (b.dist - a.dist);
+    const t = new Date(a.time).getTime() + f * (new Date(b.time).getTime() - new Date(a.time).getTime());
     return new Date(t).toLocaleString('cs-CZ', { weekday: 'short', hour: '2-digit', minute: '2-digit' });
   };
 
@@ -385,24 +391,29 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
           className="w-full h-[320px] md:h-[360px] block rounded-xl bg-gradient-to-b from-white to-slate-50 shadow-inner"
           style={{ touchAction: 'none' }}
         />
-        {hoverInfo && (
-          <div
-            className="absolute pointer-events-none rounded-lg bg-white/95 text-slate-800 text-[11px] leading-snug px-3 py-2 shadow-lg ring-1 ring-slate-200 backdrop-blur whitespace-nowrap"
-            style={{
-              left: Math.min(Math.max(hoverInfo.x, 90), hoverInfo.canvasWidth - 90),
-              top: 8,
-              transform: 'translateX(-50%)',
-            }}>
-            <div style={{ fontWeight: 700, color: DAY_COLORS[hoverInfo.day] }}>
-              {hoverInfo.time} · km {hoverInfo.km.toFixed(0)} · {hoverInfo.ele} m n. m.
+        {hoverInfo && (() => {
+          const edge = Math.min(115, hoverInfo.canvasWidth / 2 - 4);
+          const left = Math.min(Math.max(hoverInfo.x, edge), hoverInfo.canvasWidth - edge);
+          return (
+            <div
+              role="tooltip"
+              className="absolute pointer-events-none rounded-lg bg-white/95 text-slate-800 text-[11px] leading-snug px-3 py-2 shadow-lg ring-1 ring-slate-200 backdrop-blur whitespace-nowrap"
+              style={{
+                left,
+                top: 8,
+                transform: 'translateX(-50%)',
+              }}>
+              <div style={{ fontWeight: 700, color: DAY_COLORS[hoverInfo.day] }}>
+                {hoverInfo.time} · km {hoverInfo.km.toFixed(0)} · {hoverInfo.ele} m n. m.
+              </div>
+              <div className="text-slate-600">
+                Den {hoverInfo.day} · {hoverInfo.dayKm.toFixed(0)} / {hoverInfo.dayTotalKm.toFixed(0)} km · zbývá ↑ {hoverInfo.remainingUpM} m
+              </div>
+              <div className="text-slate-600">{hoverInfo.wpName}</div>
+              <div className="text-slate-500">{hoverInfo.weather}</div>
             </div>
-            <div className="text-slate-600">
-              Den {hoverInfo.day} · {hoverInfo.dayKm.toFixed(0)} / {hoverInfo.dayTotalKm.toFixed(0)} km · zbývá ↑ {hoverInfo.remainingUpM} m
-            </div>
-            <div className="text-slate-600">{hoverInfo.wpName}</div>
-            <div className="text-slate-500">{hoverInfo.weather}</div>
-          </div>
-        )}
+          );
+        })()}
       </div>
       <div className="text-xs text-slate-500 mt-2">Přejeďte myší po křivce — ukáže polohu na mapě a aktuální výšku, čas i počasí.</div>
     </div>

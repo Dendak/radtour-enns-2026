@@ -26,12 +26,16 @@ export function OnRoute() {
         aria-label="Obsah na trase"
         className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 mb-6 shadow-sm">
         <TabButton
+          id="tab-fotky"
+          panelId="panel-fotky"
           active={tab === 'fotky'}
           onClick={() => setTab('fotky')}
           icon={<ImageIcon className="h-4 w-4" />}
           label="Fotky & tipy"
         />
         <TabButton
+          id="tab-mesta"
+          panelId="panel-mesta"
           active={tab === 'mesta'}
           onClick={() => setTab('mesta')}
           icon={<Landmark className="h-4 w-4" />}
@@ -39,7 +43,10 @@ export function OnRoute() {
         />
       </div>
 
-      <div role="tabpanel">
+      <div
+        role="tabpanel"
+        id={tab === 'fotky' ? 'panel-fotky' : 'panel-mesta'}
+        aria-labelledby={tab === 'fotky' ? 'tab-fotky' : 'tab-mesta'}>
         {tab === 'fotky' ? <Highlights embedded /> : <Cities embedded />}
       </div>
     </section>
@@ -47,11 +54,15 @@ export function OnRoute() {
 }
 
 function TabButton({
+  id,
+  panelId,
   active,
   onClick,
   icon,
   label,
 }: {
+  id: string;
+  panelId: string;
   active: boolean;
   onClick: () => void;
   icon: React.ReactNode;
@@ -61,7 +72,10 @@ function TabButton({
     <button
       type="button"
       role="tab"
+      id={id}
+      aria-controls={panelId}
       aria-selected={active}
+      tabIndex={active ? 0 : -1}
       onClick={onClick}
       className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition ${
         active

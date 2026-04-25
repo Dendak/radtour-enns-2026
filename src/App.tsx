@@ -18,7 +18,7 @@ import { setHover } from '@/hooks/useHoverStore';
 export default function App() {
   const gpxUrl = `${import.meta.env.BASE_URL}ennsradweg_osm.gpx`;
   const { track, waypoints, dayEnd, donauStart, loaded } = useGpxTrack(gpxUrl);
-  const { byWaypoint: weather, updatedAt, loading, refresh } = useWeather(waypoints);
+  const { byWaypoint: weather, updatedAt, loading, error: weatherError, refresh } = useWeather(waypoints);
 
   const [userLoc, setUserLoc] = useState<UserLocation | null>(null);
   const handleLocate = useCallback((loc: UserLocation | null) => setUserLoc(loc), []);
@@ -66,6 +66,7 @@ export default function App() {
             weather={weather}
             updatedAt={updatedAt}
             loading={loading}
+            error={weatherError}
             onRefresh={refresh}
           />
         </div>

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Cloud, CloudSun, CloudRain, Sun, CloudSnow, CloudFog, CloudDrizzle, CloudLightning, Wind, Thermometer, MapPin, Clock, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Cloud, CloudSun, CloudRain, Sun, CloudSnow, CloudFog, CloudDrizzle, CloudLightning, Wind, Thermometer, MapPin, Clock, RefreshCw } from 'lucide-react';
 import { DAY_COLORS, DAY_NAMES, DAY_CAPTIONS, DAY_PHOTOS, wmoText, type Waypoint } from '@/data/trip';
 import { TopoPattern } from './TopoPattern';
 import type { WeatherPoint } from '@/hooks/useWeather';
@@ -21,12 +21,13 @@ function wmoIcon(code: number | undefined) {
 }
 
 export function WeatherDays({
-  waypoints, weather, updatedAt, loading, onRefresh,
+  waypoints, weather, updatedAt, loading, error, onRefresh,
 }: {
   waypoints: Waypoint[];
   weather: WeatherPoint[];
   updatedAt: Date | null;
   loading: boolean;
+  error?: string | null;
   onRefresh: () => void;
 }) {
   return (
@@ -44,13 +45,27 @@ export function WeatherDays({
           {updatedAt ? `aktualizováno ${updatedAt.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}` : 'Obnovit'}
         </button>
       </div>
+      {error && (
+        <div className="mb-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+          <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+          <span>
+            Předpověď se nepodařilo načíst ({error}). Zobrazujeme poslední uložená data, pokud jsou dostupná. Zkuste tlačítko „Obnovit".
+          </span>
+        </div>
+      )}
       <div className="grid gap-4 md:gap-5">
         {([1, 2, 3] as const).map((day) => {
           const wps = waypoints.map((w, i) => ({ w, i })).filter(({ w }) => w.day === day);
-          const temps = wps.map(({ i }) => weather[i]).filter((x) => x && !x.error && x.temp !== undefined).map((x) => x!.temp!);
+          const temps: number[] = [];
+          let totalRain = 0;
+          for (const { i } of wps) {
+            const wx = weather[i];
+            if (!wx || wx.error) continue;
+            if (typeof wx.temp === 'number') temps.push(wx.temp);
+            totalRain += wx.precip ?? 0;
+          }
           const tMin = temps.length ? Math.min(...temps) : null;
           const tMax = temps.length ? Math.max(...temps) : null;
-          const totalRain = wps.reduce((s, { i }) => s + ((weather[i] && !weather[i].error) ? (weather[i].precip ?? 0) : 0), 0);
           const dayKm = wps.length >= 2 ? wps[wps.length - 1].w.dist - wps[0].w.dist : 0;
           const start = wps.length ? wps[0].w.dist : 0;
           const color = DAY_COLORS[day];
@@ -112,7 +127,7 @@ export function WeatherDays({
                   <Badge icon={<CloudRain className="h-3 w-3" />} label={`Σ ${totalRain.toFixed(1)} mm`} />
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-3">
                 {wps.map(({ w, i }) => {
                   const wx = weather[i];
                   const time = new Date(w.time).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });

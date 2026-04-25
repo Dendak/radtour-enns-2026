@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { DAY_COLORS, type Waypoint } from '@/data/trip';
 import { dayForDist } from '@/hooks/useGpxTrack';
 import type { WeatherPoint } from '@/hooks/useWeather';
 
-export function PrecipitationChart({ waypoints, weather, dayEnd }: {
+function PrecipitationChartInner({ waypoints, weather, dayEnd }: {
   waypoints: Waypoint[];
   weather: WeatherPoint[];
   dayEnd: Record<1 | 2, number>;
@@ -92,3 +92,5 @@ export function PrecipitationChart({ waypoints, weather, dayEnd }: {
     </div>
   );
 }
+
+export const PrecipitationChart = memo(PrecipitationChartInner);

@@ -208,11 +208,16 @@ function PhotoGallery({
 
   return (
     <div
-      className="relative h-56 md:h-64 bg-slate-100 overflow-hidden"
+      className="relative h-56 md:h-64 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}>
+      {total === 0 && (
+        <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">
+          Fotky se nenačetly
+        </div>
+      )}
       <AnimatePresence initial={false} mode="sync">
         {current && (
           <motion.img
