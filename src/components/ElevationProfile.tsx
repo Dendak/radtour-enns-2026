@@ -272,9 +272,21 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
           <div className="font-display text-lg font-bold text-ink">Výškový profil</div>
         </div>
         <div className="text-xs text-slate-500 flex gap-3">
-          <span>↑ {stats.up} m</span>
-          <span>↓ {stats.down} m</span>
-          <span>{stats.min}–{stats.max} m n. m.</span>
+          <span
+            title={`Celkové stoupání za všechny 3 dny: ${stats.up} m převýšení`}
+            className="cursor-help underline decoration-dotted decoration-slate-300 underline-offset-2">
+            ↑ {stats.up} m
+          </span>
+          <span
+            title={`Celkové klesání za všechny 3 dny: ${stats.down} m`}
+            className="cursor-help underline decoration-dotted decoration-slate-300 underline-offset-2">
+            ↓ {stats.down} m
+          </span>
+          <span
+            title={`Nejnižší bod ${stats.min} m n. m. · nejvyšší bod ${stats.max} m n. m.`}
+            className="cursor-help underline decoration-dotted decoration-slate-300 underline-offset-2">
+            {stats.min}–{stats.max} m n. m.
+          </span>
         </div>
       </div>
       <canvas
