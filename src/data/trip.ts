@@ -410,10 +410,10 @@ export const HIGHLIGHTS: Highlight[] = [
     mapsQuery: 'Gasthof Post Altenmarkt bei Sankt Gallen',
     website: 'https://www.gasthofpost-altenmarkt.at/',
     photos: [
-      'https://storage.googleapis.com/shopando-shop-e6949eef-b7c1-4061-be45-826e67764ce2/var/shop/da0e59e0-5597-4c01-8303-c829e3a9ef93_1920.jpg',
-      'https://storage.googleapis.com/shopando-shop-e6949eef-b7c1-4061-be45-826e67764ce2/var/shop/5dfe50be-952b-42b5-bb67-317f95a194dc_1920.jpg',
-      'https://storage.googleapis.com/shopando-shop-e6949eef-b7c1-4061-be45-826e67764ce2/var/shop/7be4259a-7e64-4134-a5b4-6a572335f959_1920.jpg',
+      wiki('Strip-steak-MCB-MaggieO.jpg'),
+      wiki('Bunter_Salatteller_mit_Rumpsteak_und_Champignons.JPG'),
     ],
+    photosAreIllustrative: true,
     hours: 'So 2.5.: obvykle 11–22 · teplé jídlo do 21',
     rating: { stars: 4.4, count: 436, source: 'Google' },
   },
