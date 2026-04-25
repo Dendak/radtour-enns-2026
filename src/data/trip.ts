@@ -233,7 +233,7 @@ export const HIGHLIGHTS: Highlight[] = [
     mapsQuery: 'Stiegenwirt Pichl Mandling',
     website: 'https://www.stiegenwirt.at/',
     photos: [
-      wiki('2017-05-28_Wiener_Schnitzel_mit_Pommes_frites_anagoria.jpg'),
+      wiki('Wiener_Backhendl_5.jpg'),
       'https://stiegenwirt.at/wp-content/uploads/2026/01/032-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-scaled.jpg',
       'https://stiegenwirt.at/wp-content/uploads/2026/01/002-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-Kopie.jpg',
       'https://stiegenwirt.at/wp-content/uploads/2026/01/044-Stiegenwirt_Steirisches-Wirtshaus-kumpPhotography-scaled.jpg',
@@ -603,7 +603,7 @@ export const HIGHLIGHTS: Highlight[] = [
     tip: 'Pfandl pro dva + Mostdudler.',
     mapsQuery: 'Platzhirsch Enns Hauptplatz',
     photos: [
-      wiki('2017-05-28_Wiener_Schnitzel_mit_Pommes_frites_anagoria.jpg'),
+      wiki('Bauerngröstl_Innerperskoler_Hof,_.JPG'),
       wiki('Enns_-_Hauptplatz_mit_Stadtturm.JPG'),
     ],
     photosAreIllustrative: true,
