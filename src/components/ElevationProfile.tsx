@@ -16,6 +16,8 @@ type HoverInfo = {
   x: number;
   canvasWidth: number;
   km: number;
+  dayKm: number;
+  dayTotalKm: number;
   ele: number;
   time: string;
   wpName: string;
@@ -166,6 +168,34 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
       ctx.beginPath(); ctx.arc(x, yDot, 3.4, 0, Math.PI * 2); ctx.stroke();
     });
 
+    // City name labels above dots (deduped by name, greedy non-overlap placement)
+    ctx.font = '600 10px Inter, system-ui, sans-serif';
+    ctx.textBaseline = 'bottom';
+    ctx.textAlign = 'center';
+    const seenNames = new Set<string>();
+    const placed: { left: number; right: number }[] = [];
+    const minGap = 6;
+    for (const w of waypoints) {
+      if (seenNames.has(w.name)) continue;
+      seenNames.add(w.name);
+      const x = xForDist(w.dist);
+      const eleAtWp = pointAtDist(track, w.dist).ele;
+      const yDot = yForEle(eleAtWp);
+      const tw = ctx.measureText(w.name).width;
+      const left = x - tw / 2;
+      const right = x + tw / 2;
+      if (left < innerLeft - 4 || right > innerRight + 4) continue;
+      const conflict = placed.some((p) => !(right + minGap < p.left || left - minGap > p.right));
+      if (conflict) continue;
+      placed.push({ left, right });
+      const ty = yDot - 9;
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+      ctx.strokeText(w.name, x, ty);
+      ctx.fillStyle = DAY_COLORS[w.day];
+      ctx.fillText(w.name, x, ty);
+    }
+
     if (userLoc && userLoc.distKm >= 0 && userLoc.distKm <= maxD) {
       const x = xForDist(userLoc.distKm);
       const p = pointAtDist(track, userLoc.distKm);
@@ -266,10 +296,15 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
     const wline = !wx ? 'Načítání počasí …'
       : wx.error ? 'předpověď nedostupná'
       : `${wmoText(wx.code)} · ${wx.temp?.toFixed(0)} °C · ${wx.precip?.toFixed(1)} mm · ${wx.wind?.toFixed(0)} km/h`;
+    const totalDist = track[track.length - 1].dist;
+    const dayStart = day === 1 ? 0 : day === 2 ? dayEnd[1] : dayEnd[2];
+    const dayEndDist = day === 1 ? dayEnd[1] : day === 2 ? dayEnd[2] : totalDist;
     setHoverInfo({
       x,
       canvasWidth: rect.width,
       km: d,
+      dayKm: Math.max(0, d - dayStart),
+      dayTotalKm: dayEndDist - dayStart,
       ele: Math.round(p.ele),
       time,
       wpName: nearWp.name,
@@ -331,6 +366,9 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
             }}>
             <div style={{ fontWeight: 700, color: DAY_COLORS[hoverInfo.day] }}>
               {hoverInfo.time} · km {hoverInfo.km.toFixed(0)} · {hoverInfo.ele} m n. m.
+            </div>
+            <div className="text-slate-600">
+              Den {hoverInfo.day} · {hoverInfo.dayKm.toFixed(0)} / {hoverInfo.dayTotalKm.toFixed(0)} km
             </div>
             <div className="text-slate-600">{hoverInfo.wpName}</div>
             <div className="text-slate-500">{hoverInfo.weather}</div>
