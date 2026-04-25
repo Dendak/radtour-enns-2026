@@ -323,17 +323,17 @@ export function ElevationProfile({ track, waypoints, weather, dayEnd, onHover, u
         />
         {hoverInfo && (
           <div
-            className="absolute pointer-events-none rounded-lg bg-slate-900/92 text-white text-[11px] leading-snug px-3 py-2 shadow-lg backdrop-blur whitespace-nowrap"
+            className="absolute pointer-events-none rounded-lg bg-white/95 text-slate-800 text-[11px] leading-snug px-3 py-2 shadow-lg ring-1 ring-slate-200 backdrop-blur whitespace-nowrap"
             style={{
               left: Math.min(Math.max(hoverInfo.x, 90), hoverInfo.canvasWidth - 90),
               top: 8,
               transform: 'translateX(-50%)',
             }}>
-            <div style={{ fontWeight: 600, color: DAY_COLORS[hoverInfo.day] }}>
+            <div style={{ fontWeight: 700, color: DAY_COLORS[hoverInfo.day] }}>
               {hoverInfo.time} · km {hoverInfo.km.toFixed(0)} · {hoverInfo.ele} m n. m.
             </div>
-            <div style={{ opacity: 0.85 }}>{hoverInfo.wpName}</div>
-            <div style={{ opacity: 0.85 }}>{hoverInfo.weather}</div>
+            <div className="text-slate-600">{hoverInfo.wpName}</div>
+            <div className="text-slate-500">{hoverInfo.weather}</div>
           </div>
         )}
       </div>
